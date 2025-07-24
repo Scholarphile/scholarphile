@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Scholarphile</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+        <style>
+            :root {
+                --primary: #4a5cff;
+                --background: #f9f9ff;
+                --text: #1a1a1a;
+            }
+            * {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+                font-family: 'Inter', sans-serif;
+            }
+            body {
+                background: var(--background);
+                color: var(--text);
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                padding: 2rem;
+                min-height: 100vh;
+            }
+            h1 {
+                margin-bottom: 0.25rem;
+                color: var(--primary);
+                font-size: 2.5rem;
+            }
+            h4 {
+                margin-bottom: 1rem;
+                font-weight: 400;
+                color: #555;
+            }
+            pre, p {
+                max-width: 720px;
+                line-height: 1.6;
+                margin-bottom: 1rem;
+                white-space: pre-wrap;
+            }
+            .bar {
+                width: 100%;
+                max-width: 720px;
+                height: 4px;
+                background: var(--primary);
+                margin: 1.5rem 0;
+                border-radius: 2px;
+            }
+            button#themeToggle {
+                margin-top: 1rem;
+                padding: 0.5rem 1rem;
+                border: none;
+                border-radius: 4px;
+                background: var(--primary);
+                color: white;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+            button#themeToggle:hover {
+                background: #3b49d9;
+            }
+            body.dark {
+                --background: #1a1a1a;
+                --text: #f9f9ff;
+            }
+            /* --- New layout styles --- */
+            nav{
+                width:100%;
+                max-width:960px;
+                display:flex;
+                justify-content:space-between;
+                align-items:center;
+                margin-bottom:4rem;
+            }
+            .logo{
+                font-weight:600;
+                font-size:1.5rem;
+                color:var(--primary);
+            }
+            nav ul{
+                display:flex;
+                gap:1rem;
+                list-style:none;
+            }
+            nav ul li a{
+                text-decoration:none;
+                color:var(--text);
+                font-weight:600;
+                transition:color .2s;
+            }
+            nav ul li a:hover{
+                color:var(--primary);
+            }
+            .hero{
+                text-align:center;
+                margin-bottom:3rem;
+                max-width:680px;
+            }
+            .hero p{
+                font-size:1.25rem;
+                color:#555;
+                margin-top:1rem;
+            }
+            .hero-actions{
+                margin-top:2rem;
+                display:flex;
+                gap:1rem;
+                justify-content:center;
+                flex-wrap:wrap;
+            }
+            button.primary,button.secondary{
+                padding:.75rem 1.5rem;
+                border-radius:4px;
+                font-weight:600;
+                cursor:pointer;
+                border:none;
+            }
+            button.primary{
+                background:var(--primary);
+                color:#fff;
+            }
+            button.secondary{
+                background:transparent;
+                border:2px solid var(--primary);
+                color:var(--primary);
+            }
+            button.secondary:hover{
+                background:var(--primary);
+                color:#fff;
+            }
+            .features{
+                display:grid;
+                grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+                gap:1.5rem;
+                margin-bottom:4rem;
+                width:100%;
+                max-width:960px;
+            }
+            .card{
+                background:#fff;
+                padding:1.5rem;
+                border-radius:8px;
+                box-shadow:0 2px 6px rgba(0,0,0,.05);
+            }
+            body.dark .card{
+                background:#242424;
+            }
+            footer{
+                margin-top:auto;
+                padding:2rem 0;
+                font-size:.875rem;
+                color:#777;
+            }
+            /* --- End layout styles --- */
+        </style>
+    </head>
+    <body>
+        <nav>
+            <span class="logo">Scholarphile</span>
+            <ul>
+                <li><a href="#features">Features</a></li>
+                <li><a href="#about">About</a></li>
+            </ul>
+            <button id="themeToggle">🌙</button>
+        </nav>
+
+        <section class="hero">
+            <h1>Empower Learning. Share Knowledge.</h1>
+            <p>Store, search, and collaborate on class notes with your peers and alumni in one unified hub.</p>
+            <div class="hero-actions">
+                <button class="primary">Get Started</button>
+                <button class="secondary">Browse Notes</button>
+            </div>
+        </section>
+
+        <section id="features" class="features">
+            <div class="card">
+                <h3>Upload Notes</h3>
+                <p>Drag‑and‑drop PDFs, slides, or images—organised automatically by course.</p>
+            </div>
+            <div class="card">
+                <h3>Real‑time Collaboration</h3>
+                <p>Comment, highlight, and annotate notes with classmates instantly.</p>
+            </div>
+            <div class="card">
+                <h3>Smart Search</h3>
+                <p>Find any concept in seconds with AI‑powered semantic search.</p>
+            </div>
+        </section>
+
+        <footer id="about">
+            <p>© 2025 Scholarphile. Built for students, by students.</p>
+        </footer>
+
+        <script>
+            const btn = document.getElementById('themeToggle');
+            btn.addEventListener('click', () => {
+                document.body.classList.toggle('dark');
+            });
+        </script>
+    </body>
+</html>
