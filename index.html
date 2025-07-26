@@ -67,7 +67,10 @@
         .nav-tabs {
             display: inline-flex;
             gap: 0.25rem;
-            background: var(--surface);
+            background: rgba(42, 42, 42, 0.3);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 32px;
             padding: 0.25rem;
             margin-bottom: 1rem;
@@ -92,7 +95,7 @@
         }
 
         .nav-tab:hover:not(.active) {
-            background: var(--surface-light);
+            background: rgba(58, 58, 58, 0.4);
             color: var(--text-primary);
         }
 
