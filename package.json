@@ -1,0 +1,25 @@
+{
+  "name": "permates",
+  "version": "1.0.0",
+  "description": "Scholarphile - A modern learning platform with flashcards",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 8000",
+    "dev": "python -m http.server 8000",
+    "build": "echo 'Static site - no build required'",
+    "deploy": "echo 'Deploy via GitHub Actions'"
+  },
+  "keywords": [
+    "education",
+    "flashcards",
+    "learning",
+    "notes",
+    "study"
+  ],
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/permates.git"
+  }
+} 
