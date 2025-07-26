@@ -64,58 +64,6 @@
             text-align: center;
         }
 
-        .logo {
-            display: inline-flex;
-            align-items: center;
-            gap: 0.75rem;
-            text-decoration: none;
-            margin-bottom: 1.5rem;
-        }
-
-        .logo-icon {
-            width: 32px;
-            height: 24px;
-            background: var(--logo-blue);
-            border-radius: 4px;
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            padding: 2px 0;
-        }
-
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            left: 4px;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--logo-red);
-        }
-
-        .logo-lines {
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            height: 100%;
-            padding: 2px 4px 2px 10px;
-        }
-
-        .logo-line {
-            height: 1px;
-            background: var(--logo-grey);
-            width: 100%;
-        }
-
-        .logo-text {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.75rem;
-            font-weight: 600;
-            color: var(--text-primary);
-            letter-spacing: 0.5px;
-        }
-
         .nav-tabs {
             display: inline-flex;
             gap: 0.5rem;
@@ -157,8 +105,8 @@
 
         /* Main content */
         .main {
-            margin-top: 140px;
-            min-height: calc(100vh - 140px);
+            margin-top: 100px;
+            min-height: calc(100vh - 100px);
         }
 
         .container {
@@ -606,9 +554,7 @@
                 font-size: 1.5rem;
             }
 
-            .logo-text {
-                font-size: 1.5rem;
-            }
+
         }
 
         /* Animations */
@@ -651,16 +597,6 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <a href="#" class="logo">
-                <div class="logo-icon">
-                    <div class="logo-lines">
-                        <div class="logo-line"></div>
-                        <div class="logo-line"></div>
-                        <div class="logo-line"></div>
-                    </div>
-                </div>
-                <span class="logo-text">Scholarphile</span>
-            </a>
             <nav class="nav-tabs">
                 <button class="nav-tab active" data-page="mynotes">MyNotes</button>
                 <button class="nav-tab" data-page="discover">Discover</button>
