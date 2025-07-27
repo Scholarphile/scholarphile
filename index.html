@@ -499,6 +499,52 @@
 
         .stat-card {
             background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            text-align: center;
+            border: 1px solid var(--border);
+        }
+
+        /* Loading Spinner */
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid var(--border);
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-secondary);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .stat-card {
+            background: var(--surface);
             padding: 1.5rem;
             border-radius: 12px;
             text-align: center;
@@ -614,82 +660,11 @@
                     <p class="mynotes-subtitle">Discover newly uploaded documents from peers</p>
                 </div>
 
-                <div class="documents-grid">
-                    <!-- Sample documents -->
-                    <div class="document-card fade-in">
-                        <div class="document-preview">
-                            <div class="document-preview-content">
-                                <div class="document-preview-title">CS50x</div>
-                                <div class="document-preview-subtitle">Introduction to Computer Science</div>
-                            </div>
-                        </div>
-                        <div class="document-info">
-                            <div class="document-title">CS50x Final Project Notes</div>
-                            <div class="document-meta">
-                                <div class="document-author">
-                                    <div class="author-avatar">JD</div>
-                                    <span>John Doe</span>
-                                </div>
-                                <span>2 hours ago</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="document-card fade-in">
-                        <div class="document-preview">
-                            <div class="document-preview-content">
-                                <div class="document-preview-title">Calculus</div>
-                                <div class="document-preview-subtitle">Applied Mathematics</div>
-                            </div>
-                        </div>
-                        <div class="document-info">
-                            <div class="document-title">Calculus Applied! Study Guide</div>
-                            <div class="document-meta">
-                                <div class="document-author">
-                                    <div class="author-avatar">AS</div>
-                                    <span>Alice Smith</span>
-                                </div>
-                                <span>1 day ago</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="document-card fade-in">
-                        <div class="document-preview">
-                            <div class="document-preview-content">
-                                <div class="document-preview-title">CS50P</div>
-                                <div class="document-preview-subtitle">Python Programming</div>
-                            </div>
-                        </div>
-                        <div class="document-info">
-                            <div class="document-title">Python Programming Notes</div>
-                            <div class="document-meta">
-                                <div class="document-author">
-                                    <div class="author-avatar">MJ</div>
-                                    <span>Mike Johnson</span>
-                                </div>
-                                <span>3 days ago</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="document-card fade-in">
-                        <div class="document-preview">
-                            <div class="document-preview-content">
-                                <div class="document-preview-title">CS50AI</div>
-                                <div class="document-preview-subtitle">Artificial Intelligence</div>
-                            </div>
-                        </div>
-                        <div class="document-info">
-                            <div class="document-title">AI Fundamentals Summary</div>
-                            <div class="document-meta">
-                                <div class="document-author">
-                                    <div class="author-avatar">EW</div>
-                                    <span>Emma Wilson</span>
-                                </div>
-                                <span>1 week ago</span>
-                            </div>
-                        </div>
+                <div class="documents-grid" id="documentsGrid">
+                    <!-- Documents will be loaded dynamically from API -->
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Loading documents...</p>
                     </div>
                 </div>
             </section>
@@ -839,13 +814,15 @@
             showNotification('Successfully signed in!', 'success');
         });
 
-        // Search functionality
-        const searchInput = document.querySelector('.search-input');
+        // Filter chips functionality
         const filterChips = document.querySelectorAll('.filter-chip');
 
-        searchInput.addEventListener('input', function(e) {
-            // Implement search logic here
-            console.log('Searching for:', e.target.value);
+        filterChips.forEach(chip => {
+            chip.addEventListener('click', function() {
+                filterChips.forEach(c => c.classList.remove('active'));
+                this.classList.add('active');
+                // Implement filter logic here
+            });
         });
 
         filterChips.forEach(chip => {
@@ -856,13 +833,7 @@
             });
         });
 
-        // Document card click handlers
-        document.querySelectorAll('.document-card').forEach(card => {
-            card.addEventListener('click', function() {
-                // Implement document preview/opening logic
-                showNotification('Opening document...', 'info');
-            });
-        });
+        // Document card click handlers are now handled dynamically in createDocumentCard function
 
         // Notification system
         function showNotification(message, type = 'info') {
@@ -905,8 +876,155 @@
         `;
         document.head.appendChild(style);
 
-        // Initialize with some sample data
-        console.log('Scholarphile MyNotes initialized');
+        // API Configuration
+        const API_BASE_URL = 'https://scholarphile-api.scholarphile.workers.dev';
+
+        // Load documents from API
+        async function loadDocuments() {
+            const documentsGrid = document.getElementById('documentsGrid');
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/documents`);
+                const data = await response.json();
+                
+                if (data.documents && data.documents.length > 0) {
+                    renderDocuments(data.documents);
+                } else {
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error('Error loading documents:', error);
+                showErrorState();
+            }
+        }
+
+        // Render documents from API data
+        function renderDocuments(documents) {
+            const documentsGrid = document.getElementById('documentsGrid');
+            documentsGrid.innerHTML = '';
+            
+            documents.forEach(doc => {
+                const card = createDocumentCard(doc);
+                documentsGrid.appendChild(card);
+            });
+        }
+
+        // Create document card from API data
+        function createDocumentCard(doc) {
+            const card = document.createElement('div');
+            card.className = 'document-card fade-in';
+            card.dataset.documentId = doc.id;
+            
+            const initials = doc.user_name ? doc.user_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+            const timeAgo = formatTimeAgo(doc.created_at);
+            
+            card.innerHTML = `
+                <div class="document-preview">
+                    <div class="document-preview-content">
+                        <div class="document-preview-title">${doc.course_code || 'Document'}</div>
+                        <div class="document-preview-subtitle">${doc.course_name || 'Study Material'}</div>
+                    </div>
+                </div>
+                <div class="document-info">
+                    <div class="document-title">${doc.title}</div>
+                    <div class="document-meta">
+                        <div class="document-author">
+                            <div class="author-avatar">${initials}</div>
+                            <span>${doc.user_name || 'Unknown User'}</span>
+                        </div>
+                        <span>${timeAgo}</span>
+                    </div>
+                </div>
+            `;
+            
+            // Add click handler
+            card.addEventListener('click', () => {
+                showNotification('Opening document...', 'info');
+                // TODO: Implement document opening logic
+            });
+            
+            return card;
+        }
+
+        // Show empty state when no documents
+        function showEmptyState() {
+            const documentsGrid = document.getElementById('documentsGrid');
+            documentsGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-file-alt"></i>
+                    <h3>No documents yet</h3>
+                    <p>Be the first to share your study materials!</p>
+                </div>
+            `;
+        }
+
+        // Show error state
+        function showErrorState() {
+            const documentsGrid = document.getElementById('documentsGrid');
+            documentsGrid.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Unable to load documents</h3>
+                    <p>Please try again later.</p>
+                </div>
+            `;
+        }
+
+        // Format time ago
+        function formatTimeAgo(dateString) {
+            const date = new Date(dateString);
+            const now = new Date();
+            const diffInSeconds = Math.floor((now - date) / 1000);
+            
+            if (diffInSeconds < 60) return 'Just now';
+            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
+            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
+            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
+            return `${Math.floor(diffInSeconds / 2592000)} months ago`;
+        }
+
+        // Search functionality with API
+        const searchInput = document.querySelector('.search-input');
+        let searchTimeout;
+
+        searchInput.addEventListener('input', function(e) {
+            clearTimeout(searchTimeout);
+            const query = e.target.value.trim();
+            
+            if (query.length > 0) {
+                searchTimeout = setTimeout(() => {
+                    performSearch(query);
+                }, 500);
+            } else {
+                loadDocuments(); // Load all documents when search is cleared
+            }
+        });
+
+        // Perform search via API
+        async function performSearch(query) {
+            const documentsGrid = document.getElementById('documentsGrid');
+            documentsGrid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Searching...</p></div>';
+            
+            try {
+                const response = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(query)}`);
+                const data = await response.json();
+                
+                if (data.results && data.results.length > 0) {
+                    renderDocuments(data.results);
+                } else {
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error('Error searching documents:', error);
+                showErrorState();
+            }
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDocuments();
+            console.log('Scholarphile MyNotes initialized with API integration');
+        });
     </script>
 </body>
 </html>
