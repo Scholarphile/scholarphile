@@ -113,9 +113,10 @@ async function handleDocuments(request, env, method) {
         });
       }
 
-      // Store file in R2
+      // Store file in R2 (temporarily disabled until R2 is enabled)
       const fileName = `${Date.now()}-${file.name}`;
-      await env.STORAGE.put(fileName, file.stream());
+      // await env.STORAGE.put(fileName, file.stream());
+      console.log('File upload temporarily disabled - R2 not configured');
 
       // Save metadata to D1
       const { success } = await env.DB.prepare(`
