@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarphile - MyNotes</title>
-    <meta name="description" content="Discover and share academic documents with peers. Access notes, assignments, and study materials from students across all years.">
+    <title>Scholarphile - Enhanced Learning Platform</title>
+    <meta name="description" content="Advanced academic document sharing with AI recommendations, enhanced search, and collaborative features.">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -16,6 +16,8 @@
             --accent: #f59e0b;
             --success: #10b981;
             --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
             --background: #1a1a1a;
             --surface: #2a2a2a;
             --surface-light: #3a3a3a;
@@ -28,9 +30,6 @@
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
             --gradient-primary: linear-gradient(135deg, #3a7ca5 0%, #4a8bb8 100%);
             --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
-            --logo-blue: #87CEEB;
-            --logo-red: #DC143C;
-            --logo-grey: #696969;
         }
 
         * {
@@ -54,68 +53,88 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(26, 26, 26, 0.2);
+            background: rgba(26, 26, 26, 0.95);
             backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            padding: 0.75rem 1rem;
-            transition: all 0.3s ease;
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
         }
 
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            text-align: center;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
         }
 
         .nav-tabs {
-            display: inline-flex;
-            gap: 0.25rem;
-            background: rgba(42, 42, 42, 0.15);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 32px;
-            padding: 0.25rem;
+            display: flex;
+            gap: 0.5rem;
         }
 
         .nav-tab {
             padding: 0.5rem 1rem;
-            border-radius: 24px;
+            border-radius: 8px;
             font-weight: 500;
-            font-size: 0.875rem;
             cursor: pointer;
             transition: all 0.3s ease;
             border: none;
             background: transparent;
             color: var(--text-secondary);
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', 'Segoe UI', sans-serif;
         }
 
-        .nav-tab.active {
+        .nav-tab.active, .nav-tab:hover {
             background: var(--primary);
             color: white;
         }
 
-        .nav-tab:hover:not(.active) {
-            background: rgba(58, 58, 58, 0.2);
-            color: var(--text-primary);
+        .user-menu {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
         }
 
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+        }
 
+        .debug-toggle {
+            background: var(--warning);
+            color: black;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
 
-        /* Main content */
+        /* Main Content */
         .main {
             margin-top: 80px;
             min-height: calc(100vh - 80px);
+            padding: 2rem 1rem;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1rem;
         }
 
-        /* Page sections */
         .page {
             display: none;
         }
@@ -124,25 +143,138 @@
             display: block;
         }
 
-        /* MyNotes Page */
-        .mynotes-header {
+        /* Common Components */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            color: var(--text-primary);
+            border: 1px solid var(--border);
+        }
+
+        .btn-danger {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .input-group {
+            margin-bottom: 1rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group select,
+        .input-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            background: var(--surface-light);
+            color: var(--text-primary);
+            font-size: 1rem;
+        }
+
+        .input-group input:focus,
+        .input-group select:focus,
+        .input-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(58, 124, 165, 0.1);
+        }
+
+        /* Upload Zone */
+        .upload-zone {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 3rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            cursor: pointer;
             margin-bottom: 2rem;
         }
 
-        .mynotes-title {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
+        .upload-zone.dragover {
+            border-color: var(--primary);
+            background: rgba(58, 124, 165, 0.1);
         }
 
-        .mynotes-subtitle {
+        .upload-zone i {
+            font-size: 3rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        /* Search */
+        .search-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .search-input {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        .search-filters {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            background: var(--surface);
             color: var(--text-secondary);
-            font-size: 1.125rem;
-            font-weight: 400;
+            cursor: pointer;
+            font-size: 0.875rem;
         }
 
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Document Grid */
         .documents-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -152,9 +284,8 @@
 
         .document-card {
             background: var(--surface);
-            border-radius: 16px;
+            border-radius: 12px;
             overflow: hidden;
-            box-shadow: var(--shadow-md);
             border: 1px solid var(--border);
             transition: all 0.3s ease;
             cursor: pointer;
@@ -165,1322 +296,1109 @@
             box-shadow: var(--shadow-lg);
         }
 
-        .document-preview {
-            height: 200px;
-            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
+        .document-header {
+            padding: 1rem;
+            border-bottom: 1px solid var(--border);
         }
 
-        .document-preview::before {
-            content: '';
+        .document-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .document-meta {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .document-content {
+            padding: 1rem;
+        }
+
+        .document-actions {
+            padding: 1rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        /* Recommendations */
+        .recommendations-section {
+            margin-bottom: 3rem;
+        }
+
+        .recommendations-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .recommendation-card {
+            position: relative;
+        }
+
+        .recommendation-reason {
             position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background: var(--accent);
+            color: black;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        /* Analytics Dashboard */
+        .analytics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .analytics-card {
+            background: var(--surface);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .analytics-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .analytics-label {
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        /* Debug Panel */
+        .debug-panel {
+            position: fixed;
+            top: 80px;
+            right: -400px;
+            width: 400px;
+            height: calc(100vh - 80px);
+            background: var(--surface);
+            border-left: 1px solid var(--border);
+            padding: 1rem;
+            overflow-y: auto;
+            transition: all 0.3s ease;
+            z-index: 999;
+        }
+
+        .debug-panel.open {
+            right: 0;
+        }
+
+        .debug-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .debug-section h3 {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+            color: var(--warning);
+        }
+
+        .debug-log {
+            background: #000;
+            color: #0f0;
+            font-family: 'Courier New', monospace;
+            padding: 1rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            height: 200px;
+            overflow-y: auto;
+        }
+
+        /* Auth Modal */
+        .modal {
+            position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="%23cbd5e1" stroke-width="0.5"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
-            opacity: 0.3;
-        }
-
-        .document-preview-content {
-            position: relative;
-            z-index: 1;
-            text-align: center;
-            color: #1e293b;
-            padding: 1rem;
-        }
-
-        .document-preview-title {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-
-        .document-preview-subtitle {
-            font-size: 0.875rem;
-            color: #64748b;
-            font-weight: 400;
-        }
-
-        .document-info {
-            padding: 1.5rem;
-        }
-
-        .document-title {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
-            font-size: 1.125rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .document-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 400;
-        }
-
-        .document-author {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .author-avatar {
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
             align-items: center;
             justify-content: center;
-            font-size: 0.75rem;
-            font-weight: 600;
-            color: white;
+            z-index: 9999;
         }
 
-        /* Discover Page */
-        .search-container {
-            margin-bottom: 2rem;
+        .modal.open {
+            display: flex;
         }
 
-        .search-box {
-            position: relative;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1rem 1rem 1rem 3rem;
-            border: 1px solid var(--border);
+        .modal-content {
+            background: var(--surface);
             border-radius: 12px;
-            background: var(--surface);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Poppins', sans-serif;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-muted);
-        }
-
-        .search-filters {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .filter-chip {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            background: var(--surface);
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 400;
-        }
-
-        .filter-chip.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
-        }
-
-        .search-results {
-            margin-top: 2rem;
-        }
-
-        .results-count {
-            color: var(--text-secondary);
-            margin-bottom: 1rem;
-            font-weight: 400;
-        }
-
-        /* Sign In Page */
-        .auth-container {
-            max-width: 400px;
-            margin: 2rem auto;
             padding: 2rem;
-            background: var(--surface);
-            border-radius: 16px;
-            box-shadow: var(--shadow-lg);
+            max-width: 400px;
+            width: 90%;
             border: 1px solid var(--border);
         }
 
-        .auth-title {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
-            font-size: 1.75rem;
-            font-weight: 600;
-            text-align: center;
+        .modal-header {
             margin-bottom: 1.5rem;
         }
 
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
+        .modal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
         }
 
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .form-label {
-            font-weight: 500;
-            color: var(--text-primary);
-            font-size: 0.875rem;
-        }
-
-        .form-input {
-            padding: 0.75rem;
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 1rem;
+            background: var(--surface);
             border: 1px solid var(--border);
             border-radius: 8px;
-            background: var(--background);
-            color: var(--text-primary);
-            font-size: 1rem;
-            transition: border-color 0.3s ease;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Poppins', sans-serif;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            font-weight: 500;
-            font-size: 0.875rem;
-            cursor: pointer;
-            border: none;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', 'Poppins', sans-serif;
-        }
-
-        .btn-primary {
-            background: var(--gradient-primary);
-            color: white;
-            box-shadow: var(--shadow-md);
-        }
-
-        .btn-primary:hover {
-            transform: translateY(-2px);
+            padding: 1rem;
             box-shadow: var(--shadow-lg);
-        }
-
-        .btn-secondary {
-            background: transparent;
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-        }
-
-        .btn-secondary:hover {
-            background: var(--surface-light);
-        }
-
-        .auth-divider {
-            text-align: center;
-            margin: 1.5rem 0;
-            color: var(--text-muted);
-            position: relative;
-        }
-
-        .auth-divider::before {
-            content: '';
-            position: absolute;
-            top: 50%;
-            left: 0;
-            right: 0;
-            height: 1px;
-            background: var(--border);
-        }
-
-        .auth-divider span {
-            background: var(--surface);
-            padding: 0 1rem;
-            font-size: 0.875rem;
-        }
-
-        .social-auth {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .social-btn {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: 8px;
-            background: var(--surface);
-            color: var(--text-primary);
-            cursor: pointer;
+            z-index: 9998;
+            transform: translateX(400px);
             transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            font-weight: 400;
         }
 
-        .social-btn:hover {
-            background: var(--surface-light);
+        .notification.show {
+            transform: translateX(0);
         }
 
-        /* Profile Page */
-        .profile-header {
-            text-align: center;
-            margin-bottom: 2rem;
+        .notification.success {
+            border-left: 4px solid var(--success);
         }
 
-        .profile-avatar {
-            width: 80px;
-            height: 80px;
-            border-radius: 50%;
-            background: var(--gradient-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2rem;
-            font-weight: 700;
-            color: white;
-            margin: 0 auto 1rem;
+        .notification.error {
+            border-left: 4px solid var(--danger);
         }
 
-        .profile-name {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
-            font-size: 1.75rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .notification.warning {
+            border-left: 4px solid var(--warning);
         }
 
-        .profile-email {
-            color: var(--text-secondary);
-            font-weight: 400;
-        }
-
-        .profile-stats {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 2rem;
-        }
-
-        .stat-card {
-            background: var(--surface);
-            border-radius: 12px;
-            padding: 1.5rem;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        /* Loading Spinner */
-        .loading-spinner {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-        }
-
-        .spinner {
-            width: 40px;
-            height: 40px;
-            border: 3px solid var(--border);
-            border-top: 3px solid var(--primary);
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-bottom: 1rem;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        /* Empty State */
-        .empty-state {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state i {
-            font-size: 3rem;
-            margin-bottom: 1rem;
-            opacity: 0.5;
-        }
-
-        /* Upload Page Styles */
-        .upload-container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
-
-        .upload-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .upload-title {
-            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
-            font-size: 2.5rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .upload-subtitle {
-            color: var(--text-secondary);
-            font-size: 1.125rem;
-            font-weight: 400;
-        }
-
-        .upload-form {
-            background: var(--surface);
-            border-radius: 16px;
-            padding: 2rem;
-            border: 1px solid var(--border);
-        }
-
-        .upload-area {
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            padding: 3rem 2rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            margin-bottom: 2rem;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary);
-            background: rgba(58, 124, 165, 0.05);
-        }
-
-        .upload-area.dragover {
-            border-color: var(--primary);
-            background: rgba(58, 124, 165, 0.1);
-        }
-
-        .upload-content {
-            color: var(--text-secondary);
-        }
-
-        .upload-icon {
-            font-size: 3rem;
-            color: var(--primary);
-            margin-bottom: 1rem;
-        }
-
-        .upload-content h3 {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-
-        .upload-content p {
-            margin-bottom: 0.5rem;
-        }
-
-        .upload-hint {
-            font-size: 0.875rem;
-            opacity: 0.7;
-        }
-
-        .form-section {
-            margin-bottom: 2rem;
-        }
-
-        .form-section-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .form-row:last-child {
-            margin-bottom: 0;
-        }
-
-        .form-row .form-group:only-child {
-            grid-column: 1 / -1;
-        }
-
-        .upload-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            padding-top: 1rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .file-preview {
-            background: var(--surface-light);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .file-preview-icon {
-            font-size: 1.5rem;
-            color: var(--primary);
-        }
-
-        .file-preview-info {
-            flex: 1;
-        }
-
-        .file-preview-name {
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-bottom: 0.25rem;
-        }
-
-        .file-preview-size {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .file-preview-remove {
-            background: var(--danger);
-            color: white;
-            border: none;
-            border-radius: 4px;
-            padding: 0.5rem;
-            cursor: pointer;
-            font-size: 0.875rem;
-        }
-
-        .upload-progress {
-            background: var(--surface-light);
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .progress-bar {
-            width: 100%;
-            height: 8px;
-            background: var(--border);
-            border-radius: 4px;
-            overflow: hidden;
-            margin-bottom: 0.5rem;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: var(--primary);
-            width: 0%;
-            transition: width 0.3s ease;
-        }
-
-        .progress-text {
-            font-size: 0.875rem;
-            color: var(--text-secondary);
-        }
-
-        .stat-card {
-            background: var(--surface);
-            padding: 1.5rem;
-            border-radius: 12px;
-            text-align: center;
-            border: 1px solid var(--border);
-        }
-
-        .stat-number {
-            font-size: 1.5rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 0.25rem;
-        }
-
-        .stat-label {
-            color: var(--text-secondary);
-            font-size: 0.875rem;
-            font-weight: 400;
-        }
-
-        /* Responsive design */
+        /* Responsive */
         @media (max-width: 768px) {
-            .nav-tabs {
-                gap: 0.25rem;
-                padding: 0.25rem;
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
             }
 
-            .nav-tab {
-                padding: 0.5rem 1rem;
-                font-size: 0.75rem;
+            .nav-tabs {
+                flex-wrap: wrap;
+            }
+
+            .search-container {
+                flex-direction: column;
             }
 
             .documents-grid {
                 grid-template-columns: 1fr;
             }
 
-            .search-filters {
-                justify-content: center;
-            }
-
-            .profile-stats {
-                grid-template-columns: 1fr;
-            }
-
-            .mynotes-title {
-                font-size: 2rem;
-            }
-
-            .auth-title {
-                font-size: 1.5rem;
-            }
-
-            .profile-name {
-                font-size: 1.5rem;
-            }
-
-
-        }
-
-        /* Animations */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
+            .debug-panel {
+                width: 100%;
+                right: -100%;
             }
         }
 
-        .fade-in {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        /* Loading states */
+        /* Loading States */
         .loading {
-            opacity: 0.6;
-            pointer-events: none;
-        }
-
-        .spinner {
+            display: inline-block;
             width: 20px;
             height: 20px;
-            border: 2px solid var(--border);
-            border-top: 2px solid var(--primary);
+            border: 3px solid rgba(255, 255, 255, 0.3);
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .skeleton {
+            background: linear-gradient(90deg, var(--surface) 25%, var(--surface-light) 50%, var(--surface) 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { background-position: 200% 0; }
+            100% { background-position: -200% 0; }
         }
     </style>
 </head>
 <body>
+    <!-- Header -->
     <header class="header">
         <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-graduation-cap"></i>
+                Scholarphile
+            </div>
+            
             <nav class="nav-tabs">
-                <button class="nav-tab active" data-page="mynotes">MyNotes</button>
-                <button class="nav-tab" data-page="discover">Discover</button>
-                <button class="nav-tab" data-page="upload">Upload</button>
-                <button class="nav-tab" data-page="signin" id="authTab">Sign In</button>
+                <button class="nav-tab active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    Dashboard
+                </button>
+                <button class="nav-tab" data-page="documents">
+                    <i class="fas fa-file-alt"></i>
+                    Documents
+                </button>
+                <button class="nav-tab" data-page="upload">
+                    <i class="fas fa-upload"></i>
+                    Upload
+                </button>
+                <button class="nav-tab" data-page="search">
+                    <i class="fas fa-search"></i>
+                    Search
+                </button>
+                <button class="nav-tab" data-page="analytics">
+                    <i class="fas fa-chart-bar"></i>
+                    Analytics
+                </button>
             </nav>
+
+            <div class="user-menu">
+                <button class="debug-toggle" onclick="toggleDebug()">
+                    <i class="fas fa-bug"></i>
+                    Debug
+                </button>
+                <div class="user-avatar" onclick="showUserMenu()" id="userAvatar">
+                    <i class="fas fa-user"></i>
+                </div>
+            </div>
         </div>
     </header>
 
+    <!-- Main Content -->
     <main class="main">
         <div class="container">
-            <!-- MyNotes Page -->
-            <section id="mynotes" class="page active">
-                <div class="mynotes-header">
-                    <h1 class="mynotes-title">MyNotes</h1>
-                    <p class="mynotes-subtitle">Discover newly uploaded documents from peers</p>
+            <!-- Dashboard Page -->
+            <div class="page active" id="dashboard">
+                <h1>Welcome to Scholarphile</h1>
+                <p class="text-muted">Your enhanced learning platform with AI-powered recommendations</p>
+                
+                <div class="recommendations-section">
+                    <h2 class="recommendations-title">
+                        <i class="fas fa-magic"></i>
+                        Recommended for You
+                    </h2>
+                    <div class="documents-grid" id="recommendationsGrid">
+                        <!-- Recommendations will be loaded here -->
+                    </div>
                 </div>
 
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="totalDocuments">0</div>
+                        <div class="analytics-label">Total Documents</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="totalUsers">0</div>
+                        <div class="analytics-label">Active Users</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="totalSearches">0</div>
+                        <div class="analytics-label">Searches Today</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="uploadCount">0</div>
+                        <div class="analytics-label">Your Uploads</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Documents Page -->
+            <div class="page" id="documents">
+                <h1>My Documents</h1>
                 <div class="documents-grid" id="documentsGrid">
-                    <!-- Documents will be loaded dynamically from API -->
-                    <div class="loading-spinner">
-                        <div class="spinner"></div>
-                        <p>Loading documents...</p>
-                    </div>
+                    <!-- Documents will be loaded here -->
                 </div>
-            </section>
-
-            <!-- Discover Page -->
-            <section id="discover" class="page">
-                <div class="search-container">
-                    <div class="search-box">
-                        <i class="fas fa-search search-icon"></i>
-                        <input type="text" class="search-input" placeholder="Search for documents, courses, or topics...">
-                    </div>
-                    <div class="search-filters">
-                        <button class="filter-chip active">All</button>
-                        <button class="filter-chip">Computer Science</button>
-                        <button class="filter-chip">Mathematics</button>
-                        <button class="filter-chip">Physics</button>
-                        <button class="filter-chip">Literature</button>
-                    </div>
-                </div>
-
-                <div class="search-results">
-                    <div class="results-count">Showing 4 results</div>
-                    <div class="documents-grid">
-                        <!-- Same document cards as MyNotes for now -->
-                    </div>
-                </div>
-            </section>
+            </div>
 
             <!-- Upload Page -->
-            <section id="upload" class="page">
-                <div class="upload-container">
-                    <div class="upload-header">
-                        <h1 class="upload-title">Upload Document</h1>
-                        <p class="upload-subtitle">Share your study materials with the community</p>
-                    </div>
-
-                    <form class="upload-form" id="uploadForm">
-                        <div class="upload-area" id="uploadArea">
-                            <div class="upload-content">
-                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                                <h3>Drop your file here</h3>
-                                <p>or click to browse</p>
-                                <span class="upload-hint">Supports PDF, DOC, DOCX, TXT (Max 10MB)</span>
-                            </div>
-                            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" style="display: none;">
-                        </div>
-
-                        <div class="form-section">
-                            <h3 class="form-section-title">Document Information</h3>
-                            
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">Document Title *</label>
-                                    <input type="text" class="form-input" id="documentTitle" placeholder="Enter document title" required>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">Description</label>
-                                    <textarea class="form-input" id="documentDescription" placeholder="Brief description of the document" rows="3"></textarea>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">Course Code</label>
-                                    <input type="text" class="form-input" id="courseCode" placeholder="e.g., CS50, MATH101">
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Course Name</label>
-                                    <input type="text" class="form-input" id="courseName" placeholder="e.g., Introduction to Computer Science">
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">Academic Year</label>
-                                    <select class="form-input" id="academicYear">
-                                        <option value="">Select year</option>
-                                        <option value="2024">2024</option>
-                                        <option value="2023">2023</option>
-                                        <option value="2022">2022</option>
-                                        <option value="2021">2021</option>
-                                        <option value="2020">2020</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Semester</label>
-                                    <select class="form-input" id="semester">
-                                        <option value="">Select semester</option>
-                                        <option value="Fall">Fall</option>
-                                        <option value="Spring">Spring</option>
-                                        <option value="Summer">Summer</option>
-                                        <option value="Winter">Winter</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">Tags</label>
-                                    <input type="text" class="form-input" id="documentTags" placeholder="e.g., notes, exam, assignment (separate with commas)">
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="upload-actions">
-                            <button type="button" class="btn btn-secondary" id="cancelUpload">Cancel</button>
-                            <button type="submit" class="btn btn-primary" id="submitUpload">
-                                <i class="fas fa-upload"></i>
-                                Upload Document
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </section>
-
-            <!-- Sign In Page -->
-            <section id="signin" class="page">
-                <div class="auth-container">
-                    <h2 class="auth-title">Sign In</h2>
-                    <form class="auth-form" id="signinForm">
-                        <div class="form-group">
-                            <label class="form-label">Email</label>
-                            <input type="email" class="form-input" placeholder="Enter your email" required>
-                        </div>
-                        <div class="form-group">
-                            <label class="form-label">Password</label>
-                            <input type="password" class="form-input" placeholder="Enter your password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Sign In
-                        </button>
-                    </form>
-
-                    <div class="auth-divider">
-                        <span>or</span>
-                    </div>
-
-                    <div class="social-auth">
-                        <button class="social-btn">
-                            <i class="fab fa-google"></i>
-                            Google
-                        </button>
-                        <button class="social-btn">
-                            <i class="fab fa-github"></i>
-                            GitHub
-                        </button>
-                    </div>
-
-                    <div style="text-align: center; margin-top: 1.5rem;">
-                        <p style="color: var(--text-secondary); font-weight: 400;">
-                            Don't have an account? 
-                            <a href="#" style="color: var(--primary); text-decoration: none;">Sign up</a>
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Profile Page (hidden initially) -->
-            <section id="profile" class="page">
-                <div class="profile-header">
-                    <div class="profile-avatar">JD</div>
-                    <h2 class="profile-name">John Doe</h2>
-                    <p class="profile-email">john.doe@university.edu</p>
+            <div class="page" id="upload">
+                <h1>Upload Documents</h1>
+                
+                <div class="upload-zone" id="uploadZone">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <h3>Drag & Drop Files Here</h3>
+                    <p>Or click to select files</p>
+                    <input type="file" id="fileInput" multiple style="display: none;">
                 </div>
 
-                <div class="profile-stats">
-                    <div class="stat-card">
-                        <div class="stat-number">12</div>
-                        <div class="stat-label">Documents</div>
+                <div class="card" id="uploadForm" style="display: none;">
+                    <h3>Document Details</h3>
+                    <div class="input-group">
+                        <label>Title</label>
+                        <input type="text" id="docTitle" placeholder="Enter document title">
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">156</div>
-                        <div class="stat-label">Downloads</div>
+                    <div class="input-group">
+                        <label>Description</label>
+                        <textarea id="docDescription" placeholder="Enter description"></textarea>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-number">8</div>
-                        <div class="stat-label">Courses</div>
+                    <div class="input-group">
+                        <label>Course Code</label>
+                        <input type="text" id="docCourse" placeholder="e.g., CS101">
+                    </div>
+                    <div class="input-group">
+                        <label>Year</label>
+                        <select id="docYear">
+                            <option value="">Select year</option>
+                            <option value="2024">2024</option>
+                            <option value="2023">2023</option>
+                            <option value="2022">2022</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Tags (comma separated)</label>
+                        <input type="text" id="docTags" placeholder="e.g., notes, assignment, midterm">
+                    </div>
+                    <button class="btn btn-primary" onclick="uploadDocument()">
+                        <i class="fas fa-upload"></i>
+                        Upload Document
+                    </button>
+                </div>
+            </div>
+
+            <!-- Search Page -->
+            <div class="page" id="search">
+                <h1>Search Documents</h1>
+                
+                <div class="search-container">
+                    <div class="input-group search-input">
+                        <input type="text" id="searchQuery" placeholder="Search documents, courses, or topics...">
+                    </div>
+                    <button class="btn btn-primary" onclick="performSearch()">
+                        <i class="fas fa-search"></i>
+                        Search
+                    </button>
+                </div>
+
+                <div class="search-filters">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="pdf">PDF</button>
+                    <button class="filter-btn" data-filter="doc">Documents</button>
+                    <button class="filter-btn" data-filter="image">Images</button>
+                </div>
+
+                <div class="documents-grid" id="searchResults">
+                    <!-- Search results will appear here -->
+                </div>
+            </div>
+
+            <!-- Analytics Page -->
+            <div class="page" id="analytics">
+                <h1>Analytics Dashboard</h1>
+                
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="userDocuments">0</div>
+                        <div class="analytics-label">Documents Uploaded</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="userFavorites">0</div>
+                        <div class="analytics-label">Favorites</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="userSearches">0</div>
+                        <div class="analytics-label">Total Searches</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-number" id="userViews">0</div>
+                        <div class="analytics-label">Document Views</div>
                     </div>
                 </div>
 
-                <div class="documents-grid">
-                    <h3 style="grid-column: 1 / -1; margin-bottom: 1rem; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;">My Documents</h3>
-                    <!-- User's documents will go here -->
+                <div class="card">
+                    <h3>Popular Courses</h3>
+                    <div id="popularCourses">
+                        <!-- Course popularity will be displayed here -->
+                    </div>
                 </div>
-            </section>
+            </div>
         </div>
     </main>
 
-    <script>
-        // Navigation functionality
-        const navTabs = document.querySelectorAll('.nav-tab');
-        const pages = document.querySelectorAll('.page');
-        const authTab = document.getElementById('authTab');
+    <!-- Debug Panel -->
+    <div class="debug-panel" id="debugPanel">
+        <div class="debug-section">
+            <h3>API Logs</h3>
+            <div class="debug-log" id="apiLogs"></div>
+        </div>
+        
+        <div class="debug-section">
+            <h3>Network Status</h3>
+            <div id="networkStatus">
+                <div>API Status: <span id="apiStatus">Unknown</span></div>
+                <div>Database: <span id="dbStatus">Unknown</span></div>
+                <div>Storage: <span id="storageStatus">Unknown</span></div>
+            </div>
+        </div>
 
-        let isLoggedIn = false;
+        <div class="debug-section">
+            <h3>Performance</h3>
+            <div id="performanceMetrics">
+                <div>Page Load: <span id="pageLoadTime">0ms</span></div>
+                <div>Last API Call: <span id="lastApiTime">0ms</span></div>
+            </div>
+        </div>
 
-        function showPage(pageId) {
-            // Hide all pages
-            pages.forEach(page => page.classList.remove('active'));
+        <div class="debug-section">
+            <button class="btn btn-secondary" onclick="clearLogs()">Clear Logs</button>
+            <button class="btn btn-secondary" onclick="exportLogs()">Export Logs</button>
+        </div>
+    </div>
+
+    <!-- Auth Modal -->
+    <div class="modal" id="authModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="authTitle">Sign In</h2>
+                <p>Welcome to Scholarphile</p>
+            </div>
             
-            // Show selected page
-            const selectedPage = document.getElementById(pageId);
-            if (selectedPage) {
-                selectedPage.classList.add('active');
-            }
+            <div id="loginForm">
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="loginEmail" placeholder="Enter your email">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="loginPassword" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-primary" onclick="login()" style="width: 100%; margin-bottom: 1rem;">
+                    Sign In
+                </button>
+                <p style="text-align: center;">
+                    Don't have an account? 
+                    <a href="#" onclick="switchToRegister()" style="color: var(--primary);">Register</a>
+                </p>
+            </div>
 
-            // Update active tab
-            navTabs.forEach(tab => tab.classList.remove('active'));
-            event.target.classList.add('active');
+            <div id="registerForm" style="display: none;">
+                <div class="input-group">
+                    <label>Name</label>
+                    <input type="text" id="registerName" placeholder="Enter your name">
+                </div>
+                <div class="input-group">
+                    <label>Email</label>
+                    <input type="email" id="registerEmail" placeholder="Enter your email">
+                </div>
+                <div class="input-group">
+                    <label>Password</label>
+                    <input type="password" id="registerPassword" placeholder="Enter your password">
+                </div>
+                <button class="btn btn-primary" onclick="register()" style="width: 100%; margin-bottom: 1rem;">
+                    Register
+                </button>
+                <p style="text-align: center;">
+                    Already have an account? 
+                    <a href="#" onclick="switchToLogin()" style="color: var(--primary);">Sign In</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <div id="notificationContent"></div>
+    </div>
+
+    <script>
+        // Global state
+        let currentUser = null;
+        let debugMode = false;
+        let apiLogs = [];
+        let currentPage = 'dashboard';
+        
+        // API configuration
+        const API_BASE = window.location.hostname === 'localhost' ? 
+            'http://localhost:8787/api' : 
+            'https://scholarphile-api.yourdomain.workers.dev/api';
+
+        // Initialize app
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            setupEventListeners();
+            checkAuthStatus();
+        });
+
+        function initializeApp() {
+            const pageLoadTime = performance.now();
+            document.getElementById('pageLoadTime').textContent = Math.round(pageLoadTime) + 'ms';
+            
+            // Set up navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const page = this.dataset.page;
+                    switchPage(page);
+                });
+            });
+
+            // Load dashboard data
+            loadDashboardData();
         }
 
-        // Tab click handlers
-        navTabs.forEach(tab => {
-            tab.addEventListener('click', (e) => {
-                const pageId = e.target.dataset.page;
-                showPage(pageId);
+        function setupEventListeners() {
+            // Upload zone
+            const uploadZone = document.getElementById('uploadZone');
+            const fileInput = document.getElementById('fileInput');
+
+            uploadZone.addEventListener('click', () => fileInput.click());
+            uploadZone.addEventListener('dragover', handleDragOver);
+            uploadZone.addEventListener('drop', handleDrop);
+            fileInput.addEventListener('change', handleFileSelect);
+
+            // Search
+            document.getElementById('searchQuery').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    performSearch();
+                }
             });
-        });
 
-        // Sign in form handler
-        document.getElementById('signinForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Simulate login
-            isLoggedIn = true;
-            authTab.textContent = 'Profile';
-            authTab.dataset.page = 'profile';
-            
-            // Show profile page
-            showPage('profile');
-            
-            // Show success message
-            showNotification('Successfully signed in!', 'success');
-        });
-
-        // Filter chips functionality
-        const filterChips = document.querySelectorAll('.filter-chip');
-
-        filterChips.forEach(chip => {
-            chip.addEventListener('click', function() {
-                filterChips.forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                // Implement filter logic here
+            // Filter buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    performSearch();
+                });
             });
-        });
+        }
 
-        filterChips.forEach(chip => {
-            chip.addEventListener('click', function() {
-                filterChips.forEach(c => c.classList.remove('active'));
-                this.classList.add('active');
-                // Implement filter logic here
-            });
-        });
+        async function checkAuthStatus() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                showAuthModal();
+                return;
+            }
 
-        // Document card click handlers are now handled dynamically in createDocumentCard function
+            try {
+                const response = await apiCall('/auth/me', 'GET');
+                if (response.user) {
+                    currentUser = response.user;
+                    updateUserInterface();
+                    closeAuthModal();
+                } else {
+                    showAuthModal();
+                }
+            } catch (error) {
+                showAuthModal();
+            }
+        }
 
-        // Notification system
-        function showNotification(message, type = 'info') {
-            const notification = document.createElement('div');
-            notification.textContent = message;
-            notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                padding: 1rem 1.5rem;
-                border-radius: 8px;
-                color: white;
-                font-weight: 600;
-                z-index: 1000;
-                animation: slideIn 0.3s ease;
-                background: ${type === 'success' ? '#10b981' : type === 'error' ? '#ef4444' : '#3b82f6'};
-            `;
+        function updateUserInterface() {
+            if (currentUser) {
+                const avatar = document.getElementById('userAvatar');
+                avatar.innerHTML = currentUser.name.charAt(0).toUpperCase();
+                avatar.title = currentUser.name;
+                
+                // Load user-specific data
+                loadUserDocuments();
+                loadRecommendations();
+                loadAnalytics();
+            }
+        }
+
+        async function apiCall(endpoint, method = 'GET', data = null, isFormData = false) {
+            const startTime = performance.now();
             
-            document.body.appendChild(notification);
+            const options = {
+                method,
+                headers: {
+                    ...(debugMode && { 'X-Debug-Mode': 'true' }),
+                    ...(localStorage.getItem('token') && { 
+                        'Authorization': `Bearer ${localStorage.getItem('token')}` 
+                    }),
+                    ...(!isFormData && { 'Content-Type': 'application/json' })
+                }
+            };
+
+            if (data) {
+                options.body = isFormData ? data : JSON.stringify(data);
+            }
+
+            try {
+                const response = await fetch(API_BASE + endpoint, options);
+                const endTime = performance.now();
+                const duration = Math.round(endTime - startTime);
+                
+                document.getElementById('lastApiTime').textContent = duration + 'ms';
+                
+                const result = await response.json();
+                
+                logDebug(`${method} ${endpoint}`, {
+                    status: response.status,
+                    duration: duration + 'ms',
+                    response: result
+                });
+
+                if (!response.ok) {
+                    throw new Error(result.error || 'API call failed');
+                }
+
+                return result;
+            } catch (error) {
+                logDebug(`${method} ${endpoint} - ERROR`, { error: error.message });
+                throw error;
+            }
+        }
+
+        function logDebug(message, data = null) {
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = `[${timestamp}] ${message}${data ? ': ' + JSON.stringify(data, null, 2) : ''}`;
+            
+            apiLogs.unshift(logEntry);
+            if (apiLogs.length > 100) apiLogs.pop();
+            
+            const logsElement = document.getElementById('apiLogs');
+            logsElement.textContent = apiLogs.join('\n');
+            logsElement.scrollTop = 0;
+        }
+
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            const content = document.getElementById('notificationContent');
+            
+            content.textContent = message;
+            notification.className = `notification ${type}`;
+            notification.classList.add('show');
             
             setTimeout(() => {
-                notification.style.animation = 'slideOut 0.3s ease';
-                setTimeout(() => {
-                    document.body.removeChild(notification);
-                }, 300);
+                notification.classList.remove('show');
             }, 3000);
         }
 
-        // Add CSS animations
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideIn {
-                from { transform: translateX(100%); opacity: 0; }
-                to { transform: translateX(0); opacity: 1; }
-            }
-            @keyframes slideOut {
-                from { transform: translateX(0); opacity: 1; }
-                to { transform: translateX(100%); opacity: 0; }
-            }
-        `;
-        document.head.appendChild(style);
+        async function login() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
 
-        // API Configuration
-        const API_BASE_URL = 'https://scholarphile-api.scholarphile.workers.dev';
+            if (!email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
 
-        // Load documents from API
-        async function loadDocuments() {
-            const documentsGrid = document.getElementById('documentsGrid');
-            
             try {
-                const response = await fetch(`${API_BASE_URL}/api/documents`);
-                const data = await response.json();
+                const response = await apiCall('/auth/login', 'POST', { email, password });
+                localStorage.setItem('token', response.token);
+                currentUser = response.user;
+                updateUserInterface();
+                closeAuthModal();
+                showNotification('Welcome back!');
+            } catch (error) {
+                showNotification('Login failed: ' + error.message, 'error');
+            }
+        }
+
+        async function register() {
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+
+            if (!name || !email || !password) {
+                showNotification('Please fill in all fields', 'error');
+                return;
+            }
+
+            try {
+                const response = await apiCall('/auth/register', 'POST', { name, email, password });
+                localStorage.setItem('token', response.token);
+                currentUser = response.user;
+                updateUserInterface();
+                closeAuthModal();
+                showNotification('Welcome to Scholarphile!');
+            } catch (error) {
+                showNotification('Registration failed: ' + error.message, 'error');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            currentUser = null;
+            showAuthModal();
+            showNotification('Logged out successfully');
+        }
+
+        function showAuthModal() {
+            document.getElementById('authModal').classList.add('open');
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('open');
+        }
+
+        function switchToRegister() {
+            document.getElementById('authTitle').textContent = 'Register';
+            document.getElementById('loginForm').style.display = 'none';
+            document.getElementById('registerForm').style.display = 'block';
+        }
+
+        function switchToLogin() {
+            document.getElementById('authTitle').textContent = 'Sign In';
+            document.getElementById('loginForm').style.display = 'block';
+            document.getElementById('registerForm').style.display = 'none';
+        }
+
+        function switchPage(page) {
+            // Update navigation
+            document.querySelectorAll('.nav-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${page}"]`).classList.add('active');
+
+            // Update pages
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            document.getElementById(page).classList.add('active');
+
+            currentPage = page;
+
+            // Load page-specific data
+            switch(page) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'documents':
+                    loadUserDocuments();
+                    break;
+                case 'analytics':
+                    loadAnalytics();
+                    break;
+            }
+        }
+
+        async function loadDashboardData() {
+            try {
+                // Load recommendations and basic stats
+                await Promise.all([
+                    loadRecommendations(),
+                    loadBasicStats()
+                ]);
+            } catch (error) {
+                logDebug('Failed to load dashboard data', { error: error.message });
+            }
+        }
+
+        async function loadRecommendations() {
+            try {
+                const response = await apiCall('/recommendations');
+                const grid = document.getElementById('recommendationsGrid');
                 
-                if (data.documents && data.documents.length > 0) {
-                    renderDocuments(data.documents);
+                if (response.recommendations && response.recommendations.length > 0) {
+                    grid.innerHTML = response.recommendations.map(doc => createDocumentCard(doc, true)).join('');
                 } else {
-                    showEmptyState();
+                    grid.innerHTML = '<div class="card"><p>No recommendations available yet. Upload some documents and start exploring!</p></div>';
                 }
             } catch (error) {
-                console.error('Error loading documents:', error);
-                showErrorState();
+                logDebug('Failed to load recommendations', { error: error.message });
             }
         }
 
-        // Render documents from API data
-        function renderDocuments(documents) {
-            const documentsGrid = document.getElementById('documentsGrid');
-            documentsGrid.innerHTML = '';
-            
-            documents.forEach(doc => {
-                const card = createDocumentCard(doc);
-                documentsGrid.appendChild(card);
-            });
+        async function loadBasicStats() {
+            try {
+                const response = await apiCall('/documents?limit=1');
+                // Update basic counters (this would be expanded with proper analytics)
+                document.getElementById('totalDocuments').textContent = response.pagination?.total || 0;
+            } catch (error) {
+                logDebug('Failed to load basic stats', { error: error.message });
+            }
         }
 
-        // Create document card from API data
-        function createDocumentCard(doc) {
-            const card = document.createElement('div');
-            card.className = 'document-card fade-in';
-            card.dataset.documentId = doc.id;
-            
-            const initials = doc.user_name ? doc.user_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-            const timeAgo = formatTimeAgo(doc.created_at);
-            
-            card.innerHTML = `
-                <div class="document-preview">
-                    <div class="document-preview-content">
-                        <div class="document-preview-title">${doc.course_code || 'Document'}</div>
-                        <div class="document-preview-subtitle">${doc.course_name || 'Study Material'}</div>
-                    </div>
-                </div>
-                <div class="document-info">
-                    <div class="document-title">${doc.title}</div>
-                    <div class="document-meta">
-                        <div class="document-author">
-                            <div class="author-avatar">${initials}</div>
-                            <span>${doc.user_name || 'Unknown User'}</span>
+        async function loadUserDocuments() {
+            if (!currentUser) return;
+
+            try {
+                const response = await apiCall('/documents');
+                const grid = document.getElementById('documentsGrid');
+                
+                if (response.documents && response.documents.length > 0) {
+                    grid.innerHTML = response.documents.map(doc => createDocumentCard(doc)).join('');
+                } else {
+                    grid.innerHTML = '<div class="card"><p>No documents uploaded yet. <a href="#" onclick="switchPage(\'upload\')">Upload your first document</a>!</p></div>';
+                }
+            } catch (error) {
+                logDebug('Failed to load user documents', { error: error.message });
+                showNotification('Failed to load documents', 'error');
+            }
+        }
+
+        async function loadAnalytics() {
+            if (!currentUser) return;
+
+            try {
+                const response = await apiCall('/analytics');
+                
+                // Update analytics display
+                document.getElementById('userDocuments').textContent = response.user_stats?.documents_uploaded || 0;
+                document.getElementById('userFavorites').textContent = response.user_stats?.favorites_count || 0;
+                document.getElementById('userSearches').textContent = response.user_stats?.searches_count || 0;
+                
+                // Display popular courses
+                const coursesElement = document.getElementById('popularCourses');
+                if (response.course_popularity && response.course_popularity.length > 0) {
+                    coursesElement.innerHTML = response.course_popularity.map(course => 
+                        `<div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <span>${course.course_code}</span>
+                            <span>${course.doc_count} documents</span>
+                        </div>`
+                    ).join('');
+                } else {
+                    coursesElement.innerHTML = '<p>No course data available yet.</p>';
+                }
+            } catch (error) {
+                logDebug('Failed to load analytics', { error: error.message });
+            }
+        }
+
+        function createDocumentCard(doc, isRecommendation = false) {
+            return `
+                <div class="document-card ${isRecommendation ? 'recommendation-card' : ''}" onclick="viewDocument('${doc.id}')">
+                    ${isRecommendation ? `<div class="recommendation-reason">${doc.recommendation_reason}</div>` : ''}
+                    <div class="document-header">
+                        <div class="document-title">${doc.title}</div>
+                        <div class="document-meta">
+                            <span>${doc.course_code || 'No Course'}</span>
+                            <span>${doc.view_count || 0} views</span>
                         </div>
-                        <span>${timeAgo}</span>
+                    </div>
+                    <div class="document-content">
+                        <p>${doc.description || 'No description available'}</p>
+                    </div>
+                    <div class="document-actions">
+                        <button class="btn btn-secondary" onclick="event.stopPropagation(); downloadDocument('${doc.id}')">
+                            <i class="fas fa-download"></i>
+                        </button>
+                        <button class="btn btn-secondary" onclick="event.stopPropagation(); toggleFavorite('${doc.id}')">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                        ${doc.user_id === currentUser?.id ? 
+                            `<button class="btn btn-danger" onclick="event.stopPropagation(); deleteDocument('${doc.id}')">
+                                <i class="fas fa-trash"></i>
+                            </button>` : ''
+                        }
                     </div>
                 </div>
             `;
-            
-            // Add click handler
-            card.addEventListener('click', () => {
-                showNotification('Opening document...', 'info');
-                // TODO: Implement document opening logic
-            });
-            
-            return card;
         }
 
-        // Show empty state when no documents
-        function showEmptyState() {
-            const documentsGrid = document.getElementById('documentsGrid');
-            documentsGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-file-alt"></i>
-                    <h3>No documents yet</h3>
-                    <p>Be the first to share your study materials!</p>
-                </div>
-            `;
-        }
-
-        // Show error state
-        function showErrorState() {
-            const documentsGrid = document.getElementById('documentsGrid');
-            documentsGrid.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <h3>Unable to load documents</h3>
-                    <p>Please try again later.</p>
-                </div>
-            `;
-        }
-
-        // Format time ago
-        function formatTimeAgo(dateString) {
-            const date = new Date(dateString);
-            const now = new Date();
-            const diffInSeconds = Math.floor((now - date) / 1000);
-            
-            if (diffInSeconds < 60) return 'Just now';
-            if (diffInSeconds < 3600) return `${Math.floor(diffInSeconds / 60)} minutes ago`;
-            if (diffInSeconds < 86400) return `${Math.floor(diffInSeconds / 3600)} hours ago`;
-            if (diffInSeconds < 2592000) return `${Math.floor(diffInSeconds / 86400)} days ago`;
-            return `${Math.floor(diffInSeconds / 2592000)} months ago`;
-        }
-
-        // Search functionality with API
-        const searchInput = document.querySelector('.search-input');
-        let searchTimeout;
-
-        searchInput.addEventListener('input', function(e) {
-            clearTimeout(searchTimeout);
-            const query = e.target.value.trim();
-            
-            if (query.length > 0) {
-                searchTimeout = setTimeout(() => {
-                    performSearch(query);
-                }, 500);
-            } else {
-                loadDocuments(); // Load all documents when search is cleared
-            }
-        });
-
-        // Perform search via API
-        async function performSearch(query) {
-            const documentsGrid = document.getElementById('documentsGrid');
-            documentsGrid.innerHTML = '<div class="loading-spinner"><div class="spinner"></div><p>Searching...</p></div>';
-            
-            try {
-                const response = await fetch(`${API_BASE_URL}/api/search?q=${encodeURIComponent(query)}`);
-                const data = await response.json();
-                
-                if (data.results && data.results.length > 0) {
-                    renderDocuments(data.results);
-                } else {
-                    showEmptyState();
-                }
-            } catch (error) {
-                console.error('Error searching documents:', error);
-                showErrorState();
-            }
-        }
-
-        // Upload functionality
-        let selectedFile = null;
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const uploadForm = document.getElementById('uploadForm');
-        const cancelUpload = document.getElementById('cancelUpload');
-
-        // File selection via click
-        uploadArea.addEventListener('click', () => {
-            fileInput.click();
-        });
-
-        // File selection via drag and drop
-        uploadArea.addEventListener('dragover', (e) => {
+        function handleDragOver(e) {
             e.preventDefault();
-            uploadArea.classList.add('dragover');
-        });
+            e.currentTarget.classList.add('dragover');
+        }
 
-        uploadArea.addEventListener('dragleave', () => {
-            uploadArea.classList.remove('dragover');
-        });
-
-        uploadArea.addEventListener('drop', (e) => {
+        function handleDrop(e) {
             e.preventDefault();
-            uploadArea.classList.remove('dragover');
-            const files = e.dataTransfer.files;
-            if (files.length > 0) {
-                handleFileSelect(files[0]);
-            }
-        });
-
-        // File input change
-        fileInput.addEventListener('change', (e) => {
-            if (e.target.files.length > 0) {
-                handleFileSelect(e.target.files[0]);
-            }
-        });
-
-        // Handle file selection
-        function handleFileSelect(file) {
-            // Validate file type
-            const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
-            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
-            
-            if (!allowedTypes.includes(fileExtension)) {
-                showNotification('Please select a valid file type (PDF, DOC, DOCX, TXT)', 'error');
-                return;
-            }
-
-            // Validate file size (10MB limit)
-            if (file.size > 10 * 1024 * 1024) {
-                showNotification('File size must be less than 10MB', 'error');
-                return;
-            }
-
-            selectedFile = file;
-            showFilePreview(file);
+            e.currentTarget.classList.remove('dragover');
+            const files = Array.from(e.dataTransfer.files);
+            handleFiles(files);
         }
 
-        // Show file preview
-        function showFilePreview(file) {
-            const fileSize = (file.size / 1024 / 1024).toFixed(2);
-            const fileIcon = getFileIcon(file.name);
-            
-            const previewHTML = `
-                <div class="file-preview">
-                    <i class="fas ${fileIcon} file-preview-icon"></i>
-                    <div class="file-preview-info">
-                        <div class="file-preview-name">${file.name}</div>
-                        <div class="file-preview-size">${fileSize} MB</div>
-                    </div>
-                    <button type="button" class="file-preview-remove" onclick="removeFile()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-            `;
-            
-            uploadArea.innerHTML = previewHTML;
+        function handleFileSelect(e) {
+            const files = Array.from(e.target.files);
+            handleFiles(files);
         }
 
-        // Get file icon based on extension
-        function getFileIcon(filename) {
-            const ext = filename.split('.').pop().toLowerCase();
-            switch (ext) {
-                case 'pdf': return 'fa-file-pdf';
-                case 'doc':
-                case 'docx': return 'fa-file-word';
-                case 'txt': return 'fa-file-alt';
-                default: return 'fa-file';
-            }
-        }
+        function handleFiles(files) {
+            if (files.length === 0) return;
 
-        // Remove selected file
-        function removeFile() {
-            selectedFile = null;
-            fileInput.value = '';
-            uploadArea.innerHTML = `
-                <div class="upload-content">
-                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
-                    <h3>Drop your file here</h3>
-                    <p>or click to browse</p>
-                    <span class="upload-hint">Supports PDF, DOC, DOCX, TXT (Max 10MB)</span>
-                </div>
-            `;
-        }
-
-        // Handle form submission
-        uploadForm.addEventListener('submit', async (e) => {
-            e.preventDefault();
+            // Show upload form
+            document.getElementById('uploadForm').style.display = 'block';
             
-            if (!selectedFile) {
-                showNotification('Please select a file to upload', 'error');
-                return;
+            // Store files for later upload
+            window.pendingFiles = files;
+            
+            // Auto-fill title if single file
+            if (files.length === 1) {
+                const filename = files[0].name.replace(/\.[^/.]+$/, ""); // Remove extension
+                document.getElementById('docTitle').value = filename;
             }
 
-            const title = document.getElementById('documentTitle').value.trim();
-            if (!title) {
-                showNotification('Please enter a document title', 'error');
-                return;
-            }
+            showNotification(`${files.length} file(s) selected for upload`);
+        }
 
-            await uploadDocument();
-        });
-
-        // Upload document to API
         async function uploadDocument() {
-            const submitBtn = document.getElementById('submitUpload');
-            const originalText = submitBtn.innerHTML;
-            
+            if (!window.pendingFiles || window.pendingFiles.length === 0) {
+                showNotification('No files selected', 'error');
+                return;
+            }
+
+            const title = document.getElementById('docTitle').value;
+            if (!title) {
+                showNotification('Please enter a title', 'error');
+                return;
+            }
+
             try {
-                // Show loading state
-                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
-                submitBtn.disabled = true;
-
-                // Create FormData
                 const formData = new FormData();
-                formData.append('file', selectedFile);
-                formData.append('title', document.getElementById('documentTitle').value);
-                formData.append('description', document.getElementById('documentDescription').value);
-                formData.append('courseCode', document.getElementById('courseCode').value);
-                formData.append('courseName', document.getElementById('courseName').value);
-                formData.append('year', document.getElementById('academicYear').value);
-                formData.append('semester', document.getElementById('semester').value);
-                formData.append('tags', document.getElementById('documentTags').value);
+                formData.append('file', window.pendingFiles[0]); // Upload first file
+                formData.append('title', title);
+                formData.append('description', document.getElementById('docDescription').value);
+                formData.append('courseCode', document.getElementById('docCourse').value);
+                formData.append('year', document.getElementById('docYear').value);
+                formData.append('tags', document.getElementById('docTags').value);
 
-                // Upload to API
-                const response = await fetch(`${API_BASE_URL}/api/documents`, {
-                    method: 'POST',
-                    body: formData
-                });
-
-                if (response.ok) {
-                    const result = await response.json();
-                    showNotification('Document uploaded successfully!', 'success');
-                    
-                    // Reset form
-                    uploadForm.reset();
-                    removeFile();
-                    
-                    // Refresh documents list
-                    loadDocuments();
-                    
-                    // Switch to MyNotes tab
-                    showPage('mynotes');
-                } else {
-                    const error = await response.json();
-                    showNotification(error.error || 'Upload failed', 'error');
+                const response = await apiCall('/documents', 'POST', formData, true);
+                
+                showNotification('Document uploaded successfully!');
+                
+                // Reset form
+                document.getElementById('uploadForm').style.display = 'none';
+                document.getElementById('docTitle').value = '';
+                document.getElementById('docDescription').value = '';
+                document.getElementById('docCourse').value = '';
+                document.getElementById('docYear').value = '';
+                document.getElementById('docTags').value = '';
+                
+                window.pendingFiles = null;
+                
+                // Refresh documents if on documents page
+                if (currentPage === 'documents') {
+                    loadUserDocuments();
                 }
             } catch (error) {
-                console.error('Upload error:', error);
-                showNotification('Upload failed. Please try again.', 'error');
-            } finally {
-                // Reset button state
-                submitBtn.innerHTML = originalText;
-                submitBtn.disabled = false;
+                showNotification('Upload failed: ' + error.message, 'error');
             }
         }
 
-        // Cancel upload
-        cancelUpload.addEventListener('click', () => {
-            uploadForm.reset();
-            removeFile();
-            showPage('mynotes');
-        });
+        async function performSearch() {
+            const query = document.getElementById('searchQuery').value.trim();
+            if (!query) {
+                showNotification('Please enter a search term', 'warning');
+                return;
+            }
 
-        // Initialize the application
-        document.addEventListener('DOMContentLoaded', function() {
-            loadDocuments();
-            console.log('Scholarphile MyNotes initialized with API integration and upload functionality');
-        });
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            
+            try {
+                let searchUrl = `/search?q=${encodeURIComponent(query)}`;
+                if (activeFilter !== 'all') {
+                    searchUrl += `&type=${activeFilter}`;
+                }
+
+                const response = await apiCall(searchUrl);
+                const resultsGrid = document.getElementById('searchResults');
+                
+                if (response.results && response.results.length > 0) {
+                    resultsGrid.innerHTML = response.results.map(doc => createDocumentCard(doc)).join('');
+                    showNotification(`Found ${response.results.length} results`);
+                } else {
+                    resultsGrid.innerHTML = '<div class="card"><p>No results found. Try different search terms.</p></div>';
+                    showNotification('No results found', 'warning');
+                }
+            } catch (error) {
+                showNotification('Search failed: ' + error.message, 'error');
+            }
+        }
+
+        async function viewDocument(docId) {
+            try {
+                const response = await apiCall(`/documents/${docId}`);
+                // This would open a document viewer modal
+                showNotification('Document viewer would open here');
+            } catch (error) {
+                showNotification('Failed to load document', 'error');
+            }
+        }
+
+        async function downloadDocument(docId) {
+            try {
+                // In a real implementation, this would handle file download
+                showNotification('Download started');
+            } catch (error) {
+                showNotification('Download failed', 'error');
+            }
+        }
+
+        async function toggleFavorite(docId) {
+            try {
+                await apiCall('/users/favorites', 'POST', { document_id: docId });
+                showNotification('Added to favorites');
+            } catch (error) {
+                showNotification('Failed to add to favorites', 'error');
+            }
+        }
+
+        async function deleteDocument(docId) {
+            if (!confirm('Are you sure you want to delete this document?')) return;
+
+            try {
+                await apiCall(`/documents/${docId}`, 'DELETE');
+                showNotification('Document deleted');
+                loadUserDocuments(); // Refresh the list
+            } catch (error) {
+                showNotification('Failed to delete document', 'error');
+            }
+        }
+
+        function toggleDebug() {
+            debugMode = !debugMode;
+            const panel = document.getElementById('debugPanel');
+            panel.classList.toggle('open');
+            
+            if (debugMode) {
+                // Update debug status
+                updateDebugStatus();
+            }
+        }
+
+        async function updateDebugStatus() {
+            try {
+                const response = await fetch(API_BASE.replace('/api', '/health'));
+                const health = await response.json();
+                
+                document.getElementById('apiStatus').textContent = 'Connected';
+                document.getElementById('dbStatus').textContent = health.databases?.d1 ? 'Connected' : 'Offline';
+                document.getElementById('storageStatus').textContent = health.databases?.r2 ? 'Connected' : 'Offline';
+            } catch (error) {
+                document.getElementById('apiStatus').textContent = 'Offline';
+                document.getElementById('dbStatus').textContent = 'Unknown';
+                document.getElementById('storageStatus').textContent = 'Unknown';
+            }
+        }
+
+        function clearLogs() {
+            apiLogs = [];
+            document.getElementById('apiLogs').textContent = '';
+        }
+
+        function exportLogs() {
+            const logs = apiLogs.join('\n');
+            const blob = new Blob([logs], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `scholarphile-logs-${new Date().toISOString()}.txt`;
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function showUserMenu() {
+            if (currentUser) {
+                // Show user menu with logout option
+                if (confirm(`Hello ${currentUser.name}! Would you like to logout?`)) {
+                    logout();
+                }
+            } else {
+                showAuthModal();
+            }
+        }
     </script>
 </body>
 </html>
