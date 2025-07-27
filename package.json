@@ -7,7 +7,12 @@
     "start": "python -m http.server 8000",
     "dev": "python -m http.server 8000",
     "build": "echo 'Static site - no build required'",
-    "deploy": "echo 'Deploy via GitHub Actions'"
+    "deploy": "echo 'Deploy via GitHub Actions'",
+    "worker:dev": "npx wrangler dev",
+    "worker:deploy": "npx wrangler deploy",
+    "db:create": "npx wrangler d1 create scholarphile-db",
+    "db:migrate": "npx wrangler d1 execute scholarphile-db --file=./schema.sql",
+    "storage:create": "npx wrangler r2 bucket create scholarphile-documents"
   },
   "keywords": [
     "education",
@@ -20,6 +25,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/yourusername/permates.git"
+    "url": "git+https://github.com/yourusername/permates.git"
+  },
+  "bugs": {
+    "url": "https://github.com/yourusername/permates/issues"
+  },
+  "homepage": "https://github.com/yourusername/permates#readme",
+  "devDependencies": {
+    "wrangler": "^4.26.0"
   }
-} 
+}
