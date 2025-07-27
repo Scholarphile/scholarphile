@@ -1,9 +1,66 @@
 // Enhanced Cloudflare Worker for Scholarphile API with comprehensive functionality
-import { sign, verify } from 'jsonwebtoken';
 
 // Constants
 const JWT_SECRET = 'your-super-secret-jwt-key-change-in-production';
 const SESSION_DURATION = 24 * 60 * 60 * 1000; // 24 hours
+
+// JWT implementation using Web Crypto API
+class JWT {
+  static async sign(payload, secret) {
+    const header = {
+      alg: 'HS256',
+      typ: 'JWT'
+    };
+
+    const encodedHeader = btoa(JSON.stringify(header)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    const encodedPayload = btoa(JSON.stringify(payload)).replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    
+    const data = `${encodedHeader}.${encodedPayload}`;
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['sign']
+    );
+    
+    const signature = await crypto.subtle.sign('HMAC', key, encoder.encode(data));
+    const encodedSignature = btoa(String.fromCharCode(...new Uint8Array(signature)))
+      .replace(/=/g, '').replace(/\+/g, '-').replace(/\//g, '_');
+    
+    return `${data}.${encodedSignature}`;
+  }
+
+  static async verify(token, secret) {
+    const parts = token.split('.');
+    if (parts.length !== 3) {
+      throw new Error('Invalid token format');
+    }
+
+    const [header, payload, signature] = parts;
+    const data = `${header}.${payload}`;
+    
+    const encoder = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+      'raw',
+      encoder.encode(secret),
+      { name: 'HMAC', hash: 'SHA-256' },
+      false,
+      ['verify']
+    );
+
+    const signatureBytes = Uint8Array.from(atob(signature.replace(/-/g, '+').replace(/_/g, '/')), c => c.charCodeAt(0));
+    
+    const isValid = await crypto.subtle.verify('HMAC', key, signatureBytes, encoder.encode(data));
+    
+    if (!isValid) {
+      throw new Error('Invalid signature');
+    }
+
+    return JSON.parse(atob(payload.replace(/-/g, '+').replace(/_/g, '/')));
+  }
+}
 
 export default {
   async fetch(request, env, ctx) {
@@ -731,125 +788,28 @@ async function handleRecommendations(request, env, method, debugLog) {
 
     debugLog('Generating recommendations', { userId: user.id });
 
-    // Get user's search history and favorites
-    const searchHistory = await env.DB.prepare(
-      'SELECT query FROM search_history WHERE user_id = ? ORDER BY created_at DESC LIMIT 10'
-    ).bind(user.id).all();
-
-    const favorites = await env.DB.prepare(
-      'SELECT d.course_code, d.year FROM user_favorites f JOIN documents d ON f.document_id = d.id WHERE f.user_id = ?'
-    ).bind(user.id).all();
-
-    // Content-based filtering: recommend based on user's interests
-    let recommendations = [];
-
-    // 1. Recommend from same courses as favorites
-    if (favorites.results.length > 0) {
-      const courseCodes = [...new Set(favorites.results.map(f => f.course_code).filter(Boolean))];
-      if (courseCodes.length > 0) {
-        const courseRecommendations = await env.DB.prepare(`
-          SELECT d.*, u.name as author_name 
-          FROM documents d 
-          JOIN users u ON d.user_id = u.id 
-          WHERE d.course_code IN (${courseCodes.map(() => '?').join(',')})
-            AND d.id NOT IN (SELECT document_id FROM user_favorites WHERE user_id = ?)
-          ORDER BY d.view_count DESC 
-          LIMIT 5
-        `).bind(...courseCodes, user.id).all();
-        
-        recommendations.push(...courseRecommendations.results.map(doc => ({
-          ...doc,
-          recommendation_reason: 'Similar to your favorites',
-          score: 0.9
-        })));
-      }
-    }
-
-    // 2. Recommend based on search history
-    if (searchHistory.results.length > 0) {
-      const searchTerms = searchHistory.results.map(s => s.query);
-      const searchRecommendations = await env.DB.prepare(`
-        SELECT d.*, u.name as author_name 
-        FROM documents d 
-        JOIN users u ON d.user_id = u.id 
-        WHERE (${searchTerms.map(() => 'd.title LIKE ? OR d.description LIKE ?').join(' OR ')})
-          AND d.id NOT IN (SELECT document_id FROM user_favorites WHERE user_id = ?)
-        ORDER BY d.view_count DESC 
-        LIMIT 5
-      `).bind(...searchTerms.flatMap(term => [`%${term}%`, `%${term}%`]), user.id).all();
-
-      recommendations.push(...searchRecommendations.results.map(doc => ({
-        ...doc,
-        recommendation_reason: 'Based on your search history',
-        score: 0.8
-      })));
-    }
-
-    // 3. Collaborative filtering: recommend what similar users like
-    const similarUsers = await env.DB.prepare(`
-      SELECT DISTINCT f2.user_id 
-      FROM user_favorites f1 
-      JOIN user_favorites f2 ON f1.document_id = f2.document_id 
-      WHERE f1.user_id = ? AND f2.user_id != ?
-      LIMIT 10
-    `).bind(user.id, user.id).all();
-
-    if (similarUsers.results.length > 0) {
-      const similarUserIds = similarUsers.results.map(u => u.user_id);
-      const collaborativeRecommendations = await env.DB.prepare(`
-        SELECT d.*, u.name as author_name, COUNT(*) as popularity
-        FROM user_favorites f 
-        JOIN documents d ON f.document_id = d.id 
-        JOIN users u ON d.user_id = u.id
-        WHERE f.user_id IN (${similarUserIds.map(() => '?').join(',')})
-          AND d.id NOT IN (SELECT document_id FROM user_favorites WHERE user_id = ?)
-        GROUP BY d.id
-        ORDER BY popularity DESC, d.view_count DESC
-        LIMIT 5
-      `).bind(...similarUserIds, user.id).all();
-
-      recommendations.push(...collaborativeRecommendations.results.map(doc => ({
-        ...doc,
-        recommendation_reason: 'Popular among similar users',
-        score: 0.7
-      })));
-    }
-
-    // 4. Trending documents
-    const trending = await env.DB.prepare(`
+    // Simple recommendation based on popular documents
+    const { results } = await env.DB.prepare(`
       SELECT d.*, u.name as author_name 
       FROM documents d 
       JOIN users u ON d.user_id = u.id 
-      WHERE d.created_at > date('now', '-7 days')
-        AND d.id NOT IN (SELECT document_id FROM user_favorites WHERE user_id = ?)
-      ORDER BY d.view_count DESC 
-      LIMIT 3
+      WHERE d.user_id != ?
+      ORDER BY d.view_count DESC, d.created_at DESC 
+      LIMIT 5
     `).bind(user.id).all();
 
-    recommendations.push(...trending.results.map(doc => ({
+    const recommendations = results.map(doc => ({
       ...doc,
-      recommendation_reason: 'Trending this week',
-      score: 0.6
-    })));
+      recommendation_reason: 'Popular content',
+      score: 0.8
+    }));
 
-    // Remove duplicates and sort by score
-    const uniqueRecommendations = recommendations
-      .filter((doc, index, self) => 
-        index === self.findIndex(d => d.id === doc.id)
-      )
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 10);
-
-    debugLog('Recommendations generated', { count: uniqueRecommendations.length });
+    debugLog('Recommendations generated', { count: recommendations.length });
 
     return new Response(JSON.stringify({
-      recommendations: uniqueRecommendations,
-      algorithm: 'hybrid-content-collaborative',
-      authenticated: true,
-      user_profile: {
-        favorites_count: favorites.results.length,
-        search_history_count: searchHistory.results.length
-      }
+      recommendations,
+      algorithm: 'popularity-based',
+      authenticated: true
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
@@ -878,50 +838,24 @@ async function handleAnalytics(request, env, method, debugLog) {
       });
     }
 
-    // Get various analytics
-    const [userStats, popularDocuments, recentSearches, coursePop] = await Promise.all([
-      // User statistics
-      env.DB.prepare(`
-        SELECT 
-          (SELECT COUNT(*) FROM documents WHERE user_id = ?) as documents_uploaded,
-          (SELECT COUNT(*) FROM user_favorites WHERE user_id = ?) as favorites_count,
-          (SELECT COUNT(*) FROM search_history WHERE user_id = ?) as searches_count
-      `).bind(user.id, user.id, user.id).first(),
-      
-      // Popular documents
-      env.DB.prepare(`
-        SELECT d.title, d.view_count, d.download_count 
-        FROM documents d 
-        ORDER BY d.view_count DESC 
-        LIMIT 5
-      `).all(),
-      
-      // Recent searches
-      env.DB.prepare(`
-        SELECT query, COUNT(*) as frequency 
-        FROM search_history 
-        WHERE created_at > date('now', '-7 days')
-        GROUP BY query 
-        ORDER BY frequency DESC 
-        LIMIT 10
-      `).all(),
-      
-      // Course popularity
-      env.DB.prepare(`
-        SELECT course_code, COUNT(*) as doc_count 
-        FROM documents 
-        WHERE course_code IS NOT NULL AND course_code != ''
-        GROUP BY course_code 
-        ORDER BY doc_count DESC 
-        LIMIT 10
-      `).all()
-    ]);
+    // Get basic analytics
+    const userStats = await env.DB.prepare(`
+      SELECT 
+        (SELECT COUNT(*) FROM documents WHERE user_id = ?) as documents_uploaded,
+        (SELECT COUNT(*) FROM user_favorites WHERE user_id = ?) as favorites_count,
+        (SELECT COUNT(*) FROM search_history WHERE user_id = ?) as searches_count
+    `).bind(user.id, user.id, user.id).first();
+
+    const popularDocs = await env.DB.prepare(`
+      SELECT d.title, d.view_count, d.download_count 
+      FROM documents d 
+      ORDER BY d.view_count DESC 
+      LIMIT 5
+    `).all();
 
     return new Response(JSON.stringify({
       user_stats: userStats,
-      popular_documents: popularDocuments.results,
-      recent_searches: recentSearches.results,
-      course_popularity: coursePop.results,
+      popular_documents: popularDocs.results,
       generated_at: new Date().toISOString()
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
@@ -934,7 +868,7 @@ async function handleAnalytics(request, env, method, debugLog) {
   });
 }
 
-// Enhanced Upload handler with file processing
+// Enhanced Upload handler
 async function handleUpload(request, env, method, debugLog) {
   const corsHeaders = {
     'Access-Control-Allow-Origin': '*',
@@ -951,70 +885,12 @@ async function handleUpload(request, env, method, debugLog) {
       });
     }
 
-    try {
-      const formData = await request.formData();
-      const files = formData.getAll('files');
-      
-      if (files.length === 0) {
-        return new Response(JSON.stringify({ error: 'No files provided' }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
-      }
-
-      const uploadResults = [];
-
-      for (const file of files) {
-        if (file.size > 10 * 1024 * 1024) { // 10MB limit
-          uploadResults.push({
-            filename: file.name,
-            error: 'File too large (max 10MB)'
-          });
-          continue;
-        }
-
-        try {
-          const fileBuffer = await file.arrayBuffer();
-          const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}-${file.name}`;
-          
-          // Store in R2 if available
-          if (env.STORAGE) {
-            await env.STORAGE.put(fileName, fileBuffer);
-          }
-
-          uploadResults.push({
-            filename: file.name,
-            stored_as: fileName,
-            size: file.size,
-            type: file.type,
-            url: env.STORAGE ? `https://your-domain.com/files/${fileName}` : fileName
-          });
-
-          debugLog('File uploaded', { filename: file.name, size: file.size });
-        } catch (error) {
-          uploadResults.push({
-            filename: file.name,
-            error: error.message
-          });
-        }
-      }
-
-      return new Response(JSON.stringify({
-        message: 'Upload completed',
-        results: uploadResults,
-        successful: uploadResults.filter(r => !r.error).length,
-        failed: uploadResults.filter(r => r.error).length
-      }), {
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
-
-    } catch (error) {
-      debugLog('Upload error', { error: error.message });
-      return new Response(JSON.stringify({ error: 'Upload failed' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      });
-    }
+    return new Response(JSON.stringify({
+      message: 'Upload endpoint - use /api/documents instead',
+      redirect: '/api/documents'
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
   }
 
   return new Response(JSON.stringify({ error: 'Method not allowed' }), {

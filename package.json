@@ -43,8 +43,5 @@
   "homepage": "https://github.com/yourusername/permates#readme",
   "devDependencies": {
     "wrangler": "^4.26.0"
-  },
-  "dependencies": {
-    "jsonwebtoken": "^9.0.2"
   }
 }
