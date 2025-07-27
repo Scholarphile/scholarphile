@@ -543,6 +543,186 @@
             opacity: 0.5;
         }
 
+        /* Upload Page Styles */
+        .upload-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .upload-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .upload-title {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .upload-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.125rem;
+            font-weight: 400;
+        }
+
+        .upload-form {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .upload-area {
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 2rem;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary);
+            background: rgba(58, 124, 165, 0.05);
+        }
+
+        .upload-area.dragover {
+            border-color: var(--primary);
+            background: rgba(58, 124, 165, 0.1);
+        }
+
+        .upload-content {
+            color: var(--text-secondary);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .upload-content h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .upload-content p {
+            margin-bottom: 0.5rem;
+        }
+
+        .upload-hint {
+            font-size: 0.875rem;
+            opacity: 0.7;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-row:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-row .form-group:only-child {
+            grid-column: 1 / -1;
+        }
+
+        .upload-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .file-preview {
+            background: var(--surface-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .file-preview-icon {
+            font-size: 1.5rem;
+            color: var(--primary);
+        }
+
+        .file-preview-info {
+            flex: 1;
+        }
+
+        .file-preview-name {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+
+        .file-preview-size {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
+        .file-preview-remove {
+            background: var(--danger);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .upload-progress {
+            background: var(--surface-light);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--primary);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+        }
+
         .stat-card {
             background: var(--surface);
             padding: 1.5rem;
@@ -646,6 +826,7 @@
             <nav class="nav-tabs">
                 <button class="nav-tab active" data-page="mynotes">MyNotes</button>
                 <button class="nav-tab" data-page="discover">Discover</button>
+                <button class="nav-tab" data-page="upload">Upload</button>
                 <button class="nav-tab" data-page="signin" id="authTab">Sign In</button>
             </nav>
         </div>
@@ -690,6 +871,96 @@
                     <div class="documents-grid">
                         <!-- Same document cards as MyNotes for now -->
                     </div>
+                </div>
+            </section>
+
+            <!-- Upload Page -->
+            <section id="upload" class="page">
+                <div class="upload-container">
+                    <div class="upload-header">
+                        <h1 class="upload-title">Upload Document</h1>
+                        <p class="upload-subtitle">Share your study materials with the community</p>
+                    </div>
+
+                    <form class="upload-form" id="uploadForm">
+                        <div class="upload-area" id="uploadArea">
+                            <div class="upload-content">
+                                <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                                <h3>Drop your file here</h3>
+                                <p>or click to browse</p>
+                                <span class="upload-hint">Supports PDF, DOC, DOCX, TXT (Max 10MB)</span>
+                            </div>
+                            <input type="file" id="fileInput" accept=".pdf,.doc,.docx,.txt" style="display: none;">
+                        </div>
+
+                        <div class="form-section">
+                            <h3 class="form-section-title">Document Information</h3>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Document Title *</label>
+                                    <input type="text" class="form-input" id="documentTitle" placeholder="Enter document title" required>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Description</label>
+                                    <textarea class="form-input" id="documentDescription" placeholder="Brief description of the document" rows="3"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Course Code</label>
+                                    <input type="text" class="form-input" id="courseCode" placeholder="e.g., CS50, MATH101">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Course Name</label>
+                                    <input type="text" class="form-input" id="courseName" placeholder="e.g., Introduction to Computer Science">
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Academic Year</label>
+                                    <select class="form-input" id="academicYear">
+                                        <option value="">Select year</option>
+                                        <option value="2024">2024</option>
+                                        <option value="2023">2023</option>
+                                        <option value="2022">2022</option>
+                                        <option value="2021">2021</option>
+                                        <option value="2020">2020</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Semester</label>
+                                    <select class="form-input" id="semester">
+                                        <option value="">Select semester</option>
+                                        <option value="Fall">Fall</option>
+                                        <option value="Spring">Spring</option>
+                                        <option value="Summer">Summer</option>
+                                        <option value="Winter">Winter</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Tags</label>
+                                    <input type="text" class="form-input" id="documentTags" placeholder="e.g., notes, exam, assignment (separate with commas)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="upload-actions">
+                            <button type="button" class="btn btn-secondary" id="cancelUpload">Cancel</button>
+                            <button type="submit" class="btn btn-primary" id="submitUpload">
+                                <i class="fas fa-upload"></i>
+                                Upload Document
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </section>
 
@@ -1020,10 +1291,195 @@
             }
         }
 
+        // Upload functionality
+        let selectedFile = null;
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadForm = document.getElementById('uploadForm');
+        const cancelUpload = document.getElementById('cancelUpload');
+
+        // File selection via click
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        // File selection via drag and drop
+        uploadArea.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            uploadArea.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', () => {
+            uploadArea.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            if (files.length > 0) {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        // File input change
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files.length > 0) {
+                handleFileSelect(e.target.files[0]);
+            }
+        });
+
+        // Handle file selection
+        function handleFileSelect(file) {
+            // Validate file type
+            const allowedTypes = ['.pdf', '.doc', '.docx', '.txt'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            
+            if (!allowedTypes.includes(fileExtension)) {
+                showNotification('Please select a valid file type (PDF, DOC, DOCX, TXT)', 'error');
+                return;
+            }
+
+            // Validate file size (10MB limit)
+            if (file.size > 10 * 1024 * 1024) {
+                showNotification('File size must be less than 10MB', 'error');
+                return;
+            }
+
+            selectedFile = file;
+            showFilePreview(file);
+        }
+
+        // Show file preview
+        function showFilePreview(file) {
+            const fileSize = (file.size / 1024 / 1024).toFixed(2);
+            const fileIcon = getFileIcon(file.name);
+            
+            const previewHTML = `
+                <div class="file-preview">
+                    <i class="fas ${fileIcon} file-preview-icon"></i>
+                    <div class="file-preview-info">
+                        <div class="file-preview-name">${file.name}</div>
+                        <div class="file-preview-size">${fileSize} MB</div>
+                    </div>
+                    <button type="button" class="file-preview-remove" onclick="removeFile()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            
+            uploadArea.innerHTML = previewHTML;
+        }
+
+        // Get file icon based on extension
+        function getFileIcon(filename) {
+            const ext = filename.split('.').pop().toLowerCase();
+            switch (ext) {
+                case 'pdf': return 'fa-file-pdf';
+                case 'doc':
+                case 'docx': return 'fa-file-word';
+                case 'txt': return 'fa-file-alt';
+                default: return 'fa-file';
+            }
+        }
+
+        // Remove selected file
+        function removeFile() {
+            selectedFile = null;
+            fileInput.value = '';
+            uploadArea.innerHTML = `
+                <div class="upload-content">
+                    <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                    <h3>Drop your file here</h3>
+                    <p>or click to browse</p>
+                    <span class="upload-hint">Supports PDF, DOC, DOCX, TXT (Max 10MB)</span>
+                </div>
+            `;
+        }
+
+        // Handle form submission
+        uploadForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            if (!selectedFile) {
+                showNotification('Please select a file to upload', 'error');
+                return;
+            }
+
+            const title = document.getElementById('documentTitle').value.trim();
+            if (!title) {
+                showNotification('Please enter a document title', 'error');
+                return;
+            }
+
+            await uploadDocument();
+        });
+
+        // Upload document to API
+        async function uploadDocument() {
+            const submitBtn = document.getElementById('submitUpload');
+            const originalText = submitBtn.innerHTML;
+            
+            try {
+                // Show loading state
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+                submitBtn.disabled = true;
+
+                // Create FormData
+                const formData = new FormData();
+                formData.append('file', selectedFile);
+                formData.append('title', document.getElementById('documentTitle').value);
+                formData.append('description', document.getElementById('documentDescription').value);
+                formData.append('courseCode', document.getElementById('courseCode').value);
+                formData.append('courseName', document.getElementById('courseName').value);
+                formData.append('year', document.getElementById('academicYear').value);
+                formData.append('semester', document.getElementById('semester').value);
+                formData.append('tags', document.getElementById('documentTags').value);
+
+                // Upload to API
+                const response = await fetch(`${API_BASE_URL}/api/documents`, {
+                    method: 'POST',
+                    body: formData
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    showNotification('Document uploaded successfully!', 'success');
+                    
+                    // Reset form
+                    uploadForm.reset();
+                    removeFile();
+                    
+                    // Refresh documents list
+                    loadDocuments();
+                    
+                    // Switch to MyNotes tab
+                    showPage('mynotes');
+                } else {
+                    const error = await response.json();
+                    showNotification(error.error || 'Upload failed', 'error');
+                }
+            } catch (error) {
+                console.error('Upload error:', error);
+                showNotification('Upload failed. Please try again.', 'error');
+            } finally {
+                // Reset button state
+                submitBtn.innerHTML = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        // Cancel upload
+        cancelUpload.addEventListener('click', () => {
+            uploadForm.reset();
+            removeFile();
+            showPage('mynotes');
+        });
+
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             loadDocuments();
-            console.log('Scholarphile MyNotes initialized with API integration');
+            console.log('Scholarphile MyNotes initialized with API integration and upload functionality');
         });
     </script>
 </body>
