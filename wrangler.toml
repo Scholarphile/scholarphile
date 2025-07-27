@@ -35,9 +35,9 @@ database_id = "0f5d1cf0-daee-4ff4-a9b3-f5f2e9051662"
 binding = "STORAGE"
 bucket_name = "scholarphile-documents"
 
-# Analytics Engine binding for usage metrics
-[[analytics_engine_datasets]]
-binding = "ANALYTICS"
+# Analytics Engine binding for usage metrics (disabled for now)
+# [[analytics_engine_datasets]]
+# binding = "ANALYTICS"
 
 # Rate limiting using Durable Objects
 # [[durable_objects.bindings]]
