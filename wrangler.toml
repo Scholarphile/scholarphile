@@ -2,18 +2,11 @@ name = "scholarphile-api"
 main = "src/index.js"
 compatibility_date = "2024-01-15"
 
-[env.production]
-name = "scholarphile-api"
-
-[env.staging]
-name = "scholarphile-api-staging"
-
 [[d1_databases]]
 binding = "DB"
 database_name = "scholarphile-db"
 database_id = "0f5d1cf0-daee-4ff4-a9b3-f5f2e9051662"
 
-# R2 bucket - uncomment after enabling R2 in Cloudflare dashboard
-# [[r2_buckets]]
-# binding = "STORAGE"
-# bucket_name = "scholarphile-documents" 
+[[r2_buckets]]
+binding = "STORAGE"
+bucket_name = "scholarphile-documents" 
