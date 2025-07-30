@@ -90,6 +90,13 @@
             background: transparent;
             color: var(--text-secondary);
             font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', 'Segoe UI', sans-serif;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .nav-tab i {
+            font-size: 0.75rem;
         }
 
         .nav-tab.active {
@@ -193,6 +200,16 @@
             text-align: center;
             color: #1e293b;
             padding: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .document-icon {
+            font-size: 2rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
         }
 
         .document-preview-title {
@@ -227,6 +244,16 @@
             color: var(--text-secondary);
             font-size: 0.875rem;
             font-weight: 400;
+        }
+
+        .document-time {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .document-time i {
+            font-size: 0.75rem;
         }
 
         .document-author {
@@ -303,6 +330,13 @@
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 400;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .filter-chip i {
+            font-size: 0.75rem;
         }
 
         .filter-chip.active {
@@ -883,10 +917,22 @@
     <header class="header">
         <div class="header-content">
             <nav class="nav-tabs">
-                <button class="nav-tab active" data-page="mynotes">MyNotes</button>
-                <button class="nav-tab" data-page="discover">Discover</button>
-                <button class="nav-tab" data-page="upload">Upload</button>
-                <button class="nav-tab" data-page="signin" id="authTab">Sign In</button>
+                                        <button class="nav-tab active" data-page="mynotes">
+                            <i class="fas fa-sticky-note"></i>
+                            MyNotes
+                        </button>
+                        <button class="nav-tab" data-page="discover">
+                            <i class="fas fa-search"></i>
+                            Discover
+                        </button>
+                        <button class="nav-tab" data-page="upload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            Upload
+                        </button>
+                        <button class="nav-tab" data-page="signin" id="authTab">
+                            <i class="fas fa-user"></i>
+                            Sign In
+                        </button>
             </nav>
         </div>
     </header>
@@ -917,11 +963,26 @@
                         <input type="text" class="search-input" placeholder="Search for documents, courses, or topics...">
                     </div>
                     <div class="search-filters">
-                        <button class="filter-chip active">All</button>
-                        <button class="filter-chip">Computer Science</button>
-                        <button class="filter-chip">Mathematics</button>
-                        <button class="filter-chip">Physics</button>
-                        <button class="filter-chip">Literature</button>
+                        <button class="filter-chip active">
+                            <i class="fas fa-th-large"></i>
+                            All
+                        </button>
+                        <button class="filter-chip">
+                            <i class="fas fa-laptop-code"></i>
+                            Computer Science
+                        </button>
+                        <button class="filter-chip">
+                            <i class="fas fa-square-root-alt"></i>
+                            Mathematics
+                        </button>
+                        <button class="filter-chip">
+                            <i class="fas fa-atom"></i>
+                            Physics
+                        </button>
+                        <button class="filter-chip">
+                            <i class="fas fa-book-open"></i>
+                            Literature
+                        </button>
                     </div>
                 </div>
 
@@ -1291,6 +1352,7 @@
             card.innerHTML = `
                 <div class="document-preview">
                     <div class="document-preview-content">
+                        <i class="fas fa-file-alt document-icon"></i>
                         <div class="document-preview-title">${doc.course_code || 'Document'}</div>
                         <div class="document-preview-subtitle">${doc.course_name || 'Study Material'}</div>
                     </div>
@@ -1302,7 +1364,10 @@
                             <div class="author-avatar">${initials}</div>
                             <span>${doc.user_name || 'Unknown User'}</span>
                         </div>
-                        <span>${timeAgo}</span>
+                        <span class="document-time">
+                            <i class="fas fa-clock"></i>
+                            ${timeAgo}
+                        </span>
                     </div>
                 </div>
             `;
