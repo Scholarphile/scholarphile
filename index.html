@@ -1294,31 +1294,7 @@
 
         // Document card click handlers are now handled dynamically in createDocumentCard function
 
-        // Test document viewing API
-        async function testDocumentViewing() {
-            try {
-                const testUrl = `${API_BASE_URL}/api/documents/view?id=edb4b684-86f2-4ce9-b5f0-495791b91ce0`;
-                console.log('Testing document viewing API:', testUrl);
-                
-                const response = await fetch(testUrl);
-                console.log('API Response status:', response.status);
-                console.log('API Response headers:', Object.fromEntries(response.headers.entries()));
-                
-                if (response.ok) {
-                    const content = await response.text();
-                    console.log('API Response content length:', content.length);
-                    console.log('API Response content preview:', content.substring(0, 100));
-                    showNotification('Document viewing API is working!', 'success');
-                } else {
-                    const error = await response.text();
-                    console.error('API Error:', error);
-                    showNotification('Document viewing API failed', 'error');
-                }
-            } catch (error) {
-                console.error('Test failed:', error);
-                showNotification('Document viewing test failed', 'error');
-            }
-        }
+
 
         // Notification system
         function showNotification(message, type = 'info') {
@@ -2065,24 +2041,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadDocuments();
             checkExistingSession();
-            
-            // Add test button for debugging
-            const testButton = document.createElement('button');
-            testButton.textContent = 'Test Document Viewing';
-            testButton.style.cssText = `
-                position: fixed;
-                bottom: 20px;
-                right: 20px;
-                padding: 0.5rem 1rem;
-                background: var(--primary);
-                color: white;
-                border: none;
-                border-radius: 8px;
-                cursor: pointer;
-                z-index: 1000;
-            `;
-            testButton.onclick = testDocumentViewing;
-            document.body.appendChild(testButton);
             
             console.log('Scholarphile MyNotes initialized with API integration, upload functionality, and Google Sign-In');
         });
