@@ -1581,6 +1581,8 @@
             try {
                 showNotification('Signing in...', 'info');
                 
+                console.log('Google response:', response);
+                
                 const result = await fetch(`${API_BASE_URL}/api/auth`, {
                     method: 'POST',
                     headers: {
@@ -1592,7 +1594,9 @@
                     })
                 });
 
+                console.log('API response status:', result.status);
                 const data = await result.json();
+                console.log('API response data:', data);
 
                 if (data.success) {
                     currentUser = data.user;
@@ -1610,6 +1614,7 @@
                     // Switch to profile page
                     showPage('profile');
                 } else {
+                    console.error('Sign-in failed:', data.error);
                     showNotification(data.error || 'Sign-in failed', 'error');
                 }
             } catch (error) {
