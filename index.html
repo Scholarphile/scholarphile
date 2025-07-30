@@ -7,6 +7,7 @@
     <meta name="description" content="Discover and share academic documents with peers. Access notes, assignments, and study materials from students across all years.">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
             --primary: #3a7ca5;
@@ -543,6 +544,33 @@
             opacity: 0.5;
         }
 
+        /* Google Sign-In Styles */
+        .google-signin-section {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .auth-divider {
+            display: flex;
+            align-items: center;
+            margin: 2rem 0;
+            color: var(--text-secondary);
+        }
+
+        .auth-divider::before,
+        .auth-divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+
+        .auth-divider span {
+            padding: 0 1rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
         /* Upload Page Styles */
         .upload-container {
             max-width: 800px;
@@ -968,6 +996,28 @@
             <section id="signin" class="page">
                 <div class="auth-container">
                     <h2 class="auth-title">Sign In</h2>
+                    
+                    <!-- Google Sign-In -->
+                    <div class="google-signin-section">
+                                    <div id="g_id_onload"
+                 data-client_id="196551394322-igriqj0r0g30ks84t1sb175i89h6rrte.apps.googleusercontent.com"
+                 data-callback="handleGoogleSignIn"
+                 data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin"
+                             data-type="standard"
+                             data-size="large"
+                             data-theme="outline"
+                             data-text="sign_in_with"
+                             data-shape="rectangular"
+                             data-logo_alignment="left">
+                        </div>
+                    </div>
+
+                    <div class="auth-divider">
+                        <span>or</span>
+                    </div>
+
                     <form class="auth-form" id="signinForm">
                         <div class="form-group">
                             <label class="form-label">Email</label>
@@ -982,21 +1032,6 @@
                             Sign In
                         </button>
                     </form>
-
-                    <div class="auth-divider">
-                        <span>or</span>
-                    </div>
-
-                    <div class="social-auth">
-                        <button class="social-btn">
-                            <i class="fab fa-google"></i>
-                            Google
-                        </button>
-                        <button class="social-btn">
-                            <i class="fab fa-github"></i>
-                            GitHub
-                        </button>
-                    </div>
 
                     <div style="text-align: center; margin-top: 1.5rem;">
                         <p style="color: var(--text-secondary); font-weight: 400;">
@@ -1106,6 +1141,32 @@
 
         // Document card click handlers are now handled dynamically in createDocumentCard function
 
+        // Test document viewing API
+        async function testDocumentViewing() {
+            try {
+                const testUrl = `${API_BASE_URL}/api/documents/view?id=edb4b684-86f2-4ce9-b5f0-495791b91ce0`;
+                console.log('Testing document viewing API:', testUrl);
+                
+                const response = await fetch(testUrl);
+                console.log('API Response status:', response.status);
+                console.log('API Response headers:', Object.fromEntries(response.headers.entries()));
+                
+                if (response.ok) {
+                    const content = await response.text();
+                    console.log('API Response content length:', content.length);
+                    console.log('API Response content preview:', content.substring(0, 100));
+                    showNotification('Document viewing API is working!', 'success');
+                } else {
+                    const error = await response.text();
+                    console.error('API Error:', error);
+                    showNotification('Document viewing API failed', 'error');
+                }
+            } catch (error) {
+                console.error('Test failed:', error);
+                showNotification('Document viewing test failed', 'error');
+            }
+        }
+
         // Notification system
         function showNotification(message, type = 'info') {
             const notification = document.createElement('div');
@@ -1210,8 +1271,7 @@
             
             // Add click handler
             card.addEventListener('click', () => {
-                showNotification('Opening document...', 'info');
-                // TODO: Implement document opening logic
+                openDocument(doc.id, doc.title, doc.file_type);
             });
             
             return card;
@@ -1288,6 +1348,354 @@
             } catch (error) {
                 console.error('Error searching documents:', error);
                 showErrorState();
+            }
+        }
+
+        // Document opening functionality
+        async function openDocument(documentId, title, fileType) {
+            try {
+                showNotification('Loading document...', 'info');
+                
+                // Create the document URL
+                const documentUrl = `${API_BASE_URL}/api/documents/view?id=${documentId}`;
+                console.log('Opening document:', { documentId, title, fileType, documentUrl });
+                
+                // Fetch the document content
+                const response = await fetch(documentUrl);
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const content = await response.text();
+                console.log('Document loaded successfully, length:', content.length);
+                
+                // Show document in modal
+                showDocumentModal(title, content, fileType, documentUrl);
+                
+                showNotification('Document loaded successfully!', 'success');
+            } catch (error) {
+                console.error('Error opening document:', error);
+                showNotification(`Failed to load document: ${error.message}`, 'error');
+            }
+        }
+
+        // Show document in modal
+        function showDocumentModal(title, content, fileType, documentUrl) {
+            // Remove existing modal if any
+            const existingModal = document.getElementById('documentModal');
+            if (existingModal) {
+                existingModal.remove();
+            }
+
+            // Create modal
+            const modal = document.createElement('div');
+            modal.id = 'documentModal';
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                z-index: 2000;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 2rem;
+            `;
+
+            // Create modal content
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: var(--surface);
+                border-radius: 16px;
+                padding: 2rem;
+                max-width: 90%;
+                max-height: 90%;
+                overflow: hidden;
+                display: flex;
+                flex-direction: column;
+                border: 1px solid var(--border);
+            `;
+
+            // Modal header
+            const header = document.createElement('div');
+            header.style.cssText = `
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                margin-bottom: 1rem;
+                padding-bottom: 1rem;
+                border-bottom: 1px solid var(--border);
+            `;
+            
+            const titleElement = document.createElement('h2');
+            titleElement.textContent = title;
+            titleElement.style.cssText = `
+                margin: 0;
+                color: var(--text-primary);
+                font-size: 1.5rem;
+                font-weight: 600;
+            `;
+
+            const closeButton = document.createElement('button');
+            closeButton.innerHTML = '<i class="fas fa-times"></i>';
+            closeButton.style.cssText = `
+                background: none;
+                border: none;
+                color: var(--text-secondary);
+                font-size: 1.5rem;
+                cursor: pointer;
+                padding: 0.5rem;
+                border-radius: 8px;
+                transition: all 0.3s ease;
+            `;
+            closeButton.onmouseover = () => closeButton.style.color = 'var(--text-primary)';
+            closeButton.onmouseout = () => closeButton.style.color = 'var(--text-secondary)';
+            closeButton.onclick = () => modal.remove();
+
+            header.appendChild(titleElement);
+            header.appendChild(closeButton);
+
+            // Modal body
+            const body = document.createElement('div');
+            body.style.cssText = `
+                flex: 1;
+                overflow: auto;
+                margin-bottom: 1rem;
+            `;
+
+            // Document content
+            if (fileType && fileType.includes('text')) {
+                // For text files, show content directly
+                const textContent = document.createElement('pre');
+                textContent.textContent = content;
+                textContent.style.cssText = `
+                    color: var(--text-primary);
+                    font-family: 'SF Mono', 'Monaco', 'Inconsolata', monospace;
+                    font-size: 0.875rem;
+                    line-height: 1.5;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    margin: 0;
+                    padding: 1rem;
+                    background: var(--surface-light);
+                    border-radius: 8px;
+                `;
+                body.appendChild(textContent);
+            } else {
+                // For other files, show download option
+                const downloadSection = document.createElement('div');
+                downloadSection.style.cssText = `
+                    text-align: center;
+                    padding: 2rem;
+                    color: var(--text-secondary);
+                `;
+                
+                downloadSection.innerHTML = `
+                    <i class="fas fa-file" style="font-size: 3rem; margin-bottom: 1rem; display: block;"></i>
+                    <h3 style="margin-bottom: 1rem; color: var(--text-primary);">Document Ready</h3>
+                    <p style="margin-bottom: 2rem;">This document is ready for download.</p>
+                    <button onclick="downloadDocument('${documentUrl}', '${title}')" style="
+                        background: var(--primary);
+                        color: white;
+                        border: none;
+                        padding: 0.75rem 1.5rem;
+                        border-radius: 8px;
+                        cursor: pointer;
+                        font-weight: 600;
+                        transition: all 0.3s ease;
+                    ">
+                        <i class="fas fa-download"></i> Download Document
+                    </button>
+                `;
+                body.appendChild(downloadSection);
+            }
+
+            // Modal footer with actions
+            const footer = document.createElement('div');
+            footer.style.cssText = `
+                display: flex;
+                gap: 1rem;
+                justify-content: flex-end;
+                padding-top: 1rem;
+                border-top: 1px solid var(--border);
+            `;
+
+            const openInNewTabButton = document.createElement('button');
+            openInNewTabButton.textContent = 'Open in New Tab';
+            openInNewTabButton.style.cssText = `
+                background: var(--surface-light);
+                color: var(--text-primary);
+                border: 1px solid var(--border);
+                padding: 0.5rem 1rem;
+                border-radius: 8px;
+                cursor: pointer;
+                font-weight: 500;
+                transition: all 0.3s ease;
+            `;
+            openInNewTabButton.onclick = () => {
+                window.open(documentUrl, '_blank');
+            };
+
+            footer.appendChild(openInNewTabButton);
+            modalContent.appendChild(header);
+            modalContent.appendChild(body);
+            modalContent.appendChild(footer);
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+
+            // Close modal on background click
+            modal.onclick = (e) => {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            };
+
+            // Close modal on Escape key
+            document.addEventListener('keydown', function closeOnEscape(e) {
+                if (e.key === 'Escape') {
+                    modal.remove();
+                    document.removeEventListener('keydown', closeOnEscape);
+                }
+            });
+        }
+
+        // Download document function
+        function downloadDocument(url, filename) {
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Google Sign-In functionality
+        let currentUser = null;
+        let sessionToken = null;
+
+        // Handle Google Sign-In callback
+        async function handleGoogleSignIn(response) {
+            try {
+                showNotification('Signing in...', 'info');
+                
+                const result = await fetch(`${API_BASE_URL}/api/auth`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        action: 'google-signin',
+                        token: response.credential
+                    })
+                });
+
+                const data = await result.json();
+
+                if (data.success) {
+                    currentUser = data.user;
+                    sessionToken = data.sessionToken;
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('scholarphile_user', JSON.stringify(currentUser));
+                    localStorage.setItem('scholarphile_session', sessionToken);
+                    
+                    // Update UI
+                    updateAuthUI();
+                    
+                    showNotification(`Welcome back, ${currentUser.name}!`, 'success');
+                    
+                    // Switch to profile page
+                    showPage('profile');
+                } else {
+                    showNotification(data.error || 'Sign-in failed', 'error');
+                }
+            } catch (error) {
+                console.error('Google sign-in error:', error);
+                showNotification('Sign-in failed. Please try again.', 'error');
+            }
+        }
+
+        // Update authentication UI
+        function updateAuthUI() {
+            const authTab = document.getElementById('authTab');
+            
+            if (currentUser) {
+                // User is logged in
+                authTab.textContent = 'Profile';
+                authTab.onclick = () => showPage('profile');
+                
+                // Update profile page
+                updateProfilePage();
+            } else {
+                // User is not logged in
+                authTab.textContent = 'Sign In';
+                authTab.onclick = () => showPage('signin');
+            }
+        }
+
+        // Update profile page with user data
+        function updateProfilePage() {
+            if (!currentUser) return;
+            
+            const profileName = document.querySelector('.profile-name');
+            const profileEmail = document.querySelector('.profile-email');
+            const profileAvatar = document.querySelector('.profile-avatar');
+            
+            if (profileName) profileName.textContent = currentUser.name;
+            if (profileEmail) profileEmail.textContent = currentUser.email;
+            if (profileAvatar) {
+                const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                profileAvatar.textContent = initials;
+            }
+        }
+
+        // Sign out function
+        async function signOut() {
+            try {
+                if (sessionToken) {
+                    await fetch(`${API_BASE_URL}/api/auth`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            action: 'signout',
+                            sessionToken: sessionToken
+                        })
+                    });
+                }
+                
+                // Clear user data
+                currentUser = null;
+                sessionToken = null;
+                localStorage.removeItem('scholarphile_user');
+                localStorage.removeItem('scholarphile_session');
+                
+                // Update UI
+                updateAuthUI();
+                
+                showNotification('Signed out successfully', 'success');
+                
+                // Switch to signin page
+                showPage('signin');
+            } catch (error) {
+                console.error('Sign-out error:', error);
+                showNotification('Sign-out failed', 'error');
+            }
+        }
+
+        // Check for existing session on page load
+        function checkExistingSession() {
+            const savedUser = localStorage.getItem('scholarphile_user');
+            const savedSession = localStorage.getItem('scholarphile_session');
+            
+            if (savedUser && savedSession) {
+                currentUser = JSON.parse(savedUser);
+                sessionToken = savedSession;
+                updateAuthUI();
             }
         }
 
@@ -1479,7 +1887,27 @@
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             loadDocuments();
-            console.log('Scholarphile MyNotes initialized with API integration and upload functionality');
+            checkExistingSession();
+            
+            // Add test button for debugging
+            const testButton = document.createElement('button');
+            testButton.textContent = 'Test Document Viewing';
+            testButton.style.cssText = `
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                padding: 0.5rem 1rem;
+                background: var(--primary);
+                color: white;
+                border: none;
+                border-radius: 8px;
+                cursor: pointer;
+                z-index: 1000;
+            `;
+            testButton.onclick = testDocumentViewing;
+            document.body.appendChild(testButton);
+            
+            console.log('Scholarphile MyNotes initialized with API integration, upload functionality, and Google Sign-In');
         });
     </script>
 </body>
