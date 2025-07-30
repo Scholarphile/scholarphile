@@ -2,12 +2,6 @@ name = "scholarphile-api"
 main = "src/index.js"
 compatibility_date = "2024-01-15"
 
-[env.production]
-name = "scholarphile-api"
-
-[env.staging]
-name = "scholarphile-api-staging"
-
 [[d1_databases]]
 binding = "DB"
 database_name = "scholarphile-db"
