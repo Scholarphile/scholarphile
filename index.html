@@ -661,6 +661,46 @@
             font-weight: 400;
         }
 
+        /* Upload Sign-in Prompt */
+        .upload-signin-prompt {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 3rem 2rem;
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow-lg);
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+
+        .signin-prompt-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .signin-prompt-icon {
+            font-size: 3rem;
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+        }
+
+        .signin-prompt-content h3 {
+            font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Inter', 'Poppins', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin: 0;
+        }
+
+        .signin-prompt-content p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin: 0;
+            max-width: 300px;
+        }
+
         .upload-form {
             background: var(--surface);
             border-radius: 16px;
@@ -1002,7 +1042,21 @@
                         <p class="upload-subtitle">Share your study materials with the community</p>
                     </div>
 
-                    <form class="upload-form" id="uploadForm">
+                    <!-- Sign-in prompt for non-authenticated users -->
+                    <div class="upload-signin-prompt" id="uploadSigninPrompt">
+                        <div class="signin-prompt-content">
+                            <i class="fas fa-lock signin-prompt-icon"></i>
+                            <h3>Sign in to Upload</h3>
+                            <p>You need to be signed in to upload documents to Scholarphile.</p>
+                            <button class="btn btn-primary" onclick="showPage('signin')">
+                                <i class="fas fa-sign-in-alt"></i>
+                                Sign In to Upload
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Upload form for authenticated users -->
+                    <form class="upload-form" id="uploadForm" style="display: none;">
                         <div class="upload-area" id="uploadArea">
                             <div class="upload-content">
                                 <i class="fas fa-cloud-upload-alt upload-icon"></i>
@@ -1729,11 +1783,17 @@
         // Update authentication UI
         function updateAuthUI() {
             const authTab = document.getElementById('authTab');
+            const uploadForm = document.getElementById('uploadForm');
+            const uploadSigninPrompt = document.getElementById('uploadSigninPrompt');
             
             if (currentUser) {
                 // User is logged in
                 authTab.textContent = 'Profile';
                 authTab.onclick = () => showPage('profile');
+                
+                // Show upload form, hide sign-in prompt
+                if (uploadForm) uploadForm.style.display = 'block';
+                if (uploadSigninPrompt) uploadSigninPrompt.style.display = 'none';
                 
                 // Update profile page
                 updateProfilePage();
@@ -1741,6 +1801,10 @@
                 // User is not logged in
                 authTab.textContent = 'Sign In';
                 authTab.onclick = () => showPage('signin');
+                
+                // Hide upload form, show sign-in prompt
+                if (uploadForm) uploadForm.style.display = 'none';
+                if (uploadSigninPrompt) uploadSigninPrompt.style.display = 'block';
             }
         }
 
@@ -1787,8 +1851,10 @@
                 
                 showNotification('Signed out successfully', 'success');
                 
-                // Switch to signin page
-                showPage('signin');
+                // Switch to signin page if currently on upload page
+                if (document.querySelector('#upload.active')) {
+                    showPage('signin');
+                }
             } catch (error) {
                 console.error('Sign-out error:', error);
                 showNotification('Sign-out failed', 'error');
@@ -1803,6 +1869,9 @@
             if (savedUser && savedSession) {
                 currentUser = JSON.parse(savedUser);
                 sessionToken = savedSession;
+                updateAuthUI();
+            } else {
+                // Ensure upload form is hidden for non-authenticated users
                 updateAuthUI();
             }
         }
