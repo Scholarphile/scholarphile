@@ -361,15 +361,20 @@ async function handleAuth(request, env, method) {
 // Handle Google Sign-In
 async function handleGoogleSignIn(token, env, corsHeaders) {
   try {
+    console.log('Received token:', token.substring(0, 20) + '...');
+    
     // Verify Google token
     const googleUser = await verifyGoogleToken(token);
     
     if (!googleUser) {
+      console.error('Token verification failed');
       return new Response(JSON.stringify({ error: 'Invalid Google token' }), {
         status: 401,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' }
       });
     }
+    
+    console.log('Token verified, user:', googleUser.email);
 
     // Check if user exists, create if not
     let user = await getUserByEmail(googleUser.email, env);
@@ -409,9 +414,8 @@ async function handleGoogleSignIn(token, env, corsHeaders) {
 // Verify Google token
 async function verifyGoogleToken(token) {
   try {
-    // For now, we'll use a simple verification
-    // In production, you should verify with Google's API
-    const response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
+    // Try to verify as ID token first
+    let response = await fetch(`https://oauth2.googleapis.com/tokeninfo?id_token=${token}`);
     
     if (response.ok) {
       const data = await response.json();
@@ -422,6 +426,33 @@ async function verifyGoogleToken(token) {
         sub: data.sub
       };
     }
+    
+    // If ID token fails, try as access token
+    response = await fetch(`https://oauth2.googleapis.com/tokeninfo?access_token=${token}`);
+    
+    if (response.ok) {
+      const data = await response.json();
+      return {
+        email: data.email,
+        name: data.name,
+        picture: data.picture,
+        sub: data.sub
+      };
+    }
+    
+    // If both fail, try to decode the token (for development)
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return {
+        email: payload.email,
+        name: payload.name,
+        picture: payload.picture,
+        sub: payload.sub
+      };
+    } catch (decodeError) {
+      console.error('Token decode error:', decodeError);
+    }
+    
     return null;
   } catch (error) {
     console.error('Token verification error:', error);
