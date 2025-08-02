@@ -19,13 +19,13 @@
             --accent: #f59e0b;
             --success: #10b981;
             --danger: #ef4444;
-            --background: #1a1a1a;
-            --surface: #2a2a2a;
-            --surface-light: #3a3a3a;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
+            --background: #F2F2F7;
+            --surface: #f8fafc;
+            --surface-light: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
             --text-muted: #64748b;
-            --border: #404040;
+            --border: #e2e8f0;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
@@ -513,6 +513,25 @@
             </div>
         </div>
 
+        <!-- Account Actions -->
+        <div class="settings-section">
+            <div class="settings-header">
+                <h3 class="settings-title">Account Actions</h3>
+                <p class="settings-description">Manage your account and session</p>
+            </div>
+
+            <div class="setting-item">
+                <div class="setting-info">
+                    <h4>Sign Out</h4>
+                    <p>Sign out of your current session</p>
+                </div>
+                <button class="btn btn-secondary" onclick="signOut()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    Sign Out
+                </button>
+            </div>
+        </div>
+
         <!-- Danger Zone -->
         <div class="settings-section">
             <div class="settings-header">
@@ -536,6 +555,55 @@
     <script>
         const profileForm = document.getElementById('profileForm');
         const toggleSwitches = document.querySelectorAll('.toggle-switch');
+
+        // Check if user is signed in
+        function checkAuthStatus() {
+            const user = JSON.parse(localStorage.getItem('user') || 'null');
+            
+            if (!user) {
+                // Redirect to sign in if not authenticated
+                window.location.href = 'signin.html';
+                return;
+            }
+            
+            // Update profile form with user data
+            if (user.name) {
+                const nameParts = user.name.split(' ');
+                document.getElementById('firstName').value = nameParts[0] || '';
+                document.getElementById('lastName').value = nameParts.slice(1).join(' ') || '';
+            }
+            
+            if (user.email) {
+                document.getElementById('email').value = user.email;
+            }
+            
+            // Update profile picture if available
+            if (user.picture) {
+                const profilePic = document.querySelector('.profile-picture img');
+                if (profilePic) {
+                    profilePic.src = user.picture;
+                    profilePic.alt = user.name;
+                }
+            }
+            
+            // Update profile name
+            const profileName = document.querySelector('.profile-name');
+            if (profileName && user.name) {
+                profileName.textContent = user.name;
+            }
+            
+            // Update auth tab text
+            const authTab = document.getElementById('authTab');
+            if (authTab) {
+                authTab.innerHTML = '<i class="fas fa-user"></i> Profile';
+            }
+        }
+
+        // Sign out function
+        function signOut() {
+            localStorage.removeItem('user');
+            window.location.href = 'signin.html';
+        }
 
         // Form submission
         profileForm.addEventListener('submit', function(e) {
@@ -570,11 +638,15 @@
         function deleteAccount() {
             if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
                 if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
-                    alert('Account deletion would be implemented here');
-                    // In a real app, this would call the API to delete the account
+                    localStorage.removeItem('user');
+                    alert('Account deleted successfully');
+                    window.location.href = 'signin.html';
                 }
             }
         }
+
+        // Initialize auth check
+        checkAuthStatus();
     </script>
 </body>
 </html> 

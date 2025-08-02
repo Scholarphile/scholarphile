@@ -19,13 +19,13 @@
             --accent: #f59e0b;
             --success: #10b981;
             --danger: #ef4444;
-            --background: #1a1a1a;
-            --surface: #2a2a2a;
-            --surface-light: #3a3a3a;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
+            --background: #F2F2F7;
+            --surface: #f8fafc;
+            --surface-light: #f1f5f9;
+            --text-primary: #1e293b;
+            --text-secondary: #475569;
             --text-muted: #64748b;
-            --border: #404040;
+            --border: #e2e8f0;
             --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
             --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
             --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
@@ -383,6 +383,21 @@
                     <i class="fab fa-google"></i>
                     Continue with Google
                 </button>
+                <div id="g_id_onload"
+                     data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                     data-context="signin"
+                     data-ux_mode="popup"
+                     data-callback="handleCredentialResponse"
+                     data-auto_prompt="false">
+                </div>
+                <div class="g_id_signin"
+                     data-type="standard"
+                     data-shape="rectangular"
+                     data-theme="outline"
+                     data-text="signin_with"
+                     data-size="large"
+                     data-logo_alignment="left">
+                </div>
                 <button type="button" class="social-button github" id="githubSignIn">
                     <i class="fab fa-github"></i>
                     Continue with GitHub
@@ -421,10 +436,55 @@
 
         // Google Sign In
         googleSignIn.addEventListener('click', function() {
-            // Implement Google OAuth
-            console.log('Google sign in clicked');
-            alert('Google sign in would be implemented here');
+            // Initialize Google Sign-In
+            google.accounts.id.initialize({
+                client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google Client ID
+                callback: handleCredentialResponse
+            });
+            
+            google.accounts.id.prompt((notification) => {
+                if (notification.isNotDisplayed()) {
+                    console.log('Google Sign-In not displayed:', notification.getNotDisplayedReason());
+                } else if (notification.isSkippedMoment()) {
+                    console.log('Google Sign-In skipped:', notification.getSkippedReason());
+                } else if (notification.isDismissedMoment()) {
+                    console.log('Google Sign-In dismissed:', notification.getDismissedReason());
+                }
+            });
         });
+
+        // Handle Google credential response
+        function handleCredentialResponse(response) {
+            console.log('Google Sign-In response:', response);
+            
+            // Decode the JWT token to get user info
+            const responsePayload = decodeJwtResponse(response.credential);
+            console.log('User info:', responsePayload);
+            
+            // Store user info in localStorage
+            localStorage.setItem('user', JSON.stringify({
+                name: responsePayload.name,
+                email: responsePayload.email,
+                picture: responsePayload.picture,
+                provider: 'google'
+            }));
+            
+            // Show success message
+            alert('Successfully signed in with Google!');
+            
+            // Redirect to profile page
+            window.location.href = 'profile.html';
+        }
+
+        // Decode JWT token
+        function decodeJwtResponse(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
 
         // GitHub Sign In
         githubSignIn.addEventListener('click', function() {
