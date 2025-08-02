@@ -243,12 +243,15 @@ async function authenticateUser(request, env) {
   const token = authHeader.substring(7);
   
   try {
-    // Check if token exists in database and is valid
-    const session = await env.DB.prepare(
-      'SELECT s.*, u.* FROM user_sessions s JOIN users u ON s.user_id = u.id WHERE s.token = ? AND s.expires_at > ?'
-    ).bind(token, new Date().toISOString()).first();
+    // Verify JWT token
+    const payload = await JWT.verify(token, env.JWT_SECRET);
+    
+    // Get user from database
+    const user = await env.DB.prepare(
+      'SELECT * FROM users WHERE id = ?'
+    ).bind(payload.userId).first();
 
-    return session;
+    return user;
   } catch (error) {
     console.error('Auth error:', error);
     return null;
@@ -299,25 +302,21 @@ async function handleAuth(request, env, method, subRoute, debugLog) {
         `).bind(userId, email, name, new Date().toISOString(), new Date().toISOString()).run();
 
         if (success) {
-          // Create session
-          const token = crypto.randomUUID();
-          const expiresAt = new Date(Date.now() + SESSION_DURATION).toISOString();
+                  // Create JWT token
+        const token = await JWT.sign(
+          { userId, email, name, exp: Math.floor(Date.now() / 1000) + (SESSION_DURATION / 1000) },
+          env.JWT_SECRET
+        );
 
-          await env.DB.prepare(`
-            INSERT INTO user_sessions (id, user_id, token, expires_at)
-            VALUES (?, ?, ?, ?)
-          `).bind(crypto.randomUUID(), userId, token, expiresAt).run();
+        debugLog('User registered', { userId, email });
 
-          debugLog('User registered', { userId, email });
-
-          return new Response(JSON.stringify({
-            message: 'User registered successfully',
-            user: { id: userId, email, name },
-            token,
-            expiresAt
-          }), {
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-          });
+        return new Response(JSON.stringify({
+          message: 'User registered successfully',
+          user: { id: userId, email, name },
+          token
+        }), {
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        });
         }
       }
       break;
@@ -345,22 +344,18 @@ async function handleAuth(request, env, method, subRoute, debugLog) {
           });
         }
 
-        // Create session
-        const token = crypto.randomUUID();
-        const expiresAt = new Date(Date.now() + SESSION_DURATION).toISOString();
-
-        await env.DB.prepare(`
-          INSERT INTO user_sessions (id, user_id, token, expires_at)
-          VALUES (?, ?, ?, ?)
-        `).bind(crypto.randomUUID(), user.id, token, expiresAt).run();
+        // Create JWT token
+        const token = await JWT.sign(
+          { userId: user.id, email: user.email, name: user.name, exp: Math.floor(Date.now() / 1000) + (SESSION_DURATION / 1000) },
+          env.JWT_SECRET
+        );
 
         debugLog('User logged in', { userId: user.id, email });
 
         return new Response(JSON.stringify({
           message: 'Login successful',
           user: { id: user.id, email: user.email, name: user.name },
-          token,
-          expiresAt
+          token
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
