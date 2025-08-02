@@ -267,14 +267,7 @@
             background: rgba(58, 124, 165, 0.05);
         }
 
-        .social-button.google {
-            border-color: #4285f4;
-            color: #4285f4;
-        }
 
-        .social-button.google:hover {
-            background: rgba(66, 133, 244, 0.1);
-        }
 
         .social-button.github {
             border-color: #333;
@@ -379,10 +372,6 @@
             </div>
 
             <div class="social-login">
-                <button type="button" class="social-button google" id="googleSignIn">
-                    <i class="fab fa-google"></i>
-                    Continue with Google
-                </button>
                 <div id="g_id_onload"
                      data-client_id="YOUR_GOOGLE_CLIENT_ID"
                      data-context="signin"
@@ -413,7 +402,6 @@
 
     <script>
         const signinForm = document.getElementById('signinForm');
-        const googleSignIn = document.getElementById('googleSignIn');
         const githubSignIn = document.getElementById('githubSignIn');
 
         // Form submission
@@ -434,24 +422,7 @@
             window.location.href = 'profile.html';
         });
 
-        // Google Sign In
-        googleSignIn.addEventListener('click', function() {
-            // Initialize Google Sign-In
-            google.accounts.id.initialize({
-                client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your actual Google Client ID
-                callback: handleCredentialResponse
-            });
-            
-            google.accounts.id.prompt((notification) => {
-                if (notification.isNotDisplayed()) {
-                    console.log('Google Sign-In not displayed:', notification.getNotDisplayedReason());
-                } else if (notification.isSkippedMoment()) {
-                    console.log('Google Sign-In skipped:', notification.getSkippedReason());
-                } else if (notification.isDismissedMoment()) {
-                    console.log('Google Sign-In dismissed:', notification.getDismissedReason());
-                }
-            });
-        });
+
 
         // Handle Google credential response
         function handleCredentialResponse(response) {
