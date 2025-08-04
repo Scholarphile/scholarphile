@@ -2,6 +2,29 @@ name = "scholarphile-api"
 main = "src/index.js"
 compatibility_date = "2024-01-15"
 
+[env.production]
+name = "scholarphile-api"
+
+[env.staging]
+name = "scholarphile-api-staging"
+
+[env.development]
+name = "scholarphile-api-dev"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "development"
+JWT_SECRET = "your-super-secret-jwt-key-change-in-production"
+SESSION_DURATION = "86400000"
+MAX_FILE_SIZE = "10485760"
+DEBUG_MODE = "true"
+
+# Production environment variables
+[env.production.vars]
+ENVIRONMENT = "production"
+DEBUG_MODE = "false"
+
+# D1 Database
 [[d1_databases]]
 binding = "DB"
 database_name = "scholarphile-db"
@@ -10,4 +33,19 @@ database_id = "0f5d1cf0-daee-4ff4-a9b3-f5f2e9051662"
 # R2 bucket for file storage
 [[r2_buckets]]
 binding = "STORAGE"
-bucket_name = "scholarphile-documents" 
+bucket_name = "scholarphile-documents"
+
+# Analytics Engine binding for usage metrics (disabled for now)
+# [[analytics_engine_datasets]]
+# binding = "ANALYTICS"
+
+# Rate limiting using Durable Objects
+# [[durable_objects.bindings]]
+# name = "RATE_LIMITER"
+# class_name = "RateLimiter"
+
+# KV namespace for caching (optional)
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "your-kv-namespace-id"
+# preview_id = "your-preview-kv-namespace-id" 
