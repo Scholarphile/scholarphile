@@ -8,6 +8,7 @@
     <link rel="icon" type="image/png" href="favicon.png?v=2">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
             --primary: #3a7ca5;
@@ -1058,11 +1059,22 @@
                     </div>
 
                     <div class="social-auth">
-                        <button class="social-btn">
-                            <i class="fab fa-google"></i>
-                            Google
-                        </button>
-                        <button class="social-btn">
+                        <div id="g_id_onload"
+                             data-client_id="YOUR_GOOGLE_CLIENT_ID"
+                             data-context="signin"
+                             data-ux_mode="popup"
+                             data-callback="handleGoogleSignIn"
+                             data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin"
+                             data-type="standard"
+                             data-shape="rectangular"
+                             data-theme="outline"
+                             data-text="signin_with"
+                             data-size="large"
+                             data-logo_alignment="left">
+                        </div>
+                        <button class="social-btn" onclick="handleGitHubSignIn()">
                             <i class="fab fa-github"></i>
                             GitHub
                         </button>
@@ -1153,6 +1165,50 @@
         let currentUser = null;
         let authToken = localStorage.getItem('authToken');
 
+        // Google Sign-In handler
+        function handleGoogleSignIn(response) {
+            console.log('Google Sign-In response:', response);
+            
+            // Decode the JWT token to get user info
+            const responsePayload = decodeJwtResponse(response.credential);
+            console.log('User info:', responsePayload);
+            
+            // Store user info in localStorage
+            currentUser = {
+                name: responsePayload.name,
+                email: responsePayload.email,
+                picture: responsePayload.picture,
+                provider: 'google',
+                sub: responsePayload.sub
+            };
+            
+            localStorage.setItem('user', JSON.stringify(currentUser));
+            localStorage.setItem('authToken', response.credential);
+            
+            // Update UI
+            updateAuthUI();
+            showPage('profile');
+            
+            // Show success notification
+            showNotification('Successfully signed in with Google!', 'success');
+        }
+
+        // Decode JWT token
+        function decodeJwtResponse(token) {
+            const base64Url = token.split('.')[1];
+            const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+            const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+                return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+            }).join(''));
+            return JSON.parse(jsonPayload);
+        }
+
+        // GitHub Sign-In handler
+        function handleGitHubSignIn() {
+            console.log('GitHub sign in clicked');
+            showNotification('GitHub sign in would be implemented here', 'info');
+        }
+
         // Check if user is already logged in
         if (authToken) {
             checkAuthStatus();
@@ -1194,11 +1250,28 @@
 
         // Update authentication UI
         function updateAuthUI() {
-            if (currentUser) {
+            if (currentUser || authToken) {
                 document.getElementById('authTab').textContent = 'Profile';
                 document.getElementById('authTab').dataset.page = 'profile';
                 document.getElementById('profileTab').style.display = 'inline-block';
                 document.getElementById('profileTab').dataset.page = 'profile';
+                
+                // Update profile page with user info
+                if (currentUser) {
+                    const profileName = document.querySelector('.profile-name');
+                    const profileEmail = document.querySelector('.profile-email');
+                    const profileAvatar = document.querySelector('.profile-avatar');
+                    
+                    if (profileName) profileName.textContent = currentUser.name;
+                    if (profileEmail) profileEmail.textContent = currentUser.email;
+                    if (profileAvatar) {
+                        if (currentUser.picture) {
+                            profileAvatar.innerHTML = `<img src="${currentUser.picture}" alt="${currentUser.name}" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;">`;
+                        } else {
+                            profileAvatar.textContent = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                        }
+                    }
+                }
             } else {
                 document.getElementById('authTab').textContent = 'Sign In';
                 document.getElementById('authTab').dataset.page = 'signin';
