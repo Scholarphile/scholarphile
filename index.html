@@ -35,47 +35,9 @@
             --logo-grey: #696969;
         }
 
-        /* Light theme */
-        :root[data-theme="light"] {
-            --background: #ffffff;
-            --surface: #f8fafc;
-            --surface-light: #f1f5f9;
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
 
-        /* Default to light theme */
-        :root {
-            --background: #ffffff;
-            --surface: #f8fafc;
-            --surface-light: #f1f5f9;
-            --text-primary: #1e293b;
-            --text-secondary: #475569;
-            --text-muted: #64748b;
-            --border: #e2e8f0;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.1);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-        }
 
-        /* Dark theme override */
-        :root[data-theme="dark"] {
-            --background: #1a1a1a;
-            --surface: #2a2a2a;
-            --surface-light: #3a3a3a;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
-            --text-muted: #64748b;
-            --border: #404040;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-        }
+
 
         * {
             box-sizing: border-box;
@@ -114,25 +76,7 @@
             align-items: center;
         }
 
-        .theme-toggle {
-            background: transparent;
-            border: 1px solid var(--border);
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            color: var(--text-primary);
-            font-size: 1rem;
-        }
 
-        .theme-toggle:hover {
-            background: var(--surface-light);
-            transform: scale(1.05);
-        }
 
         .nav-tabs {
             display: inline-flex;
@@ -897,9 +841,7 @@
                 <button class="nav-tab" data-page="profile" id="profileTab" style="display: none;">Profile</button>
                 <button class="nav-tab" data-page="signin" id="authTab">Sign In</button>
             </nav>
-            <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
-                <i class="fas fa-moon"></i>
-            </button>
+
         </div>
     </header>
 
@@ -1746,41 +1688,13 @@
             }
         }
 
-        // Theme toggle functionality
-        function initThemeToggle() {
-            const themeToggle = document.getElementById('themeToggle');
-            const icon = themeToggle.querySelector('i');
-            
-            // Force light mode and update icon
-            document.documentElement.setAttribute('data-theme', 'light');
-            localStorage.setItem('theme', 'light');
-            icon.className = 'fas fa-sun';
-            
-            // Theme toggle click handler
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-                
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-                
-                // Update icon
-                if (newTheme === 'light') {
-                    icon.className = 'fas fa-sun';
-                } else {
-                    icon.className = 'fas fa-moon';
-                }
-                
-                showNotification(`Switched to ${newTheme} mode`, 'success');
-            });
-        }
+
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
             loadDocuments();
             updateProfilePage();
-            initThemeToggle();
-            console.log('Scholarphile MyNotes initialized with enhanced authentication, upload functionality, and theme toggle');
+            console.log('Scholarphile MyNotes initialized with enhanced authentication and upload functionality');
         });
     </script>
 </body>
