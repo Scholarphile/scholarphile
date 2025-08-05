@@ -554,6 +554,106 @@
             opacity: 0.5;
         }
 
+        /* Document Modal */
+        .document-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 10000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border-radius: 16px;
+            box-shadow: var(--shadow-xl);
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 1.5rem;
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .modal-close:hover {
+            background: var(--surface-light);
+            color: var(--text-primary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .document-details {
+            margin-bottom: 2rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-row strong {
+            color: var(--text-primary);
+            font-weight: 600;
+        }
+
+        .document-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+        }
+
+        .document-actions .btn {
+            min-width: 120px;
+        }
+
         /* Upload Page Styles */
         .upload-container {
             max-width: 800px;
@@ -1389,8 +1489,7 @@
             
             // Add click handler
             card.addEventListener('click', () => {
-                showNotification('Opening document...', 'info');
-                // TODO: Implement document opening logic
+                openDocument(doc);
             });
             
             return card;
@@ -1467,6 +1566,154 @@
             } catch (error) {
                 console.error('Error searching documents:', error);
                 showErrorState();
+            }
+        }
+
+        // Document viewing functionality
+        function openDocument(doc) {
+            const modal = document.createElement('div');
+            modal.className = 'document-modal';
+            modal.innerHTML = `
+                <div class="modal-overlay"></div>
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>${doc.title}</h2>
+                        <button class="modal-close" onclick="this.closest('.document-modal').remove()">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="document-details">
+                            <div class="detail-row">
+                                <strong>Course Code:</strong> ${doc.courseCode || 'Not specified'}
+                            </div>
+                            <div class="detail-row">
+                                <strong>Course Name:</strong> ${doc.courseName || 'Not specified'}
+                            </div>
+                            <div class="detail-row">
+                                <strong>Description:</strong> ${doc.description || 'No description provided'}
+                            </div>
+                            <div class="detail-row">
+                                <strong>File Name:</strong> ${doc.fileName || 'Document'}
+                            </div>
+                            <div class="detail-row">
+                                <strong>File Size:</strong> ${formatFileSize(doc.fileSize)}
+                            </div>
+                            <div class="detail-row">
+                                <strong>Uploaded By:</strong> ${doc.uploadedBy || 'Unknown User'}
+                            </div>
+                            <div class="detail-row">
+                                <strong>Uploaded:</strong> ${formatDate(doc.uploadedAt)}
+                            </div>
+                            <div class="detail-row">
+                                <strong>Downloads:</strong> ${doc.downloads || 0}
+                            </div>
+                            <div class="detail-row">
+                                <strong>Views:</strong> ${doc.views || 0}
+                            </div>
+                            ${doc.tags ? `<div class="detail-row"><strong>Tags:</strong> ${doc.tags}</div>` : ''}
+                        </div>
+                        <div class="document-actions">
+                            <button class="btn btn-primary" onclick="downloadDocument('${doc.id}')">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="btn btn-secondary" onclick="shareDocument('${doc.id}')">
+                                <i class="fas fa-share"></i> Share
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Add click outside to close
+            modal.querySelector('.modal-overlay').addEventListener('click', () => {
+                modal.remove();
+            });
+            
+            // Increment view count
+            incrementViewCount(doc.id);
+        }
+
+        // Format file size
+        function formatFileSize(bytes) {
+            if (!bytes) return 'Unknown size';
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(1024));
+            return Math.round(bytes / Math.pow(1024, i) * 100) / 100 + ' ' + sizes[i];
+        }
+
+        // Format date
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
+        }
+
+        // Download document
+        function downloadDocument(docId) {
+            const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+            const doc = documents.find(d => d.id == docId);
+            
+            if (doc) {
+                // Create a dummy file for demo purposes
+                const content = `Document: ${doc.title}\n\nDescription: ${doc.description || 'No description'}\nCourse: ${doc.courseName || 'Not specified'}\nUploaded by: ${doc.uploadedBy}\nUploaded: ${doc.uploadedAt}`;
+                const blob = new Blob([content], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${doc.title}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+                
+                // Increment download count
+                incrementDownloadCount(docId);
+                showNotification('Document downloaded successfully!', 'success');
+            }
+        }
+
+        // Share document
+        function shareDocument(docId) {
+            const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+            const doc = documents.find(d => d.id == docId);
+            
+            if (doc && navigator.share) {
+                navigator.share({
+                    title: doc.title,
+                    text: `Check out this document: ${doc.title}`,
+                    url: window.location.href
+                });
+            } else {
+                // Fallback: copy to clipboard
+                const shareText = `Document: ${doc.title}\nCourse: ${doc.courseName}\nUploaded by: ${doc.uploadedBy}`;
+                navigator.clipboard.writeText(shareText).then(() => {
+                    showNotification('Document link copied to clipboard!', 'success');
+                });
+            }
+        }
+
+        // Increment view count
+        function incrementViewCount(docId) {
+            const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+            const docIndex = documents.findIndex(d => d.id == docId);
+            
+            if (docIndex !== -1) {
+                documents[docIndex].views = (documents[docIndex].views || 0) + 1;
+                localStorage.setItem('documents', JSON.stringify(documents));
+            }
+        }
+
+        // Increment download count
+        function incrementDownloadCount(docId) {
+            const documents = JSON.parse(localStorage.getItem('documents') || '[]');
+            const docIndex = documents.findIndex(d => d.id == docId);
+            
+            if (docIndex !== -1) {
+                documents[docIndex].downloads = (documents[docIndex].downloads || 0) + 1;
+                localStorage.setItem('documents', JSON.stringify(documents));
             }
         }
 
