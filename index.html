@@ -1151,8 +1151,25 @@
         }
 
         // Check if user is already logged in
-        if (authToken) {
-            checkAuthStatus();
+        const savedUser = localStorage.getItem('user');
+        const savedAuthToken = localStorage.getItem('authToken');
+        
+        if (savedAuthToken || savedUser) {
+            if (savedUser) {
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    authToken = savedAuthToken;
+                    updateAuthUI();
+                } catch (error) {
+                    console.error('Error parsing saved user data:', error);
+                    // Clear invalid data
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('authToken');
+                }
+            } else if (savedAuthToken) {
+                // Only auth token, check with server
+                checkAuthStatus();
+            }
         }
 
         // Sign in form handler
@@ -1229,15 +1246,20 @@
                 if (response.ok) {
                     const data = await response.json();
                     currentUser = data.user;
+                    localStorage.setItem('user', JSON.stringify(currentUser));
                     updateAuthUI();
                 } else {
                     localStorage.removeItem('authToken');
+                    localStorage.removeItem('user');
                     authToken = null;
+                    currentUser = null;
                     updateAuthUI();
                 }
             } catch (error) {
                 localStorage.removeItem('authToken');
+                localStorage.removeItem('user');
                 authToken = null;
+                currentUser = null;
                 updateAuthUI();
             }
         }
@@ -1669,6 +1691,7 @@
             currentUser = null;
             authToken = null;
             localStorage.removeItem('authToken');
+            localStorage.removeItem('user');
             updateAuthUI();
             showPage('mynotes');
             showNotification('Successfully logged out', 'success');
