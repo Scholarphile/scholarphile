@@ -1329,16 +1329,16 @@
         // API Configuration
         const API_BASE_URL = 'https://scholarphile-api.scholarphile.workers.dev';
 
-        // Load documents from API
+        // Load documents from localStorage (demo mode)
         async function loadDocuments() {
             const documentsGrid = document.getElementById('documentsGrid');
             
             try {
-                const response = await fetch(`${API_BASE_URL}/api/documents`);
-                const data = await response.json();
+                // Load from localStorage for demo purposes
+                const documents = JSON.parse(localStorage.getItem('documents') || '[]');
                 
-                if (data.documents && data.documents.length > 0) {
-                    renderDocuments(data.documents);
+                if (documents && documents.length > 0) {
+                    renderDocuments(documents);
                 } else {
                     showEmptyState();
                 }
@@ -1359,20 +1359,20 @@
             });
         }
 
-        // Create document card from API data
+        // Create document card from localStorage data
         function createDocumentCard(doc) {
             const card = document.createElement('div');
             card.className = 'document-card fade-in';
             card.dataset.documentId = doc.id;
             
-            const initials = doc.user_name ? doc.user_name.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-            const timeAgo = formatTimeAgo(doc.created_at);
+            const initials = doc.uploadedBy ? doc.uploadedBy.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
+            const timeAgo = formatTimeAgo(doc.uploadedAt);
             
             card.innerHTML = `
                 <div class="document-preview">
                     <div class="document-preview-content">
-                        <div class="document-preview-title">${doc.course_code || 'Document'}</div>
-                        <div class="document-preview-subtitle">${doc.course_name || 'Study Material'}</div>
+                        <div class="document-preview-title">${doc.courseCode || 'Document'}</div>
+                        <div class="document-preview-subtitle">${doc.courseName || 'Study Material'}</div>
                     </div>
                 </div>
                 <div class="document-info">
@@ -1380,7 +1380,7 @@
                     <div class="document-meta">
                         <div class="document-author">
                             <div class="author-avatar">${initials}</div>
-                            <span>${doc.user_name || 'Unknown User'}</span>
+                            <span>${doc.uploadedBy || 'Unknown User'}</span>
                         </div>
                         <span>${timeAgo}</span>
                     </div>
@@ -1624,51 +1624,43 @@
                 submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
                 submitBtn.disabled = true;
 
-                // Create FormData
-                const formData = new FormData();
-                formData.append('file', selectedFile);
-                formData.append('title', document.getElementById('documentTitle').value);
-                formData.append('description', document.getElementById('documentDescription').value);
-                formData.append('courseCode', document.getElementById('courseCode').value);
-                formData.append('courseName', document.getElementById('courseName').value);
-                formData.append('year', document.getElementById('academicYear').value);
-                formData.append('semester', document.getElementById('semester').value);
-                formData.append('tags', document.getElementById('documentTags').value);
+                // Simulate upload delay
+                await new Promise(resolve => setTimeout(resolve, 2000));
 
-                // Upload to API with authentication
-                const response = await fetch(`${API_BASE_URL}/api/documents`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`
-                    },
-                    body: formData
-                });
+                // Create document object for local storage
+                const documentData = {
+                    id: Date.now(),
+                    title: document.getElementById('documentTitle').value,
+                    description: document.getElementById('documentDescription').value,
+                    courseCode: document.getElementById('courseCode').value,
+                    courseName: document.getElementById('courseName').value,
+                    year: document.getElementById('academicYear').value,
+                    semester: document.getElementById('semester').value,
+                    tags: document.getElementById('documentTags').value,
+                    fileName: selectedFile ? selectedFile.name : 'Document',
+                    fileSize: selectedFile ? selectedFile.size : 0,
+                    uploadedBy: currentUser.name || 'User',
+                    uploadedAt: new Date().toISOString(),
+                    downloads: 0,
+                    views: 0
+                };
 
-                if (response.ok) {
-                    const result = await response.json();
-                    showNotification('Document uploaded successfully!', 'success');
-                    
-                    // Reset form
-                    uploadForm.reset();
-                    removeFile();
-                    
-                    // Refresh documents list
-                    loadDocuments();
-                    
-                    // Switch to MyNotes tab
-                    showPage('mynotes');
-                } else {
-                    const error = await response.json();
-                    if (response.status === 401) {
-                        showNotification('Session expired. Please sign in again.', 'error');
-                        localStorage.removeItem('authToken');
-                        currentUser = null;
-                        updateAuthUI();
-                        showPage('signin');
-                    } else {
-                        showNotification(error.error || 'Upload failed', 'error');
-                    }
-                }
+                // Store in localStorage for demo purposes
+                const existingDocuments = JSON.parse(localStorage.getItem('documents') || '[]');
+                existingDocuments.unshift(documentData);
+                localStorage.setItem('documents', JSON.stringify(existingDocuments));
+
+                showNotification('Document uploaded successfully!', 'success');
+                
+                // Reset form
+                uploadForm.reset();
+                removeFile();
+                
+                // Refresh documents list
+                loadDocuments();
+                
+                // Switch to MyNotes tab
+                showPage('mynotes');
             } catch (error) {
                 console.error('Upload error:', error);
                 showNotification('Upload failed. Please try again.', 'error');
