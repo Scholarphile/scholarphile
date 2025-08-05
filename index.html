@@ -838,7 +838,6 @@
                 <button class="nav-tab active" data-page="mynotes">MyNotes</button>
                 <button class="nav-tab" data-page="discover">Discover</button>
                 <button class="nav-tab" data-page="upload">Upload</button>
-                <button class="nav-tab" data-page="profile" id="profileTab" style="display: none;">Profile</button>
                 <button class="nav-tab" data-page="signin" id="authTab">Sign In</button>
             </nav>
 
@@ -1195,8 +1194,6 @@
             if (currentUser || authToken) {
                 document.getElementById('authTab').textContent = 'Profile';
                 document.getElementById('authTab').dataset.page = 'profile';
-                document.getElementById('profileTab').style.display = 'inline-block';
-                document.getElementById('profileTab').dataset.page = 'profile';
                 
                 // Update profile page with user info
                 if (currentUser) {
@@ -1217,7 +1214,6 @@
             } else {
                 document.getElementById('authTab').textContent = 'Sign In';
                 document.getElementById('authTab').dataset.page = 'signin';
-                document.getElementById('profileTab').style.display = 'none';
             }
         }
 
