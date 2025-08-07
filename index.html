@@ -90,11 +90,18 @@
             border: 1px solid var(--border);
             border-radius: 32px;
             padding: 0.25rem;
+            align-items: center;
         }
 
         .nav-tabs-main {
             margin-right: auto;
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow-x: auto;
+            white-space: nowrap;
+            scrollbar-width: none;
         }
+        .nav-tabs-main::-webkit-scrollbar { display: none; }
 
         .nav-tabs-auth {
             margin-left: auto;
@@ -898,15 +905,11 @@
 
         /* Responsive design */
         @media (max-width: 768px) {
-            .nav-tabs {
-                gap: 0.25rem;
-                padding: 0.25rem;
-            }
-
-            .nav-tab {
-                padding: 0.5rem 1rem;
-                font-size: 0.75rem;
-            }
+            .header-content { gap: 0.5rem; }
+            .nav-tabs { gap: 0.25rem; padding: 0.25rem; }
+            .nav-tabs-main { max-width: calc(100% - 56px); }
+            .nav-tab { padding: 0.5rem 0.75rem; font-size: 0.75rem; flex: 0 0 auto; }
+            .nav-tab.nav-tab-avatar { width: 36px; height: 36px; }
 
             .documents-grid {
                 grid-template-columns: 1fr;
