@@ -92,6 +92,43 @@
             padding: 0.25rem;
         }
 
+        .nav-tabs-main {
+            margin-right: auto;
+        }
+
+        .nav-tabs-auth {
+            margin-left: auto;
+        }
+
+        /* Circular profile tab */
+        .nav-tab.nav-tab-avatar {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .nav-tab-avatar img {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            display: block;
+        }
+        .nav-tab-avatar-initials {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient-primary);
+            color: #fff;
+            font-weight: 700;
+        }
+
         .nav-tab {
             padding: 0.5rem 1rem;
             border-radius: 24px;
@@ -938,13 +975,16 @@
 <body>
     <header class="header">
         <div class="header-content">
-            <nav class="nav-tabs">
+            <nav class="nav-tabs nav-tabs-main">
                 <button class="nav-tab active" data-page="mynotes">MyNotes</button>
                 <button class="nav-tab" data-page="discover">Discover</button>
                 <button class="nav-tab" data-page="upload">Upload</button>
-                <button class="nav-tab" data-page="signin" id="authTab">Sign In</button>
             </nav>
-
+            <nav class="nav-tabs nav-tabs-auth">
+                <button class="nav-tab nav-tab-avatar" data-page="signin" id="authTab" aria-label="Profile or Sign In">
+                    <i class="fas fa-user"></i>
+                </button>
+            </nav>
         </div>
     </header>
 
@@ -1312,8 +1352,17 @@
         // Update authentication UI
         function updateAuthUI() {
             if (currentUser || authToken) {
-                document.getElementById('authTab').textContent = 'Profile';
-                document.getElementById('authTab').dataset.page = 'profile';
+                const authBtn = document.getElementById('authTab');
+                authBtn.dataset.page = 'profile';
+                if (currentUser && currentUser.picture) {
+                    authBtn.innerHTML = `<img src="${currentUser.picture}" alt="${currentUser.name}" />`;
+                } else if (currentUser && currentUser.name) {
+                    const initials = currentUser.name.split(' ').map(n => n[0]).join('').toUpperCase();
+                    authBtn.innerHTML = `<span class="nav-tab-avatar-initials">${initials}</span>`;
+                } else {
+                    authBtn.innerHTML = '<i class="fas fa-user"></i>';
+                }
+                authBtn.classList.add('nav-tab-avatar');
                 
                 // Update profile page with user info
                 if (currentUser) {
@@ -1332,8 +1381,10 @@
                     }
                 }
             } else {
-                document.getElementById('authTab').textContent = 'Sign In';
-                document.getElementById('authTab').dataset.page = 'signin';
+                const authBtn = document.getElementById('authTab');
+                authBtn.innerHTML = '<i class="fas fa-user"></i>';
+                authBtn.dataset.page = 'signin';
+                authBtn.classList.add('nav-tab-avatar');
             }
         }
 
