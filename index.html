@@ -1,35 +1,37 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-brand="permates">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarphile - MyNotes</title>
+    <title>Permates - MyNotes</title>
     <meta name="description" content="Discover and share academic documents with peers. Access notes, assignments, and study materials from students across all years.">
-    <link rel="icon" type="image/png" href="favicon.png?v=2">
+    <link rel="icon" type="image/png" href="favicon.png?v=3">
+    <link rel="stylesheet" href="src/brand.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
     <style>
         :root {
-            --primary: #3a7ca5;
-            --primary-dark: #2d5f7a;
-            --primary-light: #4a8bb8;
-            --secondary: #4a8bb8;
+            /* Defaults; overridden by brand.css via [data-brand] */
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #a78bfa;
+            --secondary: #22d3ee;
             --accent: #f59e0b;
             --success: #10b981;
             --danger: #ef4444;
-            --background: #1a1a1a;
-            --surface: #2a2a2a;
-            --surface-light: #3a3a3a;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5e1;
+            --background: #f5f7fb;
+            --surface: #ffffff;
+            --surface-light: #f8fafc;
+            --text-primary: #0f172a;
+            --text-secondary: #334155;
             --text-muted: #64748b;
-            --border: #404040;
-            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.3);
-            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.3), 0 2px 4px -2px rgb(0 0 0 / 0.3);
-            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.3), 0 4px 6px -4px rgb(0 0 0 / 0.3);
-            --gradient-primary: linear-gradient(135deg, #3a7ca5 0%, #4a8bb8 100%);
-            --gradient-secondary: linear-gradient(135deg, #06b6d4 0%, #3b82f6 100%);
+            --border: #e2e8f0;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+            --gradient-primary: linear-gradient(135deg, #7c3aed 0%, #a78bfa 100%);
+            --gradient-secondary: linear-gradient(135deg, #22d3ee 0%, #3b82f6 100%);
             --logo-blue: #87CEEB;
             --logo-red: #DC143C;
             --logo-grey: #696969;
@@ -60,11 +62,12 @@
             left: 0;
             right: 0;
             z-index: 1000;
-            background: rgba(26, 26, 26, 0.07);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             padding: 0.75rem 1rem;
             transition: all 0.3s ease;
+            border-bottom: 1px solid var(--border);
         }
 
         .header-content {
@@ -81,10 +84,10 @@
         .nav-tabs {
             display: inline-flex;
             gap: 0.25rem;
-            background: rgba(42, 42, 42, 0.15);
+            background: rgba(248, 250, 252, 0.8);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
             border-radius: 32px;
             padding: 0.25rem;
         }
@@ -103,12 +106,13 @@
         }
 
         .nav-tab.active {
-            background: var(--primary);
+            background: var(--gradient-primary);
             color: white;
+            box-shadow: var(--shadow-md);
         }
 
         .nav-tab:hover:not(.active) {
-            background: rgba(58, 58, 58, 0.2);
+            background: rgba(226, 232, 240, 0.8);
             color: var(--text-primary);
         }
 
@@ -1168,9 +1172,8 @@
     </main>
 
     <script>
-        // Force light mode immediately
-        document.documentElement.setAttribute('data-theme', 'light');
-        localStorage.setItem('theme', 'light');
+        // Ensure brand attribute is present
+        document.documentElement.setAttribute('data-brand', 'permates');
         
         // Navigation functionality
         const navTabs = document.querySelectorAll('.nav-tab');
@@ -1429,14 +1432,27 @@
         // API Configuration
         const API_BASE_URL = 'https://scholarphile-api.scholarphile.workers.dev';
 
-        // Load documents from localStorage (demo mode)
+        // Load documents from API. Only fall back to localStorage if the API call fails.
         async function loadDocuments() {
             const documentsGrid = document.getElementById('documentsGrid');
-            
             try {
-                // Load from localStorage for demo purposes
+                const res = await fetch(`${API_BASE_URL}/api/documents?limit=24`);
+                if (res.ok) {
+                    const data = await res.json();
+                    const docs = (data.documents || []).map(mapApiDocumentToUI);
+                    if (docs.length > 0) {
+                        renderDocuments(docs);
+                    } else {
+                        // API succeeded but no documents exist
+                        showEmptyState();
+                    }
+                    return;
+                }
+            } catch (e) {
+                // Fallback below
+            }
+            try {
                 const documents = JSON.parse(localStorage.getItem('documents') || '[]');
-                
                 if (documents && documents.length > 0) {
                     renderDocuments(documents);
                 } else {
@@ -1459,14 +1475,32 @@
             });
         }
 
-        // Create document card from localStorage data
+        // Normalize backend doc to UI shape
+        function mapApiDocumentToUI(apiDoc) {
+            return {
+                id: apiDoc.id,
+                title: apiDoc.title,
+                description: apiDoc.description,
+                courseCode: apiDoc.course_code,
+                courseName: apiDoc.course_name,
+                fileName: apiDoc.file_url ? apiDoc.file_url.split('/').pop() : 'Document',
+                fileSize: apiDoc.file_size,
+                uploadedBy: apiDoc.author_name || 'Unknown User',
+                uploadedAt: apiDoc.created_at,
+                downloads: apiDoc.download_count || 0,
+                views: apiDoc.view_count || 0,
+                tags: apiDoc.tags
+            };
+        }
+
+        // Create document card from UI data
         function createDocumentCard(doc) {
             const card = document.createElement('div');
             card.className = 'document-card fade-in';
             card.dataset.documentId = doc.id;
             
             const initials = doc.uploadedBy ? doc.uploadedBy.split(' ').map(n => n[0]).join('').toUpperCase() : 'U';
-            const timeAgo = formatTimeAgo(doc.uploadedAt);
+            const timeAgo = doc.uploadedAt ? formatTimeAgo(doc.uploadedAt) : (doc.created_at ? formatTimeAgo(doc.created_at) : '');
             
             card.innerHTML = `
                 <div class="document-preview">
@@ -1650,28 +1684,26 @@
             return date.toLocaleDateString() + ' at ' + date.toLocaleTimeString();
         }
 
-        // Download document
-        function downloadDocument(docId) {
-            const documents = JSON.parse(localStorage.getItem('documents') || '[]');
-            const doc = documents.find(d => d.id == docId);
-            
-            if (doc) {
-                // Create a dummy file for demo purposes
-                const content = `Document: ${doc.title}\n\nDescription: ${doc.description || 'No description'}\nCourse: ${doc.courseName || 'Not specified'}\nUploaded by: ${doc.uploadedBy}\nUploaded: ${doc.uploadedAt}`;
-                const blob = new Blob([content], { type: 'text/plain' });
-                const url = URL.createObjectURL(blob);
-                
-                const a = document.createElement('a');
-                a.href = url;
-                a.download = `${doc.title}.txt`;
-                document.body.appendChild(a);
-                a.click();
-                document.body.removeChild(a);
-                URL.revokeObjectURL(url);
-                
-                // Increment download count
-                incrementDownloadCount(docId);
-                showNotification('Document downloaded successfully!', 'success');
+        // Download document via API (real file)
+        async function downloadDocument(docId) {
+            try {
+                // Request document metadata to get file_url
+                const res = await fetch(`${API_BASE_URL}/api/documents/${encodeURIComponent(docId)}`);
+                if (!res.ok) {
+                    showNotification('Document not found', 'error');
+                    return;
+                }
+                const data = await res.json();
+                const doc = data.document;
+                if (!doc || !doc.file_url) {
+                    showNotification('File URL missing', 'error');
+                    return;
+                }
+                // Trigger a download redirect path that increments counters
+                const downloadUrl = `${API_BASE_URL}/api/documents/${encodeURIComponent(docId)}?download=1`;
+                window.open(downloadUrl, '_blank');
+            } catch (e) {
+                showNotification('Download failed', 'error');
             }
         }
 
@@ -1950,9 +1982,11 @@
 
         // Initialize the application
         document.addEventListener('DOMContentLoaded', function() {
+            // Clear any stale demo data so UI reflects backend truth
+            try { localStorage.removeItem('documents'); } catch (e) {}
             loadDocuments();
             updateProfilePage();
-            console.log('Scholarphile MyNotes initialized with enhanced authentication and upload functionality');
+            console.log('Permates MyNotes initialized with enhanced authentication and upload functionality');
         });
     </script>
 </body>

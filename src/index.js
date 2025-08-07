@@ -104,6 +104,40 @@ export default {
       if (path.startsWith('/api/')) {
         response = await handleAPI(request, env, path, method, debugLog, requestId);
       }
+      // File serving from R2: GET /files/:key (must appear before 404)
+      else if (path.startsWith('/files/')) {
+        const fileKey = decodeURIComponent(path.replace('/files/', '').trim());
+
+        if (!env.STORAGE) {
+          return new Response(JSON.stringify({ error: 'File storage not configured' }), {
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+
+        try {
+          const object = await env.STORAGE.get(fileKey);
+          if (!object) {
+            return new Response(JSON.stringify({ error: 'File not found' }), {
+              status: 404,
+              headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+            });
+          }
+
+          const headers = new Headers(corsHeaders);
+          object.writeHttpMetadata(headers);
+          if (!headers.has('Content-Type')) {
+            headers.set('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream');
+          }
+          return new Response(object.body, { headers });
+        } catch (error) {
+          debugLog('R2 read failed', { error: error.message });
+          return new Response(JSON.stringify({ error: 'Failed to read file' }), {
+            status: 500,
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
+      }
       // Health check with enhanced info
       else if (path === '/health') {
         const healthInfo = {
@@ -429,7 +463,9 @@ async function handleDocuments(request, env, method, subRoute, debugLog) {
   switch (method) {
     case 'GET':
       if (subRoute) {
-        // Get specific document
+        // Get specific document or trigger download redirect
+        const url = new URL(request.url);
+        const shouldDownload = url.searchParams.get('download') === '1';
         const document = await env.DB.prepare(
           'SELECT d.*, u.name as author_name FROM documents d JOIN users u ON d.user_id = u.id WHERE d.id = ?'
         ).bind(subRoute).first();
@@ -441,14 +477,68 @@ async function handleDocuments(request, env, method, subRoute, debugLog) {
           });
         }
 
-        // Increment view count
-        await env.DB.prepare(
-          'UPDATE documents SET view_count = view_count + 1 WHERE id = ?'
-        ).bind(subRoute).run();
+        if (shouldDownload) {
+          // Increment counters
+          await env.DB.prepare('UPDATE documents SET download_count = download_count + 1 WHERE id = ?')
+            .bind(subRoute)
+            .run();
+          await env.DB.prepare(
+            'INSERT INTO document_interactions (id, user_id, document_id, interaction_type, created_at) VALUES (?, ?, ?, ?, ?)'
+          ).bind(crypto.randomUUID(), document.user_id, subRoute, 'download', new Date().toISOString()).run();
 
-        return new Response(JSON.stringify({ document }), {
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
+          // Stream file directly from R2 when available
+          if (env.STORAGE) {
+            // Determine object key from stored URL or key
+            let key = document.file_url || '';
+            try {
+              if (key.startsWith('http')) {
+                const u = new URL(key);
+                const idx = u.pathname.indexOf('/files/');
+                key = idx >= 0 ? decodeURIComponent(u.pathname.slice(idx + 7)) : u.pathname.replace(/^\//, '');
+              }
+            } catch (_) {}
+            if (!key || key.startsWith('http')) {
+              // Fallback: use raw document.file_url
+              key = document.file_url;
+            }
+
+            const object = await env.STORAGE.get(key);
+            if (!object) {
+              return new Response(JSON.stringify({ error: 'File not found' }), {
+                status: 404,
+                headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+              });
+            }
+
+            const headers = new Headers(corsHeaders);
+            object.writeHttpMetadata(headers);
+            if (!headers.has('Content-Type')) {
+              headers.set('Content-Type', object.httpMetadata?.contentType || 'application/octet-stream');
+            }
+            // Force download
+            const safeName = (document.title || key).toString().replace(/[^\w\-. ]+/g, '_');
+            headers.set('Content-Disposition', `attachment; filename="${safeName}"`);
+            headers.set('Access-Control-Expose-Headers', 'Content-Disposition');
+            return new Response(object.body, { headers });
+          }
+
+          // Fallback to redirect to resolved URL
+          const origin = new URL(request.url).origin;
+          const resolvedUrl = document.file_url?.startsWith('http')
+            ? document.file_url
+            : `${origin}/files/${encodeURIComponent(document.file_url)}`;
+          const headers = new Headers({ ...corsHeaders, Location: resolvedUrl });
+          return new Response(null, { status: 302, headers });
+        } else {
+          // Increment view count
+          await env.DB.prepare(
+            'UPDATE documents SET view_count = view_count + 1 WHERE id = ?'
+          ).bind(subRoute).run();
+
+          return new Response(JSON.stringify({ document }), {
+            headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          });
+        }
       } else {
         // Get all documents with pagination and filters
         const url = new URL(request.url);
@@ -514,12 +604,21 @@ async function handleDocuments(request, env, method, subRoute, debugLog) {
 
     case 'POST':
       // Upload new document
-      const user = await authenticateUser(request, env);
+      let user = await authenticateUser(request, env);
+      // Allow unauthenticated uploads by assigning to a temporary user
       if (!user) {
-        return new Response(JSON.stringify({ error: 'Authentication required' }), {
-          status: 401,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        });
+        const tempEmail = 'temporary@scholarphile.com';
+        const tempId = 'temporary-user';
+        // Ensure temporary user exists
+        const existingTemp = await env.DB.prepare('SELECT * FROM users WHERE id = ? OR email = ?')
+          .bind(tempId, tempEmail)
+          .first();
+        if (!existingTemp) {
+          await env.DB.prepare(
+            'INSERT INTO users (id, email, name, created_at, updated_at) VALUES (?, ?, ?, ?, ?)'
+          ).bind(tempId, tempEmail, 'Temporary User', new Date().toISOString(), new Date().toISOString()).run();
+        }
+        user = existingTemp || { id: tempId, email: tempEmail, name: 'Temporary User' };
       }
 
       const formData = await request.formData();
@@ -551,9 +650,10 @@ async function handleDocuments(request, env, method, subRoute, debugLog) {
       let fileUrl = fileName;
       if (env.STORAGE) {
         try {
-          await env.STORAGE.put(fileName, fileBuffer);
-          fileUrl = `https://your-domain.com/files/${fileName}`;
-          debugLog('File uploaded to R2', { fileName });
+          await env.STORAGE.put(fileName, fileBuffer, { httpMetadata: { contentType: fileType || 'application/octet-stream' } });
+          const origin = new URL(request.url).origin;
+          fileUrl = `${origin}/files/${encodeURIComponent(fileName)}`;
+          debugLog('File uploaded to R2', { fileName, fileUrl });
         } catch (error) {
           debugLog('R2 upload failed', { error: error.message });
         }
@@ -634,7 +734,15 @@ async function handleDocuments(request, env, method, subRoute, debugLog) {
       // Delete from R2 if available
       if (env.STORAGE && docToDelete.file_url) {
         try {
-          await env.STORAGE.delete(docToDelete.file_url);
+          let key = docToDelete.file_url;
+          try {
+            const parsed = new URL(docToDelete.file_url);
+            const index = parsed.pathname.indexOf('/files/');
+            if (index >= 0) {
+              key = decodeURIComponent(parsed.pathname.slice(index + 7));
+            }
+          } catch (_) {}
+          await env.STORAGE.delete(key);
         } catch (error) {
           debugLog('R2 delete failed', { error: error.message });
         }

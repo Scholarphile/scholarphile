@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-brand="permates">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarphile - Upload</title>
-    <meta name="description" content="Upload and share your academic documents with the Scholarphile community.">
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="icon" type="image/png" href="favicon.png">
+    <title>Permates - Upload</title>
+    <meta name="description" content="Upload and share your academic documents with the Permates community.">
+    <link rel="icon" type="image/png" href="favicon.png?v=3">
+    <link rel="stylesheet" href="src/brand.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://accounts.google.com/gsi/client" async defer></script>
@@ -379,7 +379,7 @@
         <!-- Page Header -->
         <div class="page-header">
             <h1 class="page-title">Upload Document</h1>
-            <p class="page-subtitle">Share your academic documents with the Scholarphile community</p>
+            <p class="page-subtitle">Share your academic documents with the Permates community</p>
         </div>
 
         <!-- Upload Form -->
@@ -389,41 +389,7 @@
                 <input type="text" id="title" class="form-input" placeholder="e.g., Advanced Calculus Notes" required>
             </div>
 
-            <div class="form-group">
-                <label class="form-label" for="course">Course Code</label>
-                <input type="text" id="course" class="form-input" placeholder="e.g., MATH 201">
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="year">Academic Year</label>
-                <select id="year" class="form-input form-select">
-                    <option value="">Select Year</option>
-                    <option value="2024">2024</option>
-                    <option value="2023">2023</option>
-                    <option value="2022">2022</option>
-                    <option value="2021">2021</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="category">Category</label>
-                <select id="category" class="form-input form-select">
-                    <option value="">Select Category</option>
-                    <option value="mathematics">Mathematics</option>
-                    <option value="physics">Physics</option>
-                    <option value="computer-science">Computer Science</option>
-                    <option value="biology">Biology</option>
-                    <option value="chemistry">Chemistry</option>
-                    <option value="engineering">Engineering</option>
-                    <option value="business">Business</option>
-                    <option value="other">Other</option>
-                </select>
-            </div>
-
-            <div class="form-group">
-                <label class="form-label" for="description">Description</label>
-                <textarea id="description" class="form-input form-textarea" placeholder="Describe your document, topics covered, and any additional information..."></textarea>
-            </div>
+            
 
             <div class="form-group">
                 <label class="form-label">Upload File *</label>
@@ -572,11 +538,6 @@
                 const formData = new FormData();
                 formData.append('file', selectedFile);
                 formData.append('title', document.getElementById('title').value);
-                formData.append('description', document.getElementById('description').value);
-                formData.append('courseCode', document.getElementById('course').value);
-                formData.append('courseName', document.getElementById('subject').value);
-                formData.append('year', document.getElementById('year').value);
-                formData.append('semester', document.getElementById('semester').value);
 
                 // Upload to API
                 const response = await fetch(`${API_BASE_URL}/api/documents`, {
