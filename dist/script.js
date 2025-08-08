@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Sign-in modal functionality
     const signInModal = document.getElementById('sign-in-modal');
-    const signInBtns = document.querySelectorAll('#sign-in-btn');
+    const signInBtns = document.querySelectorAll('#sign-in-btn, #hero-sign-in');
     const modalClose = document.querySelector('.modal-close');
     const signInForm = document.getElementById('sign-in-form');
 

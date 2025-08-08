@@ -3,10 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarphile — Collaborative Study Notes</title>
+    <title>Scholarphile - Academic Research Platform</title>
     <meta name="description" content="Discover, organize, and share academic research with Scholarphile's powerful platform for scholars and researchers.">
     <link rel="stylesheet" href="style.css">
-    <meta name="color-scheme" content="light dark">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
@@ -17,12 +19,30 @@
             <div class="nav-links">
                 <a href="#welcome">Welcome</a>
                 <a href="#documents">Documents</a>
-                <button class="btn-primary" id="sign-in-btn">Sign in</button>
+                <button class="btn-primary" id="sign-in-btn">Sign In</button>
             </div>
         </nav>
     </header>
 
     <main>
+        <section class="hero">
+            <div class="hero-content">
+                <h1>Accelerate Your Academic Research</h1>
+                <p>Discover groundbreaking papers, organize your research, and collaborate with scholars worldwide. Scholarphile is your gateway to academic excellence.</p>
+                <div class="hero-actions">
+                    <button class="btn-primary btn-large" onclick="scrollToDocuments()">Browse Documents</button>
+                    <button class="btn-secondary btn-large" id="hero-sign-in">Sign In</button>
+                </div>
+            </div>
+            <div class="hero-visual">
+                <div class="research-card">
+                    <div class="card-header">Recent Paper</div>
+                    <div class="card-title">Machine Learning in Academic Research</div>
+                    <div class="card-meta">Nature • 2024 • 127 citations</div>
+                </div>
+            </div>
+        </section>
+
         <section id="welcome" class="welcome">
             <div class="section-header">
                 <h2>Welcome to Scholarphile</h2>
@@ -170,8 +190,8 @@
                     </div>
                     
                     <button type="button" class="btn-google">
-                        <span class="google-icon">🟦</span>
-                        Continue with Google
+                        <span class="google-icon">🎓</span>
+                        Continue with Google Scholar
                     </button>
                     
                     <div class="sign-up-link">
@@ -208,10 +228,11 @@
             </div>
         </div>
         <div class="footer-bottom">
-            <p>&copy; 2025 Scholarphile. All rights reserved.</p>
+            <p>&copy; 2024 Scholarphile. All rights reserved.</p>
         </div>
     </footer>
 
     <script src="script.js"></script>
 </body>
 </html>
+Test deployment marker: 1754631454
