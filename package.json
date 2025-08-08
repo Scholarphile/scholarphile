@@ -1,0 +1,13 @@
+{
+  "name": "scholarphile",
+  "version": "1.0.0",
+  "description": "Scholarphile - Academic research platform",
+  "scripts": {
+    "build": "echo 'Building Scholarphile...' && mkdir -p dist && echo '<h1>Welcome to Scholarphile</h1><p>Auto-deploy is working!</p>' > dist/index.html",
+    "start": "echo 'Starting development server...'",
+    "dev": "echo 'Development mode...'"
+  },
+  "keywords": ["academic", "research", "scholarship"],
+  "author": "Scholarphile Team",
+  "license": "MIT"
+}
