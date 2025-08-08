@@ -3,282 +3,153 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scholarphile — Collaborative Study Notes</title>
-    <meta name="description" content="Discover, organize, and share academic research with Scholarphile's powerful platform for scholars and researchers.">
+    <title>Scholarphile</title>
     <link rel="stylesheet" href="style.css">
-    <meta name="color-scheme" content="light dark">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
     <header class="header">
-        <nav class="nav">
-            <div class="nav-brand">
-                <h1>Scholarphile</h1>
-            </div>
-            <div class="nav-links">
-                <button class="nav-tab" id="mynotes-tab">MyNotes</button>
-                <button class="nav-tab btn-primary" id="sign-in-btn">Sign In</button>
-            </div>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" id="learn-tab">Learn</button>
+            <button class="nav-tab" id="discover-tab">Discover</button>
+            <button class="nav-tab" id="profile-tab">Profile</button>
         </nav>
     </header>
 
     <main>
-        <!-- MyNotes Section - Advanced Document Recommendations -->
-        <section id="mynotes" class="mynotes active-tab">
-            <div class="mynotes-header">
-                <h1>MyNotes</h1>
-                <p>Personalized academic resources curated for your research interests</p>
-                <div class="user-stats">
-                    <span class="stat">📚 Documents: <strong>847</strong></span>
-                    <span class="stat">📑 Collections: <strong>12</strong></span>
-                    <span class="stat">🔥 Streak: <strong>28 days</strong></span>
+        <!-- Learn Section -->
+        <section id="learn-section" class="section active">
+            <div class="section-header">
+                <h1>Learn</h1>
+                <div class="dropdown">
+                    <button class="dropdown-btn">Courses <span class="dropdown-arrow">▼</span></button>
                 </div>
             </div>
 
-            <!-- Quick Actions -->
-            <div class="quick-actions">
-                <button class="action-btn">
-                    <span class="icon">📤</span>
-                    <span>Upload Paper</span>
-                </button>
-                <button class="action-btn">
-                    <span class="icon">🔍</span>
-                    <span>Smart Search</span>
-                </button>
-                <button class="action-btn">
-                    <span class="icon">📊</span>
-                    <span>Analytics</span>
-                </button>
-                <button class="action-btn">
-                    <span class="icon">🏷️</span>
-                    <span>Tags</span>
-                </button>
-            </div>
-
-            <!-- Research Categories -->
-            <div class="research-categories">
-                <h2>Research by Category</h2>
-                <div class="categories-grid">
-                    <div class="category-card active">
-                        <div class="category-icon">🧠</div>
-                        <h3>Machine Learning</h3>
-                        <p>124 papers • Updated 2h ago</p>
+            <!-- Featured Course -->
+            <div class="featured-course">
+                <div class="course-thumbnail">
+                    <div class="course-code">CS50AI</div>
+                    <div class="course-visual">
+                        <div class="tic-tac-toe">
+                            <div class="grid">
+                                <div class="cell"></div>
+                                <div class="cell x">×</div>
+                                <div class="cell"></div>
+                                <div class="cell x">×</div>
+                                <div class="cell o">○</div>
+                                <div class="cell"></div>
+                                <div class="cell"></div>
+                                <div class="cell"></div>
+                                <div class="cell"></div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="category-card">
-                        <div class="category-icon">🧬</div>
-                        <h3>Biotechnology</h3>
-                        <p>89 papers • Updated 1d ago</p>
-                    </div>
-                    <div class="category-card">
-                        <div class="category-icon">🌍</div>
-                        <h3>Climate Science</h3>
-                        <p>67 papers • Updated 3h ago</p>
-                    </div>
-                    <div class="category-card">
-                        <div class="category-icon">💊</div>
-                        <h3>Medical Research</h3>
-                        <p>156 papers • Updated 4h ago</p>
-                    </div>
+                </div>
+                <div class="course-info">
+                    <div class="course-provider">ScholarphileX</div>
+                    <h2>CS50's Introduction to Artificial Intelligence with Python</h2>
+                    <div class="course-meta">Ends 31 Dec 2025</div>
                 </div>
             </div>
 
-            <!-- Recommended Documents -->
-            <div class="recommended-documents">
-                <div class="section-header">
-                    <h2>Recommended for You</h2>
-                    <p>AI-curated papers based on your research history and interests</p>
-                    <div class="filters">
-                        <button class="filter-btn active">All</button>
-                        <button class="filter-btn">Recent</button>
-                        <button class="filter-btn">Trending</button>
-                        <button class="filter-btn">Bookmarked</button>
-                    </div>
+            <!-- Upgrade Banner -->
+            <div class="upgrade-banner">
+                <div class="upgrade-icon">🏆</div>
+                <div class="upgrade-text">
+                    <span>Upgrade to access more features</span>
                 </div>
-            <div class="documents-grid">
-                <article class="document-item">
-                    <div class="document-badge">Research Guide</div>
-                    <h3>Academic Writing Excellence</h3>
-                    <p class="document-description">Comprehensive guide to academic writing, citation styles, and research methodology. Essential for students and researchers.</p>
-                    <div class="document-meta">
-                        <span>📄 24 pages</span>
-                        <span>📊 PDF</span>
-                        <span>🔥 Most Popular</span>
-                    </div>
-                    <button class="btn-download" onclick="downloadDocument('academic-writing-guide.pdf', 'Academic Writing Excellence')">
-                        📥 Download PDF
-                    </button>
-                </article>
-                
-                <article class="document-item">
-                    <div class="document-badge">Template</div>
-                    <h3>Research Proposal Template</h3>
-                    <p class="document-description">Professional template for research proposals with examples, formatting guidelines, and best practices.</p>
-                    <div class="document-meta">
-                        <span>📄 12 pages</span>
-                        <span>📊 DOCX</span>
-                        <span>⭐ Highly Rated</span>
-                    </div>
-                    <button class="btn-download" onclick="downloadDocument('research-proposal-template.docx', 'Research Proposal Template')">
-                        📥 Download DOCX
-                    </button>
-                </article>
-                
-                <article class="document-item">
-                    <div class="document-badge">Reference</div>
-                    <h3>Citation Style Quick Reference</h3>
-                    <p class="document-description">Complete reference for APA, MLA, Chicago, and Harvard citation styles with examples and formatting rules.</p>
-                    <div class="document-meta">
-                        <span>📄 8 pages</span>
-                        <span>📊 PDF</span>
-                        <span>🔄 Updated 2024</span>
-                    </div>
-                    <button class="btn-download" onclick="downloadDocument('citation-styles-reference.pdf', 'Citation Style Quick Reference')">
-                        📥 Download PDF
-                    </button>
-                </article>
-                
-                <article class="document-item">
-                    <div class="document-badge">Checklist</div>
-                    <h3>Research Ethics Checklist</h3>
-                    <p class="document-description">Essential checklist for ensuring ethical compliance in academic research, IRB guidelines, and best practices.</p>
-                    <div class="document-meta">
-                        <span>📄 6 pages</span>
-                        <span>📊 PDF</span>
-                        <span>✅ Essential</span>
-                    </div>
-                    <button class="btn-download" onclick="downloadDocument('research-ethics-checklist.pdf', 'Research Ethics Checklist')">
-                        📥 Download PDF
-                    </button>
-                </article>
-                
-                <article class="document-item">
-                    <div class="document-badge">Guide</div>
-                    <h3>Literature Review Framework</h3>
-                    <p class="document-description">Step-by-step framework for conducting systematic literature reviews with search strategies and analysis methods.</p>
-                    <div class="document-meta">
-                        <span>📄 18 pages</span>
-                        <span>📊 PDF</span>
-                        <span>🎯 Comprehensive</span>
-                    </div>
-                    <button class="btn-download" onclick="downloadDocument('literature-review-framework.pdf', 'Literature Review Framework')">
-                        📥 Download PDF
-                    </button>
-                </article>
-                
-                <article class="document-item">
-                    <div class="document-badge">Template</div>
-                    <h3>Thesis Structure Template</h3>
-                    <p class="document-description">Professional thesis template with chapter outlines, formatting guidelines, and submission requirements.</p>
-                    <div class="document-meta">
-                        <span>📄 30 pages</span>
-                        <span>📊 DOCX</span>
-                        <span>🎓 Graduate Level</span>
-                    </div>
-                    <button class="btn-download" onclick="downloadDocument('thesis-structure-template.docx', 'Thesis Structure Template')">
-                        📥 Download DOCX
-                    </button>
-                </article>
+                <div class="upgrade-arrow">→</div>
             </div>
+
+            <!-- Resume Course -->
+            <div class="resume-course">
+                <div class="resume-icon">🎓</div>
+                <div class="resume-text">
+                    <div class="resume-label">Resume Course</div>
+                    <div class="resume-title">Search</div>
+                </div>
+                <div class="resume-arrow">→</div>
+            </div>
+
+            <!-- All Courses -->
+            <div class="all-courses">
+                <div class="all-courses-header">
+                    <span>View All My Courses (5)</span>
+                    <span class="header-arrow">→</span>
+                </div>
+            </div>
+
+            <!-- Course Grid -->
+            <div class="courses-grid">
+                <div class="course-card">
+                    <div class="course-card-thumbnail">
+                        <div class="math-bg">∫ ∂ ∇</div>
+                    </div>
+                    <div class="course-card-title">Calculus Applied!</div>
+                </div>
+                
+                <div class="course-card featured">
+                    <div class="course-card-thumbnail cs">
+                        <div class="cs-codes">
+                            <div class="code-line">CS50x</div>
+                            <div class="code-line highlight">CS50x</div>
+                            <div class="code-line">CS50x</div>
+                            <div class="code-line">CS50x</div>
+                        </div>
+                        <div class="featured-badges">
+                            <span class="badge">💡</span>
+                            <span class="badge">💡</span>
+                            <span class="badge">💡</span>
+                        </div>
+                    </div>
+                    <div class="course-card-title">CS50's Introduction to Computer Science</div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-card-thumbnail python">
+                        <div class="python-logo">🐍</div>
+                        <div class="python-text">
+                            <div>CS50P</div>
+                            <div>CS50P</div>
+                            <div>CS50P</div>
+                            <div>CS50P</div>
+                        </div>
+                    </div>
+                    <div class="course-card-title">CS50's Introduction to Programming with Python</div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-card-thumbnail">
+                        <div class="math-bg">∫ ∂ ∇</div>
+                    </div>
+                    <div class="course-card-title">Calculus Applied!</div>
+                </div>
             </div>
         </section>
 
-        <!-- Sign In Section (hidden by default) -->
-        <section id="signin-section" class="signin-section">
-            <div class="signin-container">
-                <h1>Welcome to Scholarphile</h1>
-                <p>Sign in to access your personalized research dashboard</p>
-                <div class="signin-benefits">
-                    <div class="benefit">
-                        <span class="benefit-icon">🎯</span>
-                        <span>Personalized recommendations</span>
-                    </div>
-                    <div class="benefit">
-                        <span class="benefit-icon">📚</span>
-                        <span>Unlimited document access</span>
-                    </div>
-                    <div class="benefit">
-                        <span class="benefit-icon">🔄</span>
-                        <span>Sync across devices</span>
-                    </div>
-                </div>
-                <button class="btn-primary btn-large" id="open-signin-modal">Sign In to Continue</button>
+        <!-- Discover Section -->
+        <section id="discover-section" class="section">
+            <div class="section-header">
+                <h1>Discover</h1>
+            </div>
+            <div class="discover-content">
+                <p>Explore new courses and learning opportunities</p>
             </div>
         </section>
 
-        <!-- Sign In Modal -->
-        <div id="sign-in-modal" class="modal">
-            <div class="modal-content">
-                <span class="modal-close">&times;</span>
-                <h2>Sign In to Scholarphile</h2>
-                <p>Access premium features and track your downloads</p>
-                
-                <form class="sign-in-form" id="sign-in-form">
-                    <div class="form-group">
-                        <label for="email">Email Address</label>
-                        <input type="email" id="email" name="email" required placeholder="your.email@university.edu">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" id="password" name="password" required placeholder="Enter your password">
-                    </div>
-                    
-                    <div class="form-options">
-                        <label class="checkbox-label">
-                            <input type="checkbox" id="remember-me">
-                            <span class="checkmark"></span>
-                            Remember me
-                        </label>
-                        <a href="#" class="forgot-password">Forgot password?</a>
-                    </div>
-                    
-                    <button type="submit" class="btn-primary btn-large">Sign In</button>
-                    
-                    <div class="form-divider">
-                        <span>or</span>
-                    </div>
-                    
-                    <button type="button" class="btn-google">
-                        <span class="google-icon">🟦</span>
-                        Continue with Google
-                    </button>
-                    
-                    <div class="sign-up-link">
-                        Don't have an account? <a href="#" id="create-account-link">Create one</a>
-                    </div>
-                </form>
+        <!-- Profile Section -->
+        <section id="profile-section" class="section">
+            <div class="section-header">
+                <h1>Profile</h1>
             </div>
-        </div>
+            <div class="profile-content">
+                <p>Manage your learning profile and achievements</p>
+            </div>
+        </section>
     </main>
-
-    <footer class="footer">
-        <div class="footer-content">
-            <div class="footer-section">
-                <h3>Scholarphile</h3>
-                <p>Empowering academic research worldwide</p>
-            </div>
-            <div class="footer-section">
-                <h4>Product</h4>
-                <a href="#features">Features</a>
-                <a href="#pricing">Pricing</a>
-                <a href="#api">API</a>
-            </div>
-            <div class="footer-section">
-                <h4>Resources</h4>
-                <a href="#help">Help Center</a>
-                <a href="#blog">Blog</a>
-                <a href="#guides">Research Guides</a>
-            </div>
-            <div class="footer-section">
-                <h4>Company</h4>
-                <a href="#about">About</a>
-                <a href="#careers">Careers</a>
-                <a href="#contact">Contact</a>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Scholarphile. All rights reserved.</p>
-        </div>
-    </footer>
 
     <script src="script.js"></script>
 </body>
