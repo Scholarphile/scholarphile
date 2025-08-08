@@ -234,77 +234,79 @@ section {
 
 .documents-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+    gap: 1.25rem;
     max-width: 1200px;
     margin: 0 auto;
 }
 
 .document-item {
-    background: white;
-    padding: 2rem;
-    border-radius: 1rem;
+    position: relative;
+    background: #ffffff;
+    padding: 1.5rem 1.5rem 1.25rem;
+    border-radius: 0.75rem;
     border: 1px solid #e5e7eb;
-    transition: transform 0.2s, box-shadow 0.2s;
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
     display: flex;
     flex-direction: column;
+    overflow: hidden;
+}
+
+/* Tab header accent */
+.document-item::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 8px;
+    background: linear-gradient(90deg, #2563eb, #7c3aed);
+}
+
+/* Subtle tab notch */
+.document-item::after {
+    content: "";
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    width: 64px;
+    height: 18px;
+    border-radius: 6px 6px 0 0;
+    background: #eef2ff;
+    border: 1px solid #dbeafe;
 }
 
 .document-item:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    transform: translateY(-4px);
+    box-shadow: 0 16px 28px -12px rgba(0,0,0,0.15);
+    border-color: #dbeafe;
 }
 
 .document-badge {
-    display: inline-block;
-    background: #dbeafe;
-    color: #2563eb;
-    padding: 0.25rem 0.75rem;
-    border-radius: 1rem;
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-bottom: 1rem;
-    width: fit-content;
+    align-self: flex-start;
+    margin-top: 1rem; /* push below the tab */
+    background: #eff6ff;
+    color: #1d4ed8;
+    border: 1px solid #dbeafe;
 }
 
 .document-item h3 {
-    font-size: 1.25rem;
-    font-weight: 600;
-    margin-bottom: 1rem;
-    color: #1f2937;
+    margin-top: 0.5rem;
+    font-size: 1.1rem;
 }
 
 .document-description {
-    color: #6b7280;
-    margin-bottom: 1rem;
-    flex-grow: 1;
-    line-height: 1.6;
+    margin-top: 0.25rem;
 }
 
 .document-meta {
-    display: flex;
-    gap: 1rem;
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin-bottom: 1.5rem;
-    flex-wrap: wrap;
+    margin-top: 0.75rem;
 }
 
 .btn-download {
-    background: #2563eb;
-    color: white;
-    border: none;
-    padding: 0.75rem 1.5rem;
-    border-radius: 0.5rem;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
     margin-top: auto;
-}
-
-.btn-download:hover {
-    background: #1d4ed8;
-    transform: translateY(-1px);
+    align-self: flex-start;
+    border-radius: 0.4rem;
 }
 
 /* Community Stats */
@@ -644,5 +646,13 @@ section {
     .btn-large {
         width: 100%;
         max-width: 300px;
+    }
+    .documents-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    .document-item::after {
+      left: 12px;
+      width: 52px;
     }
 }
