@@ -15,40 +15,84 @@
                 <h1>Scholarphile</h1>
             </div>
             <div class="nav-links">
-                <a href="#welcome">Welcome</a>
-                <a href="#documents">Documents</a>
-                <button class="btn-primary" id="sign-in-btn">Sign in</button>
+                <button class="nav-tab" id="mynotes-tab">MyNotes</button>
+                <button class="nav-tab btn-primary" id="sign-in-btn">Sign In</button>
             </div>
         </nav>
     </header>
 
     <main>
-        <section id="welcome" class="welcome">
-            <div class="section-header">
-                <h2>Welcome to Scholarphile</h2>
-                <p>Your gateway to curated academic resources and research excellence</p>
-            </div>
-            <div class="welcome-content">
-                <div class="welcome-card">
-                    <h3>📚 Curated Research</h3>
-                    <p>Access carefully selected academic papers, research guides, and scholarly resources from leading institutions worldwide.</p>
-                </div>
-                <div class="welcome-card">
-                    <h3>⚡ Instant Access</h3>
-                    <p>Download papers and resources immediately. No waiting, no complicated processes - just click and get what you need.</p>
-                </div>
-                <div class="welcome-card">
-                    <h3>🎯 Quality First</h3>
-                    <p>Every document is reviewed for academic rigor, relevance, and impact. Focus on research, not searching.</p>
+        <!-- MyNotes Section - Advanced Document Recommendations -->
+        <section id="mynotes" class="mynotes active-tab">
+            <div class="mynotes-header">
+                <h1>MyNotes</h1>
+                <p>Personalized academic resources curated for your research interests</p>
+                <div class="user-stats">
+                    <span class="stat">📚 Documents: <strong>847</strong></span>
+                    <span class="stat">📑 Collections: <strong>12</strong></span>
+                    <span class="stat">🔥 Streak: <strong>28 days</strong></span>
                 </div>
             </div>
-        </section>
 
-        <section id="documents" class="documents">
-            <div class="section-header">
-                <h2>Recommended Documents</h2>
-                <p>Curated academic resources ready for immediate download</p>
+            <!-- Quick Actions -->
+            <div class="quick-actions">
+                <button class="action-btn">
+                    <span class="icon">📤</span>
+                    <span>Upload Paper</span>
+                </button>
+                <button class="action-btn">
+                    <span class="icon">🔍</span>
+                    <span>Smart Search</span>
+                </button>
+                <button class="action-btn">
+                    <span class="icon">📊</span>
+                    <span>Analytics</span>
+                </button>
+                <button class="action-btn">
+                    <span class="icon">🏷️</span>
+                    <span>Tags</span>
+                </button>
             </div>
+
+            <!-- Research Categories -->
+            <div class="research-categories">
+                <h2>Research by Category</h2>
+                <div class="categories-grid">
+                    <div class="category-card active">
+                        <div class="category-icon">🧠</div>
+                        <h3>Machine Learning</h3>
+                        <p>124 papers • Updated 2h ago</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🧬</div>
+                        <h3>Biotechnology</h3>
+                        <p>89 papers • Updated 1d ago</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">🌍</div>
+                        <h3>Climate Science</h3>
+                        <p>67 papers • Updated 3h ago</p>
+                    </div>
+                    <div class="category-card">
+                        <div class="category-icon">💊</div>
+                        <h3>Medical Research</h3>
+                        <p>156 papers • Updated 4h ago</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recommended Documents -->
+            <div class="recommended-documents">
+                <div class="section-header">
+                    <h2>Recommended for You</h2>
+                    <p>AI-curated papers based on your research history and interests</p>
+                    <div class="filters">
+                        <button class="filter-btn active">All</button>
+                        <button class="filter-btn">Recent</button>
+                        <button class="filter-btn">Trending</button>
+                        <button class="filter-btn">Bookmarked</button>
+                    </div>
+                </div>
             <div class="documents-grid">
                 <article class="document-item">
                     <div class="document-badge">Research Guide</div>
@@ -133,6 +177,30 @@
                         📥 Download DOCX
                     </button>
                 </article>
+            </div>
+            </div>
+        </section>
+
+        <!-- Sign In Section (hidden by default) -->
+        <section id="signin-section" class="signin-section">
+            <div class="signin-container">
+                <h1>Welcome to Scholarphile</h1>
+                <p>Sign in to access your personalized research dashboard</p>
+                <div class="signin-benefits">
+                    <div class="benefit">
+                        <span class="benefit-icon">🎯</span>
+                        <span>Personalized recommendations</span>
+                    </div>
+                    <div class="benefit">
+                        <span class="benefit-icon">📚</span>
+                        <span>Unlimited document access</span>
+                    </div>
+                    <div class="benefit">
+                        <span class="benefit-icon">🔄</span>
+                        <span>Sync across devices</span>
+                    </div>
+                </div>
+                <button class="btn-primary btn-large" id="open-signin-modal">Sign In to Continue</button>
             </div>
         </section>
 

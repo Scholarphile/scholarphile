@@ -1,11 +1,40 @@
-// Scholarphile - Functional Academic Platform
+// Scholarphile - Two-Tab Design
 document.addEventListener('DOMContentLoaded', function() {
     
-    // Sign-in modal functionality
+    // Tab switching functionality
+    const myNotesTab = document.getElementById('mynotes-tab');
+    const signInTab = document.getElementById('sign-in-btn');
+    const myNotesSection = document.getElementById('mynotes');
+    const signInSection = document.getElementById('signin-section');
     const signInModal = document.getElementById('sign-in-modal');
-    const signInBtns = document.querySelectorAll('#sign-in-btn');
     const modalClose = document.querySelector('.modal-close');
     const signInForm = document.getElementById('sign-in-form');
+    const openSignInModalBtn = document.getElementById('open-signin-modal');
+
+    // Tab switching
+    function showMyNotes() {
+        myNotesSection.style.display = 'block';
+        signInSection.style.display = 'none';
+        myNotesTab.classList.add('active');
+        signInTab.classList.remove('active');
+    }
+
+    function showSignIn() {
+        myNotesSection.style.display = 'none';
+        signInSection.style.display = 'flex';
+        signInTab.classList.add('active');
+        myNotesTab.classList.remove('active');
+    }
+
+    // Event listeners for tabs
+    myNotesTab.addEventListener('click', showMyNotes);
+    signInTab.addEventListener('click', showSignIn);
+
+    // Initialize with MyNotes active
+    showMyNotes();
+
+    // Sign-in modal functionality
+    const signInBtns = document.querySelectorAll('#sign-in-btn, #open-signin-modal');
 
     // Lightweight client-side auth and user data cache
     const Auth = (() => {
@@ -228,9 +257,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 e.preventDefault();
                 return;
             }
-            e.preventDefault();
-            signInModal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
+            // Only show modal if it's the modal button, not the tab button
+            if (btn.id === 'open-signin-modal') {
+                e.preventDefault();
+                signInModal.style.display = 'block';
+                document.body.style.overflow = 'hidden';
+            }
         });
     });
 
