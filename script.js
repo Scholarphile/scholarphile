@@ -53,12 +53,55 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    courseCards.forEach((card) => {
-        card.addEventListener('click', () => {
-            const title = card.querySelector('.course-card-title').textContent;
-            showNotification(`🎓 Opening: ${title}`);
-        });
-    });
+    // Replace static grid with API-driven rendering after auth
+    async function hydrateFromApi() {
+        const token = localStorage.getItem('sp_auth_token');
+        if (!token) return; // remain static for guests
+        try {
+            const res = await fetch('/api/user-data', { headers: { Authorization: `Bearer ${token}` }});
+            if (!res.ok) throw new Error('Failed to load user data');
+            const data = await res.json();
+            // Render courses
+            const grid = document.querySelector('.courses-grid');
+            if (grid && Array.isArray(data.courses)) {
+                grid.innerHTML = data.courses.map(course => courseCardHtml(course)).join('');
+                grid.querySelectorAll('.course-card').forEach(card => {
+                    card.addEventListener('click', () => {
+                        const title = card.getAttribute('data-title');
+                        showNotification(`🎓 Opening: ${title}`);
+                    });
+                });
+            }
+            // Update resume block
+            const rTitle = document.querySelector('.resume-title');
+            if (rTitle && data.courses && data.courses[0]) {
+                rTitle.textContent = data.courses[0].title;
+            }
+        } catch(e) {
+            console.warn(e);
+        }
+    }
+
+    function courseCardHtml(course){
+        const themeClass = course.theme === 'cs' ? 'cs' : (course.theme === 'python' ? 'python' : '');
+        const inner = themeClass === 'cs' ? `
+            <div class="cs-codes">
+                <div class="code-line">CS50x</div>
+                <div class="code-line highlight">CS50x</div>
+                <div class="code-line">CS50x</div>
+                <div class="code-line">CS50x</div>
+            </div>
+            <div class="featured-badges"><span class="badge">💡</span><span class="badge">💡</span><span class="badge">💡</span></div>
+        ` : themeClass === 'python' ? `
+            <div class="python-logo">🐍</div>
+            <div class="python-text"><div>CS50P</div><div>CS50P</div><div>CS50P</div><div>CS50P</div></div>
+        ` : `<div class="math-bg">∫ ∂ ∇</div>`;
+        return `
+        <div class="course-card" data-title="${course.title}">
+            <div class="course-card-thumbnail ${themeClass}">${inner}</div>
+            <div class="course-card-title">${course.title}</div>
+        </div>`;
+    }
 
     function showNotification(message) {
         const existing = document.querySelector('.notification');
@@ -144,4 +187,5 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     renderUser();
+    hydrateFromApi();
 });

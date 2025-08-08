@@ -21,6 +21,7 @@
       <div class="section-header"><h1>Profile</h1></div>
       <div class="profile-content">
         <p id="profile-greeting">Loading profile...</p>
+        <p><button id="sign-out" class="nav-tab" style="margin-top:1rem;">Sign Out</button></p>
       </div>
     </section>
   </main>
@@ -36,6 +37,8 @@
         greeting.textContent = 'You are not signed in.';
         slot.innerHTML = '<a class="nav-tab btn-primary" href="index.html">Sign In</a>';
       }
+      const so = document.getElementById('sign-out');
+      if (so) so.addEventListener('click', ()=>{ localStorage.removeItem('sp_auth_token'); localStorage.removeItem('sp_auth_user'); window.location.href='index.html'; });
     });
   </script>
 </body>
