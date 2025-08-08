@@ -2,12 +2,16 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     const learnTab = document.getElementById('learn-tab');
-    const discoverTab = document.getElementById('discover-tab');
-    const profileTab = document.getElementById('profile-tab');
+    const discoverLink = document.getElementById('discover-link');
     
     const learnSection = document.getElementById('learn-section');
     const discoverSection = document.getElementById('discover-section');
     const profileSection = document.getElementById('profile-section');
+    const userSlot = document.getElementById('user-slot');
+    const signInBtn = document.getElementById('sign-in-btn');
+    const signInModal = document.getElementById('sign-in-modal');
+    const signInForm = document.getElementById('sign-in-form');
+    const modalClose = document.querySelector('.modal-close');
 
     function showSection(activeTab, activeSection) {
         document.querySelectorAll('.nav-tab').forEach(tab => {
@@ -26,13 +30,12 @@ document.addEventListener('DOMContentLoaded', function() {
         showSection(learnTab, learnSection);
     });
 
-    discoverTab.addEventListener('click', () => {
-        showSection(discoverTab, discoverSection);
-    });
-
-    profileTab.addEventListener('click', () => {
-        showSection(profileTab, profileSection);
-    });
+    // Discover opens local page if present, else section
+    if (discoverLink) {
+        discoverLink.addEventListener('click', (e) => {
+            // allow navigation to discover.html; no-op here
+        });
+    }
 
     const upgradeB = document.querySelector('.upgrade-banner');
     const resumeCourse = document.querySelector('.resume-course');
@@ -97,4 +100,48 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     showSection(learnTab, learnSection);
+
+    // --- Auth/UI wiring ---
+    function renderUser() {
+        const token = localStorage.getItem('sp_auth_token');
+        const user = token ? JSON.parse(localStorage.getItem('sp_auth_user') || '{}') : null;
+        if (token && user && user.displayName) {
+            // Show circular avatar on the right
+            userSlot.innerHTML = `<a href="profile.html" class="avatar" title="${user.displayName}">${user.displayName[0].toUpperCase()}</a>`;
+        } else {
+            userSlot.innerHTML = '<button class="nav-tab btn-primary" id="sign-in-btn">Sign In</button>';
+            const btn = document.getElementById('sign-in-btn');
+            if (btn) btn.addEventListener('click', openModal);
+        }
+    }
+
+    function openModal(e){
+        if (e) e.preventDefault();
+        if (signInModal) signInModal.setAttribute('aria-hidden','false');
+    }
+    function closeModal(){ if (signInModal) signInModal.setAttribute('aria-hidden','true'); }
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (signInBtn) signInBtn.addEventListener('click', openModal);
+
+    if (signInForm) {
+        signInForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const remember = document.getElementById('remember-me').checked;
+            try {
+                const res = await fetch('/api/signin', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email, password, remember}) });
+                const data = await res.json();
+                if (!res.ok) throw new Error(data.error || 'Sign-in failed');
+                localStorage.setItem('sp_auth_token', data.token);
+                localStorage.setItem('sp_auth_user', JSON.stringify(data.user));
+                closeModal();
+                renderUser();
+            } catch(err){
+                alert(err.message || 'Sign-in failed');
+            }
+        });
+    }
+
+    renderUser();
 });

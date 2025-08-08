@@ -11,10 +11,14 @@
 </head>
 <body>
     <header class="header">
-        <nav class="nav-tabs">
-            <button class="nav-tab active" id="learn-tab">Learn</button>
-            <button class="nav-tab" id="discover-tab">Discover</button>
-            <button class="nav-tab" id="profile-tab">Profile</button>
+        <nav class="nav-bar">
+            <div class="nav-left nav-tabs">
+                <button class="nav-tab active" id="learn-tab">Learn</button>
+                <a class="nav-tab" id="discover-link" href="discover.html">Discover</a>
+            </div>
+            <div class="nav-right" id="user-slot">
+                <button class="nav-tab btn-primary" id="sign-in-btn">Sign In</button>
+            </div>
         </nav>
     </header>
 
@@ -150,6 +154,24 @@
             </div>
         </section>
     </main>
+
+    <!-- Sign In Modal -->
+    <div id="sign-in-modal" class="modal" aria-hidden="true">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close">×</button>
+            <h2>Sign in to Scholarphile</h2>
+            <form id="sign-in-form">
+                <label>Email
+                    <input type="email" id="email" required placeholder="you@university.edu" />
+                </label>
+                <label>Password
+                    <input type="password" id="password" required placeholder="••••••••" />
+                </label>
+                <label class="remember"><input type="checkbox" id="remember-me" /> Remember me</label>
+                <button type="submit" class="btn-primary btn-large" id="sign-in-submit">Sign In</button>
+            </form>
+        </div>
+    </div>
 
     <script src="script.js?v=1754677913"></script>
 </body>

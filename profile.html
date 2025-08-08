@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Profile — Scholarphile</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="header">
+    <nav class="nav-bar">
+      <div class="nav-left nav-tabs">
+        <a class="nav-tab" href="index.html">Learn</a>
+        <a class="nav-tab" href="discover.html">Discover</a>
+      </div>
+      <div class="nav-right" id="user-slot"></div>
+    </nav>
+  </header>
+  <main>
+    <section class="section active">
+      <div class="section-header"><h1>Profile</h1></div>
+      <div class="profile-content">
+        <p id="profile-greeting">Loading profile...</p>
+      </div>
+    </section>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const user = JSON.parse(localStorage.getItem('sp_auth_user')||'null');
+      const greeting = document.getElementById('profile-greeting');
+      const slot = document.getElementById('user-slot');
+      if (user) {
+        greeting.textContent = `Welcome, ${user.displayName}`;
+        slot.innerHTML = `<a href="profile.html" class="avatar" title="${user.displayName}">${user.displayName[0].toUpperCase()}</a>`;
+      } else {
+        greeting.textContent = 'You are not signed in.';
+        slot.innerHTML = '<a class="nav-tab btn-primary" href="index.html">Sign In</a>';
+      }
+    });
+  </script>
+</body>
+</html>
+
