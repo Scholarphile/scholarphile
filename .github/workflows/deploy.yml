@@ -30,11 +30,19 @@ jobs:
         env:
           NODE_ENV: production
 
+      - name: Debug - List secrets (masked)
+        run: |
+          echo "API Token set: ${{ secrets.CLOUDFLARE_API_TOKEN != '' }}"
+          echo "Account ID set: ${{ secrets.CLOUDFLARE_ACCOUNT_ID != '' }}"
+          echo "Project Name set: ${{ secrets.PAGES_PROJECT_NAME != '' }}"
+          echo "Project Name: ${{ secrets.PAGES_PROJECT_NAME || 'scholarphile' }}"
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/pages-action@v1
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           accountId: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
-          projectName: ${{ secrets.PAGES_PROJECT_NAME }}
+          projectName: ${{ secrets.PAGES_PROJECT_NAME || 'scholarphile' }}
           directory: dist
           gitHubToken: ${{ secrets.GITHUB_TOKEN }}
+          wranglerVersion: '3'
