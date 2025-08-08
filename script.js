@@ -1,5 +1,47 @@
-// Scholarphile - Interactive Features
+// Scholarphile - Functional Academic Platform
 document.addEventListener('DOMContentLoaded', function() {
+    
+    // Sign-in modal functionality
+    const signInModal = document.getElementById('sign-in-modal');
+    const signInBtns = document.querySelectorAll('#sign-in-btn, #hero-sign-in');
+    const modalClose = document.querySelector('.modal-close');
+    const signInForm = document.getElementById('sign-in-form');
+
+    // Open modal
+    signInBtns.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            signInModal.style.display = 'block';
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Close modal
+    modalClose.addEventListener('click', closeModal);
+    window.addEventListener('click', (e) => {
+        if (e.target === signInModal) {
+            closeModal();
+        }
+    });
+
+    function closeModal() {
+        signInModal.style.display = 'none';
+        document.body.style.overflow = 'auto';
+    }
+
+    // Handle sign-in form
+    signInForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        
+        // Simulate authentication
+        showNotification('🎓 Welcome back! Sign-in successful.');
+        closeModal();
+        
+        // Reset form
+        signInForm.reset();
+    });
     
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -88,15 +130,152 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    // Research items interaction
-    const researchItems = document.querySelectorAll('.research-item');
-    researchItems.forEach(item => {
-        item.addEventListener('click', function() {
-            // Simulate opening research detail
-            const title = this.querySelector('h3').textContent;
-            showNotification(`Opening: ${title}`);
+    // Document download functionality
+    window.downloadDocument = function(filename, title) {
+        // Generate realistic academic content
+        const documentContent = generateDocumentContent(filename, title);
+        
+        // Create and trigger download
+        const blob = new Blob([documentContent], { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        // Show success notification
+        showNotification(`📥 Downloaded: ${title}`);
+        
+        // Track download (simulate analytics)
+        console.log(`Download tracked: ${filename}`);
+    };
+
+    function generateDocumentContent(filename, title) {
+        const templates = {
+            'academic-writing-guide.pdf': `
+ACADEMIC WRITING EXCELLENCE
+A Comprehensive Guide to Scholarly Communication
+
+Table of Contents:
+1. Introduction to Academic Writing
+2. Research and Documentation
+3. Citation Styles and Formats
+4. Structure and Organization
+5. Language and Style
+6. Revision and Editing
+
+Chapter 1: Introduction to Academic Writing
+
+Academic writing is a formal style of writing used in scholarly and professional contexts. It is characterized by:
+- Clear, precise language
+- Logical organization
+- Evidence-based arguments
+- Proper citation of sources
+- Objective tone
+
+Key Principles:
+1. Clarity and Precision
+2. Critical Analysis
+3. Evidence-Based Reasoning
+4. Proper Documentation
+5. Ethical Scholarship
+
+This guide provides essential strategies for developing strong academic writing skills across disciplines.
+
+[Content continues with detailed chapters on methodology, citation formats, and best practices...]
+            `,
+            'research-proposal-template.docx': `
+RESEARCH PROPOSAL TEMPLATE
+
+Title: [Your Research Title Here]
+
+1. INTRODUCTION
+   - Background and Context
+   - Problem Statement
+   - Research Questions
+   - Significance of the Study
+
+2. LITERATURE REVIEW
+   - Current State of Knowledge
+   - Theoretical Framework
+   - Gaps in Research
+
+3. METHODOLOGY
+   - Research Design
+   - Data Collection Methods
+   - Analysis Plan
+   - Timeline
+
+4. EXPECTED OUTCOMES
+   - Anticipated Results
+   - Potential Impact
+   - Limitations
+
+5. REFERENCES
+   [APA Format Citations]
+
+Guidelines:
+- Keep proposals focused and concise
+- Clearly articulate the research problem
+- Demonstrate knowledge of existing literature
+- Provide realistic timeline and budget
+            `,
+            'citation-styles-reference.pdf': `
+CITATION STYLE QUICK REFERENCE
+APA • MLA • Chicago • Harvard
+
+APA STYLE (7th Edition)
+In-text: (Author, Year)
+Reference: Author, A. A. (Year). Title of work. Publisher.
+
+MLA STYLE (9th Edition)
+In-text: (Author Page#)
+Works Cited: Author. "Title." Publication, Date, URL.
+
+CHICAGO STYLE (17th Edition)
+Footnote: Author, Title (Place: Publisher, Year), page.
+Bibliography: Author. Title. Place: Publisher, Year.
+
+HARVARD STYLE
+In-text: (Author Year)
+Reference: Author, A. Year, Title, Publisher, Place.
+
+Quick Tips:
+- Always check your institution's preferred style
+- Use citation management tools
+- Be consistent throughout your work
+- Include all necessary bibliographic information
+            `
+        };
+        
+        return templates[filename] || `
+${title}
+
+This is a sample academic document generated for demonstration purposes.
+
+Content includes:
+- Academic writing principles
+- Research methodologies
+- Best practices and guidelines
+- Template structures
+- Reference materials
+
+For the complete document, please visit our full resource library.
+
+© 2024 Scholarphile Academic Resources
+        `;
+    }
+
+    // Scroll to documents function
+    window.scrollToDocuments = function() {
+        document.getElementById('documents').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
         });
-    });
+    };
 
     // CTA button interactions
     const ctaButtons = document.querySelectorAll('.btn-primary, .btn-secondary');

@@ -17,10 +17,9 @@
                 <h1>Scholarphile</h1>
             </div>
             <div class="nav-links">
-                <a href="#features">Features</a>
-                <a href="#research">Research</a>
-                <a href="#community">Community</a>
-                <button class="btn-primary">Get Started</button>
+                <a href="#welcome">Welcome</a>
+                <a href="#documents">Documents</a>
+                <button class="btn-primary" id="sign-in-btn">Sign In</button>
             </div>
         </nav>
     </header>
@@ -31,8 +30,8 @@
                 <h1>Accelerate Your Academic Research</h1>
                 <p>Discover groundbreaking papers, organize your research, and collaborate with scholars worldwide. Scholarphile is your gateway to academic excellence.</p>
                 <div class="hero-actions">
-                    <button class="btn-primary btn-large">Start Researching</button>
-                    <button class="btn-secondary btn-large">Explore Papers</button>
+                    <button class="btn-primary btn-large" onclick="scrollToDocuments()">Browse Documents</button>
+                    <button class="btn-secondary btn-large" id="hero-sign-in">Sign In</button>
                 </div>
             </div>
             <div class="hero-visual">
@@ -44,106 +43,163 @@
             </div>
         </section>
 
-        <section id="features" class="features">
+        <section id="welcome" class="welcome">
             <div class="section-header">
-                <h2>Powerful Research Tools</h2>
-                <p>Everything you need to excel in academic research</p>
+                <h2>Welcome to Scholarphile</h2>
+                <p>Your gateway to curated academic resources and research excellence</p>
             </div>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
-                    <h3>Smart Discovery</h3>
-                    <p>AI-powered search across millions of academic papers with intelligent recommendations.</p>
+            <div class="welcome-content">
+                <div class="welcome-card">
+                    <h3>📚 Curated Research</h3>
+                    <p>Access carefully selected academic papers, research guides, and scholarly resources from leading institutions worldwide.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📚</div>
-                    <h3>Research Organization</h3>
-                    <p>Create collections, add notes, and organize your research with powerful tagging systems.</p>
+                <div class="welcome-card">
+                    <h3>⚡ Instant Access</h3>
+                    <p>Download papers and resources immediately. No waiting, no complicated processes - just click and get what you need.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🤝</div>
-                    <h3>Collaboration Hub</h3>
-                    <p>Share findings, get feedback, and collaborate with researchers in your field.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Citation Analytics</h3>
-                    <p>Track impact, analyze trends, and monitor citation networks in real-time.</p>
+                <div class="welcome-card">
+                    <h3>🎯 Quality First</h3>
+                    <p>Every document is reviewed for academic rigor, relevance, and impact. Focus on research, not searching.</p>
                 </div>
             </div>
         </section>
 
-        <section id="research" class="research-showcase">
+        <section id="documents" class="documents">
             <div class="section-header">
-                <h2>Latest Research</h2>
-                <p>Trending papers and breakthrough discoveries</p>
+                <h2>Recommended Documents</h2>
+                <p>Curated academic resources ready for immediate download</p>
             </div>
-            <div class="research-grid">
-                <article class="research-item">
-                    <div class="research-badge">Computer Science</div>
-                    <h3>Advances in Quantum Computing for Academic Applications</h3>
-                    <p class="research-authors">Dr. Sarah Chen, Prof. Michael Rodriguez</p>
-                    <div class="research-stats">
-                        <span>📖 45 citations</span>
-                        <span>⭐ 4.8 rating</span>
-                        <span>📅 Dec 2024</span>
+            <div class="documents-grid">
+                <article class="document-item">
+                    <div class="document-badge">Research Guide</div>
+                    <h3>Academic Writing Excellence</h3>
+                    <p class="document-description">Comprehensive guide to academic writing, citation styles, and research methodology. Essential for students and researchers.</p>
+                    <div class="document-meta">
+                        <span>📄 24 pages</span>
+                        <span>📊 PDF</span>
+                        <span>🔥 Most Popular</span>
                     </div>
+                    <button class="btn-download" onclick="downloadDocument('academic-writing-guide.pdf', 'Academic Writing Excellence')">
+                        📥 Download PDF
+                    </button>
                 </article>
-                <article class="research-item">
-                    <div class="research-badge">Biology</div>
-                    <h3>CRISPR Applications in Sustainable Agriculture</h3>
-                    <p class="research-authors">Dr. Elena Petrov, Dr. James Kim</p>
-                    <div class="research-stats">
-                        <span>📖 82 citations</span>
-                        <span>⭐ 4.9 rating</span>
-                        <span>📅 Nov 2024</span>
+                
+                <article class="document-item">
+                    <div class="document-badge">Template</div>
+                    <h3>Research Proposal Template</h3>
+                    <p class="document-description">Professional template for research proposals with examples, formatting guidelines, and best practices.</p>
+                    <div class="document-meta">
+                        <span>📄 12 pages</span>
+                        <span>📊 DOCX</span>
+                        <span>⭐ Highly Rated</span>
                     </div>
+                    <button class="btn-download" onclick="downloadDocument('research-proposal-template.docx', 'Research Proposal Template')">
+                        📥 Download DOCX
+                    </button>
                 </article>
-                <article class="research-item">
-                    <div class="research-badge">Psychology</div>
-                    <h3>Digital Learning and Cognitive Development</h3>
-                    <p class="research-authors">Prof. Lisa Thompson, Dr. Ahmed Hassan</p>
-                    <div class="research-stats">
-                        <span>📖 67 citations</span>
-                        <span>⭐ 4.7 rating</span>
-                        <span>📅 Oct 2024</span>
+                
+                <article class="document-item">
+                    <div class="document-badge">Reference</div>
+                    <h3>Citation Style Quick Reference</h3>
+                    <p class="document-description">Complete reference for APA, MLA, Chicago, and Harvard citation styles with examples and formatting rules.</p>
+                    <div class="document-meta">
+                        <span>📄 8 pages</span>
+                        <span>📊 PDF</span>
+                        <span>🔄 Updated 2024</span>
                     </div>
+                    <button class="btn-download" onclick="downloadDocument('citation-styles-reference.pdf', 'Citation Style Quick Reference')">
+                        📥 Download PDF
+                    </button>
+                </article>
+                
+                <article class="document-item">
+                    <div class="document-badge">Checklist</div>
+                    <h3>Research Ethics Checklist</h3>
+                    <p class="document-description">Essential checklist for ensuring ethical compliance in academic research, IRB guidelines, and best practices.</p>
+                    <div class="document-meta">
+                        <span>📄 6 pages</span>
+                        <span>📊 PDF</span>
+                        <span>✅ Essential</span>
+                    </div>
+                    <button class="btn-download" onclick="downloadDocument('research-ethics-checklist.pdf', 'Research Ethics Checklist')">
+                        📥 Download PDF
+                    </button>
+                </article>
+                
+                <article class="document-item">
+                    <div class="document-badge">Guide</div>
+                    <h3>Literature Review Framework</h3>
+                    <p class="document-description">Step-by-step framework for conducting systematic literature reviews with search strategies and analysis methods.</p>
+                    <div class="document-meta">
+                        <span>📄 18 pages</span>
+                        <span>📊 PDF</span>
+                        <span>🎯 Comprehensive</span>
+                    </div>
+                    <button class="btn-download" onclick="downloadDocument('literature-review-framework.pdf', 'Literature Review Framework')">
+                        📥 Download PDF
+                    </button>
+                </article>
+                
+                <article class="document-item">
+                    <div class="document-badge">Template</div>
+                    <h3>Thesis Structure Template</h3>
+                    <p class="document-description">Professional thesis template with chapter outlines, formatting guidelines, and submission requirements.</p>
+                    <div class="document-meta">
+                        <span>📄 30 pages</span>
+                        <span>📊 DOCX</span>
+                        <span>🎓 Graduate Level</span>
+                    </div>
+                    <button class="btn-download" onclick="downloadDocument('thesis-structure-template.docx', 'Thesis Structure Template')">
+                        📥 Download DOCX
+                    </button>
                 </article>
             </div>
         </section>
 
-        <section id="community" class="community">
-            <div class="section-header">
-                <h2>Join the Academic Community</h2>
-                <p>Connect with thousands of researchers worldwide</p>
+        <!-- Sign In Modal -->
+        <div id="sign-in-modal" class="modal">
+            <div class="modal-content">
+                <span class="modal-close">&times;</span>
+                <h2>Sign In to Scholarphile</h2>
+                <p>Access premium features and track your downloads</p>
+                
+                <form class="sign-in-form" id="sign-in-form">
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@university.edu">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="password" id="password" name="password" required placeholder="Enter your password">
+                    </div>
+                    
+                    <div class="form-options">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="remember-me">
+                            <span class="checkmark"></span>
+                            Remember me
+                        </label>
+                        <a href="#" class="forgot-password">Forgot password?</a>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary btn-large">Sign In</button>
+                    
+                    <div class="form-divider">
+                        <span>or</span>
+                    </div>
+                    
+                    <button type="button" class="btn-google">
+                        <span class="google-icon">🎓</span>
+                        Continue with Google Scholar
+                    </button>
+                    
+                    <div class="sign-up-link">
+                        Don't have an account? <a href="#" id="create-account-link">Create one</a>
+                    </div>
+                </form>
             </div>
-            <div class="community-stats">
-                <div class="stat-item">
-                    <div class="stat-number">50K+</div>
-                    <div class="stat-label">Active Researchers</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">2M+</div>
-                    <div class="stat-label">Research Papers</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">500+</div>
-                    <div class="stat-label">Universities</div>
-                </div>
-                <div class="stat-item">
-                    <div class="stat-number">95%</div>
-                    <div class="stat-label">Satisfaction Rate</div>
-                </div>
-            </div>
-        </section>
-
-        <section class="cta">
-            <div class="cta-content">
-                <h2>Ready to Transform Your Research?</h2>
-                <p>Join thousands of researchers who trust Scholarphile for their academic journey.</p>
-                <button class="btn-primary btn-large">Get Started Free</button>
-            </div>
-        </section>
+        </div>
     </main>
 
     <footer class="footer">
