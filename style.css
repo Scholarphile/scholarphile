@@ -335,17 +335,21 @@ main {
 .course-card-title { padding:12px 14px; font-size:0.98rem; font-weight:600; line-height:1.45; color:#e6f0f0; }
 
 /* Other Sections */
-.discover-content,
-.profile-content {
-    text-align: center;
-    padding: 4rem 2rem;
-    opacity: 0.7;
-}
+.hero-min { text-align:center; padding: 3rem 0 2rem; }
+.hero-min h1 { font-size: 2.4rem; font-weight: 700; color:#e9f7f7; margin-bottom: 0.5rem; }
+.tagline { color:#b9dede; margin-bottom: 1.25rem; }
+.search-row { display:flex; gap: 0.5rem; justify-content:center; }
+.search-row input { width: min(640px, 90%); padding: 0.9rem 1rem; border-radius: 0.6rem; border:1px solid #1f3b3b; background:#0e2426; color:#e6f0f0; }
+.section-header.compact { margin: 1.25rem 0; }
 
-.discover-content p,
-.profile-content p {
-    font-size: 1.2rem;
-}
+/* Documents */
+.documents-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 16px; }
+.doc-card { background:#0e2426; border:1px solid #1f3b3b; border-radius:12px; padding: 14px; display:flex; flex-direction:column; gap:8px; }
+.doc-badge { align-self:flex-start; background:#103033; color:#a6d0d0; border:1px solid #1f4b4b; border-radius:999px; padding:4px 10px; font-size:0.78rem; }
+.doc-title { font-weight:600; color:#e6f0f0; }
+.doc-meta { color:#9abbbb; font-size:0.85rem; }
+.doc-actions { margin-top:auto; }
+.doc-actions .btn-primary { padding: 0.6rem 1rem; }
 
 /* Responsive Design */
 @media (max-width: 768px) {

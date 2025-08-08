@@ -23,135 +23,20 @@
     </header>
 
     <main>
-        <!-- Learn Section -->
-        <section id="learn-section" class="section active">
-            <div class="section-header">
-                <h1>Learn</h1>
-                <div class="dropdown">
-                    <button class="dropdown-btn">Courses <span class="dropdown-arrow">▼</span></button>
+        <section id="home" class="section active">
+            <div class="hero-min">
+                <h1>Research, organized.</h1>
+                <p class="tagline">Curated academic documents and simple notes — personalized when you sign in.</p>
+                <div class="search-row">
+                    <input id="doc-search" type="search" placeholder="Search documents (e.g., citation, proposal, ethics)" />
+                    <button class="btn-primary" id="browse-docs">Browse</button>
                 </div>
             </div>
 
-            <!-- Featured Course -->
-            <div class="featured-course">
-                <div class="course-thumbnail">
-                    <div class="course-code">CS50AI</div>
-                    <div class="course-visual">
-                        <div class="tic-tac-toe">
-                            <div class="grid">
-                                <div class="cell"></div>
-                                <div class="cell x">×</div>
-                                <div class="cell"></div>
-                                <div class="cell x">×</div>
-                                <div class="cell o">○</div>
-                                <div class="cell"></div>
-                                <div class="cell"></div>
-                                <div class="cell"></div>
-                                <div class="cell"></div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="course-info">
-                    <div class="course-provider">ScholarphileX</div>
-                    <h2>CS50's Introduction to Artificial Intelligence with Python</h2>
-                    <div class="course-meta">Ends 31 Dec 2025</div>
-                </div>
+            <div class="section-header compact">
+                <h2>Recommended Documents</h2>
             </div>
-
-            <!-- Upgrade Banner -->
-            <div class="upgrade-banner">
-                <div class="upgrade-icon">🏆</div>
-                <div class="upgrade-text">
-                    <span>Upgrade to access more features</span>
-                </div>
-                <div class="upgrade-arrow">→</div>
-            </div>
-
-            <!-- Resume Course -->
-            <div class="resume-course">
-                <div class="resume-icon">🎓</div>
-                <div class="resume-text">
-                    <div class="resume-label">Resume Course</div>
-                    <div class="resume-title">Search</div>
-                </div>
-                <div class="resume-arrow">→</div>
-            </div>
-
-            <!-- All Courses -->
-            <div class="all-courses">
-                <div class="all-courses-header">
-                    <span>View All My Courses (5)</span>
-                    <span class="header-arrow">→</span>
-                </div>
-            </div>
-
-            <!-- Course Grid -->
-            <div class="courses-grid">
-                <div class="course-card">
-                    <div class="course-card-thumbnail">
-                        <div class="math-bg">∫ ∂ ∇</div>
-                    </div>
-                    <div class="course-card-title">Calculus Applied!</div>
-                </div>
-                
-                <div class="course-card featured">
-                    <div class="course-card-thumbnail cs">
-                        <div class="cs-codes">
-                            <div class="code-line">CS50x</div>
-                            <div class="code-line highlight">CS50x</div>
-                            <div class="code-line">CS50x</div>
-                            <div class="code-line">CS50x</div>
-                        </div>
-                        <div class="featured-badges">
-                            <span class="badge">💡</span>
-                            <span class="badge">💡</span>
-                            <span class="badge">💡</span>
-                        </div>
-                    </div>
-                    <div class="course-card-title">CS50's Introduction to Computer Science</div>
-                </div>
-                
-                <div class="course-card">
-                    <div class="course-card-thumbnail python">
-                        <div class="python-logo">🐍</div>
-                        <div class="python-text">
-                            <div>CS50P</div>
-                            <div>CS50P</div>
-                            <div>CS50P</div>
-                            <div>CS50P</div>
-                        </div>
-                    </div>
-                    <div class="course-card-title">CS50's Introduction to Programming with Python</div>
-                </div>
-                
-                <div class="course-card">
-                    <div class="course-card-thumbnail">
-                        <div class="math-bg">∫ ∂ ∇</div>
-                    </div>
-                    <div class="course-card-title">Calculus Applied!</div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Discover Section -->
-        <section id="discover-section" class="section">
-            <div class="section-header">
-                <h1>Discover</h1>
-            </div>
-            <div class="discover-content">
-                <p>Explore new courses and learning opportunities</p>
-            </div>
-        </section>
-
-        <!-- Profile Section -->
-        <section id="profile-section" class="section">
-            <div class="section-header">
-                <h1>Profile</h1>
-            </div>
-            <div class="profile-content">
-                <p>Manage your learning profile and achievements</p>
-            </div>
+            <div class="documents-grid" id="documents-grid"></div>
         </section>
     </main>
 
