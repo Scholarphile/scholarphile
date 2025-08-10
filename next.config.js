@@ -4,6 +4,9 @@ const nextConfig = {
     domains: ['localhost'],
     unoptimized: true,
   },
+  experimental: {
+    runtime: 'edge',
+  },
 }
 
 module.exports = nextConfig

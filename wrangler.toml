@@ -1,20 +1,10 @@
 [build]
 command = "npm run build"
-output_dir = ".next"
-
-[build.environment]
-NODE_VERSION = "18"
 
 [env.production]
 name = "scholarphile"
-workers_dev = true
-
-[env.production.vars]
-ENVIRONMENT = "production"
+pages_build_output_dir = ".vercel/output/static"
 
 [env.staging]
 name = "scholarphile-staging"
-workers_dev = true
-
-[env.staging.vars]
-ENVIRONMENT = "staging"
+pages_build_output_dir = ".vercel/output/static"
