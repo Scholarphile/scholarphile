@@ -1,6 +1,6 @@
 [build]
 command = "npm run build"
-output_dir = "out"
+output_dir = ".next"
 
 [env.production]
 name = "scholarphile"
