@@ -6,11 +6,12 @@ import { HowItWorks } from '@/components/sections/how-it-works'
 import { Footer } from '@/components/layout/footer'
 
 export default function HomePage() {
-  // Cache busting timestamp
+  // Aggressive cache busting with random timestamp
   const timestamp = Date.now()
+  const randomId = Math.random().toString(36).substring(7)
   
   return (
-    <div className="min-h-screen bg-background" data-timestamp={timestamp}>
+    <div className="min-h-screen bg-background" data-timestamp={timestamp} data-random={randomId}>
       <Header />
       <main>
         <Hero />
