@@ -6,8 +6,11 @@ import { HowItWorks } from '@/components/sections/how-it-works'
 import { Footer } from '@/components/layout/footer'
 
 export default function HomePage() {
+  // Cache busting timestamp
+  const timestamp = Date.now()
+  
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" data-timestamp={timestamp}>
       <Header />
       <main>
         <Hero />
