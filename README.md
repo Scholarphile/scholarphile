@@ -31,7 +31,7 @@ A sleek, minimal document sharing community platform designed specifically for c
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/scholarphile.git
+git clone https://github.com/scholarphile/scholarphile.git
 cd scholarphile
 ```
 
