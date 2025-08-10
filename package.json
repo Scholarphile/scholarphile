@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "A sleek, minimal document sharing community platform for college students",
   "private": true,
+  "buildTimestamp": "2024-12-19T00:00:00.000Z",
   "scripts": {
     "dev": "next dev",
     "build": "next build",

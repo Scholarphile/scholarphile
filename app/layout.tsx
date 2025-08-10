@@ -15,6 +15,12 @@ export const metadata: Metadata = {
   authors: [{ name: 'ScholarPhile Team' }],
   viewport: 'width=device-width, initial-scale=1',
   themeColor: '#0a0a0a',
+  // Force cache refresh
+  other: {
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+  },
 }
 
 export default function RootLayout({
@@ -23,14 +29,27 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className="dark">
       <head>
         {/* Cache busting meta tag */}
         <meta name="cache-timestamp" content={timestamp.toString()} />
+        <meta httpEquiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta httpEquiv="Pragma" content="no-cache" />
+        <meta httpEquiv="Expires" content="0" />
       </head>
-      <body className={inter.className}>
+      <body className={`${inter.className} antialiased`}>
         {children}
-        <Toaster />
+        <Toaster
+          position="top-right"
+          toastOptions={{
+            duration: 4000,
+            style: {
+              background: '#1e293b',
+              color: '#ffffff',
+              border: '1px solid #334155',
+            },
+          }}
+        />
       </body>
     </html>
   )

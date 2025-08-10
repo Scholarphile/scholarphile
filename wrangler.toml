@@ -4,8 +4,8 @@ output_dir = ".next"
 
 [env.production]
 name = "scholarphile"
-pages_build_output_dir = ".next/standalone"
+pages_build_output_dir = ".next"
 
 [env.staging]
 name = "scholarphile-staging"
-pages_build_output_dir = ".next/standalone"
+pages_build_output_dir = ".next"
