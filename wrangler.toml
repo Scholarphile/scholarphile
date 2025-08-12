@@ -1,11 +1,12 @@
 [build]
-command = "npm run build"
-output_dir = "out"
+command = "cd Phile && npm ci --no-audit --no-fund && npm run build"
+output_dir = "Phile/out"
 
 [env.production]
 name = "scholarphile"
-pages_build_output_dir = "out"
+pages_build_output_dir = "Phile/out"
 
 [env.staging]
 name = "scholarphile-staging"
-pages_build_output_dir = "out"
+pages_build_output_dir = "Phile/out"
+
