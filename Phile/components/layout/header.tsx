@@ -5,9 +5,12 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { BookOpen, Menu, X, Search, User, Upload } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { UserProfile } from '@/components/auth/user-profile'
+import { useSession } from 'next-auth/react'
 
 export const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
+  const { data: session } = useSession()
 
   const navigation = [
     { name: 'Browse', href: '/browse' },
@@ -48,10 +51,16 @@ export const Header: React.FC = () => {
               <Upload className="h-4 w-4 mr-2" />
               Upload
             </Button>
-            <Button variant="primary" size="sm">
-              <User className="h-4 w-4 mr-2" />
-              Sign In
-            </Button>
+            {session ? (
+              <UserProfile />
+            ) : (
+              <Link href="/auth/signin">
+                <Button variant="primary" size="sm">
+                  <User className="h-4 w-4 mr-2" />
+                  Sign In
+                </Button>
+              </Link>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -93,10 +102,26 @@ export const Header: React.FC = () => {
                   <Upload className="h-4 w-4 mr-2" />
                   Upload Document
                 </Button>
-                <Button variant="primary" className="w-full justify-center">
-                  <User className="h-4 w-4 mr-2" />
-                  Sign In
-                </Button>
+                {session ? (
+                  <div className="text-center">
+                    <p className="text-sm text-surface-300 mb-2">
+                      Welcome, {session.user?.name || 'User'}!
+                    </p>
+                    <Link href="/auth/signout">
+                      <Button variant="outline" className="w-full justify-center">
+                        <User className="h-4 w-4 mr-2" />
+                        Sign Out
+                      </Button>
+                    </Link>
+                  </div>
+                ) : (
+                  <Link href="/auth/signin">
+                    <Button variant="primary" className="w-full justify-center">
+                      <User className="h-4 w-4 mr-2" />
+                      Sign In
+                    </Button>
+                  </Link>
+                )}
               </div>
             </div>
           </motion.div>

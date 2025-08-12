@@ -12,6 +12,7 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
+    "@auth/core": "^0.40.0",
     "@cloudflare/next-on-pages": "^1.13.13",
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
@@ -21,6 +22,7 @@
     "framer-motion": "^10.16.0",
     "lucide-react": "^0.292.0",
     "next": "^14.0.0",
+    "next-auth": "^4.24.5",
     "postcss": "^8.4.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
