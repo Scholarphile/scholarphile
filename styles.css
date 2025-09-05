@@ -5,11 +5,18 @@
     box-sizing: border-box;
 }
 
+/* CSS Custom Properties */
+:root {
+    --accent-blue: #4A90E2;
+    --accent-blue-hover: #357ABD;
+    --accent-blue-light: #E8F4FD;
+}
+
 body {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     line-height: 1.6;
     color: #333;
-    background-color: #f8f9fa;
+    background-color: #f5f5f5;
 }
 
 .container {
@@ -25,6 +32,12 @@ header {
     position: sticky;
     top: 0;
     z-index: 100;
+    border-bottom: 2px solid transparent;
+    transition: border-bottom-color 0.3s ease;
+}
+
+header:hover {
+    border-bottom-color: var(--accent-blue-light);
 }
 
 .nav-container {
@@ -38,9 +51,14 @@ header {
 }
 
 .logo {
-    color: #2c5aa0;
+    color: #2d2d2d;
     font-size: 1.8rem;
     font-weight: 700;
+    transition: color 0.3s ease;
+}
+
+.logo:hover {
+    color: var(--accent-blue);
 }
 
 .nav-links {
@@ -58,7 +76,7 @@ header {
 
 .nav-links a:hover,
 .nav-links a.active {
-    color: #2c5aa0;
+    color: var(--accent-blue);
 }
 
 /* Main content */
@@ -68,7 +86,7 @@ main {
 
 /* Hero section */
 .hero {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #4a4a4a 0%, #2d2d2d 100%);
     color: white;
     padding: 80px 0;
     text-align: center;
@@ -103,14 +121,14 @@ main {
 }
 
 .btn.primary {
-    background: #fff;
-    color: #2c5aa0;
+    background: var(--accent-blue);
+    color: #fff;
 }
 
 .btn.primary:hover {
-    background: #f8f9fa;
+    background: var(--accent-blue-hover);
     transform: translateY(-2px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
 }
 
 /* About section */
@@ -123,7 +141,7 @@ main {
     font-size: 2.5rem;
     margin-bottom: 30px;
     text-align: center;
-    color: #2c5aa0;
+    color: #2d2d2d;
 }
 
 .about p {
@@ -136,7 +154,7 @@ main {
 
 /* Course pages */
 .course-header {
-    background: linear-gradient(135deg, #2c5aa0 0%, #1e3a5f 100%);
+    background: linear-gradient(135deg, #3a3a3a 0%, #1a1a1a 100%);
     color: white;
     padding: 60px 0;
     text-align: center;
@@ -161,7 +179,7 @@ main {
 }
 
 .content-placeholder h2 {
-    color: #2c5aa0;
+    color: #2d2d2d;
     font-size: 2.2rem;
     margin-bottom: 30px;
 }
@@ -179,13 +197,13 @@ main {
 .example-section {
     margin: 40px 0;
     padding: 30px;
-    background: #f8f9fa;
+    background: #f8f8f8;
     border-radius: 10px;
-    border-left: 4px solid #2c5aa0;
+    border-left: 4px solid var(--accent-blue);
 }
 
 .example-section h3 {
-    color: #2c5aa0;
+    color: #2d2d2d;
     margin-bottom: 15px;
 }
 
@@ -195,19 +213,25 @@ main {
     padding: 20px;
     background: #fff;
     border-radius: 5px;
-    border: 1px solid #e9ecef;
+    border: 1px solid #ddd;
+    transition: border-color 0.3s ease;
+}
+
+.math-example:hover {
+    border-color: var(--accent-blue);
 }
 
 .placeholder-note {
     margin-top: 50px;
     padding: 30px;
-    background: #e8f4f8;
+    background: #f0f0f0;
     border-radius: 10px;
-    border: 2px dashed #2c5aa0;
+    border: 2px dashed #666;
+    transition: all 0.3s ease;
 }
 
 .placeholder-note h3 {
-    color: #2c5aa0;
+    color: #2d2d2d;
     margin-bottom: 15px;
 }
 
@@ -223,7 +247,7 @@ main {
 
 /* Footer */
 footer {
-    background: #2c5aa0;
+    background: #2d2d2d;
     color: white;
     text-align: center;
     padding: 30px 0;
@@ -258,4 +282,18 @@ footer {
         flex-direction: column;
         align-items: center;
     }
+}
+
+/* Focus states for accessibility */
+.btn:focus,
+.nav-links a:focus {
+    outline: 2px solid var(--accent-blue);
+    outline-offset: 2px;
+}
+
+/* Additional subtle accents */
+.placeholder-note:hover {
+    border-color: var(--accent-blue);
+    background: var(--accent-blue-light);
+    transition: all 0.3s ease;
 }
