@@ -1,0 +1,261 @@
+/* Reset and base styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f8f9fa;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Header and Navigation */
+header {
+    background: #fff;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.nav-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 70px;
+}
+
+.logo {
+    color: #2c5aa0;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 30px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active {
+    color: #2c5aa0;
+}
+
+/* Main content */
+main {
+    min-height: calc(100vh - 140px);
+}
+
+/* Hero section */
+.hero {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 80px 0;
+    text-align: center;
+}
+
+.hero h1 {
+    font-size: 3rem;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.hero p {
+    font-size: 1.3rem;
+    margin-bottom: 40px;
+    opacity: 0.9;
+}
+
+.cta-buttons {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+}
+
+.btn {
+    display: inline-block;
+    padding: 15px 30px;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn.primary {
+    background: #fff;
+    color: #2c5aa0;
+}
+
+.btn.primary:hover {
+    background: #f8f9fa;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+/* About section */
+.about {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.about h2 {
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    text-align: center;
+    color: #2c5aa0;
+}
+
+.about p {
+    font-size: 1.1rem;
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    color: #666;
+}
+
+/* Course pages */
+.course-header {
+    background: linear-gradient(135deg, #2c5aa0 0%, #1e3a5f 100%);
+    color: white;
+    padding: 60px 0;
+    text-align: center;
+}
+
+.course-header h1 {
+    font-size: 2.8rem;
+    margin-bottom: 20px;
+    font-weight: 300;
+}
+
+.course-description {
+    font-size: 1.2rem;
+    max-width: 800px;
+    margin: 0 auto;
+    opacity: 0.9;
+}
+
+.course-content {
+    padding: 80px 0;
+    background: #fff;
+}
+
+.content-placeholder h2 {
+    color: #2c5aa0;
+    font-size: 2.2rem;
+    margin-bottom: 30px;
+}
+
+.content-placeholder ul {
+    margin: 20px 0;
+    padding-left: 30px;
+}
+
+.content-placeholder li {
+    margin: 10px 0;
+    color: #666;
+}
+
+.example-section {
+    margin: 40px 0;
+    padding: 30px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    border-left: 4px solid #2c5aa0;
+}
+
+.example-section h3 {
+    color: #2c5aa0;
+    margin-bottom: 15px;
+}
+
+.math-example {
+    text-align: center;
+    margin: 20px 0;
+    padding: 20px;
+    background: #fff;
+    border-radius: 5px;
+    border: 1px solid #e9ecef;
+}
+
+.placeholder-note {
+    margin-top: 50px;
+    padding: 30px;
+    background: #e8f4f8;
+    border-radius: 10px;
+    border: 2px dashed #2c5aa0;
+}
+
+.placeholder-note h3 {
+    color: #2c5aa0;
+    margin-bottom: 15px;
+}
+
+.placeholder-note ul {
+    margin: 15px 0;
+    padding-left: 30px;
+}
+
+.placeholder-note li {
+    margin: 8px 0;
+    color: #555;
+}
+
+/* Footer */
+footer {
+    background: #2c5aa0;
+    color: white;
+    text-align: center;
+    padding: 30px 0;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .nav-container {
+        flex-direction: column;
+        height: auto;
+        padding: 15px 20px;
+    }
+    
+    .nav-links {
+        margin-top: 15px;
+        gap: 20px;
+    }
+    
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+    
+    .hero p {
+        font-size: 1.1rem;
+    }
+    
+    .course-header h1 {
+        font-size: 2.2rem;
+    }
+    
+    .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+}
