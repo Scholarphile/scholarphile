@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>General Chemistry I - Scholarphile</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- MathJax for LaTeX rendering -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="nav-container">
+                <h1 class="logo">Scholarphile</h1>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="classical-mechanics.html">Classical Mechanics</a></li>
+                    <li><a href="linear-algebra.html">Linear Algebra</a></li>
+                    <li><a href="calculus.html">Calculus</a></li>
+                    <li><a href="general-chemistry.html" class="active">General Chemistry</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="course-header">
+            <div class="container">
+                <h1>General Chemistry I</h1>
+                <p class="course-description">
+                    Explore the fundamental principles of chemistry including atomic structure, chemical bonding, stoichiometry, thermodynamics, and kinetics. Essential foundation for all chemistry and related sciences.
+                </p>
+            </div>
+        </section>
+
+        <section class="course-content">
+            <div class="container">
+                
+                <!-- Chapter 1: Atomic Structure -->
+                <div class="content-section">
+                    <h2>Chapter 1: Atomic Structure and Periodic Properties</h2>
+                    
+                    <h3>1.1 Atomic Theory and Structure</h3>
+                    <p>The atom consists of a dense nucleus containing protons and neutrons, surrounded by electrons in orbitals.</p>
+                    
+                    <h4>Fundamental Particles</h4>
+                    <ul>
+                        <li><strong>Proton:</strong> Charge = +1, Mass ≈ 1 amu, Location = nucleus</li>
+                        <li><strong>Neutron:</strong> Charge = 0, Mass ≈ 1 amu, Location = nucleus</li>
+                        <li><strong>Electron:</strong> Charge = -1, Mass ≈ 0.0005 amu, Location = orbitals</li>
+                    </ul>
+                    
+                    <h4>Atomic Number and Mass Number</h4>
+                    <div class="math-example">
+                        $$\text{Atomic Number (Z)} = \text{Number of protons}$$
+                        $$\text{Mass Number (A)} = \text{Number of protons + neutrons}$$
+                        $$\text{Number of neutrons} = A - Z$$
+                    </div>
+                    
+                    <div class="example-section">
+                        <h4>Example: Carbon-14</h4>
+                        <p>Carbon-14 has 6 protons (atomic number) and mass number 14.</p>
+                        <ul>
+                            <li>Protons: 6</li>
+                            <li>Neutrons: 14 - 6 = 8</li>
+                            <li>Electrons (neutral atom): 6</li>
+                        </ul>
+                        <p>Isotope notation: $^{14}C$ or $^{14}C_6$</p>
+                    </div>
+                    
+                    <h3>1.2 Electron Configuration</h3>
+                    <p>Electrons occupy orbitals according to specific rules:</p>
+                    <ul>
+                        <li><strong>Aufbau Principle:</strong> Fill lowest energy orbitals first</li>
+                        <li><strong>Pauli Exclusion Principle:</strong> Maximum 2 electrons per orbital (opposite spins)</li>
+                        <li><strong>Hund's Rule:</strong> Fill orbitals singly before pairing</li>
+                    </ul>
+                    
+                    <h4>Orbital Order</h4>
+                    <p>1s < 2s < 2p < 3s < 3p < 4s < 3d < 4p < 5s < 4d < 5p < 6s < 4f < 5d < 6p</p>
+                    
+                    <div class="example-section">
+                        <h4>Example: Electron Configurations</h4>
+                        <ul>
+                            <li><strong>Carbon (Z=6):</strong> 1s² 2s² 2p²</li>
+                            <li><strong>Iron (Z=26):</strong> 1s² 2s² 2p⁶ 3s² 3p⁶ 4s² 3d⁶ or [Ar] 4s² 3d⁶</li>
+                            <li><strong>Chlorine (Z=17):</strong> 1s² 2s² 2p⁶ 3s² 3p⁵ or [Ne] 3s² 3p⁵</li>
+                        </ul>
+                    </div>
+                    
+                    <h3>1.3 Periodic Trends</h3>
+                    
+                    <h4>Atomic Radius</h4>
+                    <p>Decreases across a period (left to right), increases down a group</p>
+                    
+                    <h4>Ionization Energy</h4>
+                    <p>Energy required to remove an electron: $M(g) \rightarrow M^+(g) + e^-$</p>
+                    <p>Increases across a period, decreases down a group</p>
+                    
+                    <h4>Electronegativity</h4>
+                    <p>Ability to attract electrons in a bond. Increases across a period, decreases down a group</p>
+                    <p>Pauling scale: F (4.0) > O (3.5) > N (3.0) > Cl (3.0) > C (2.5)</p>
+                </div>
+
+                <!-- Chapter 2: Chemical Bonding -->
+                <div class="content-section">
+                    <h2>Chapter 2: Chemical Bonding</h2>
+                    
+                    <h3>2.1 Ionic Bonding</h3>
+                    <p>Formed between metals and nonmetals through electron transfer.</p>
+                    
+                    <h4>Lattice Energy</h4>
+                    <p>Energy required to separate an ionic solid into gaseous ions:</p>
+                    <div class="math-example">
+                        $$U \propto \frac{q_1 \cdot q_2}{r}$$
+                    </div>
+                    <p>where $q_1$ and $q_2$ are ionic charges and $r$ is the distance between ions.</p>
+                    
+                    <div class="example-section">
+                        <h4>Example: Ionic Compound Formation</h4>
+                        <p>Formation of NaCl:</p>
+                        <ul>
+                            <li>Na → Na⁺ + e⁻ (ionization energy = +496 kJ/mol)</li>
+                            <li>Cl + e⁻ → Cl⁻ (electron affinity = -349 kJ/mol)</li>
+                            <li>Na⁺ + Cl⁻ → NaCl(s) (lattice energy = -787 kJ/mol)</li>
+                        </ul>
+                        <p>Overall: Na(s) + ½Cl₂(g) → NaCl(s) ΔH = -411 kJ/mol</p>
+                    </div>
+                    
+                    <h3>2.2 Covalent Bonding</h3>
+                    <p>Formed between nonmetals through electron sharing.</p>
+                    
+                    <h4>Lewis Structures</h4>
+                    <p>Steps to draw Lewis structures:</p>
+                    <ol>
+                        <li>Count total valence electrons</li>
+                        <li>Determine central atom (usually least electronegative)</li>
+                        <li>Connect atoms with single bonds</li>
+                        <li>Complete octets with lone pairs</li>
+                        <li>Form multiple bonds if needed</li>
+                    </ol>
+                    
+                    <div class="example-section">
+                        <h4>Example: Lewis Structure of CO₂</h4>
+                        <p>Total valence electrons: C(4) + 2×O(6) = 16 electrons</p>
+                        <p>Structure: O=C=O</p>
+                        <p>Each oxygen has 2 lone pairs, carbon has no lone pairs</p>
+                        <p>All atoms satisfy the octet rule</p>
+                    </div>
+                    
+                    <h3>2.3 Molecular Geometry (VSEPR Theory)</h3>
+                    <p>Valence Shell Electron Pair Repulsion theory predicts molecular shapes based on electron pair repulsion.</p>
+                    
+                    <h4>Common Geometries</h4>
+                    <ul>
+                        <li><strong>Linear:</strong> 2 electron pairs (BeF₂, CO₂)</li>
+                        <li><strong>Trigonal planar:</strong> 3 electron pairs (BF₃)</li>
+                        <li><strong>Tetrahedral:</strong> 4 electron pairs (CH₄)</li>
+                        <li><strong>Trigonal bipyramidal:</strong> 5 electron pairs (PF₅)</li>
+                        <li><strong>Octahedral:</strong> 6 electron pairs (SF₆)</li>
+                    </ul>
+                    
+                    <div class="example-section">
+                        <h4>Example: Water (H₂O)</h4>
+                        <p>Central atom: O with 2 bonding pairs and 2 lone pairs</p>
+                        <p>Electron geometry: Tetrahedral</p>
+                        <p>Molecular geometry: Bent (≈104.5° bond angle)</p>
+                        <p>The lone pairs compress the H-O-H bond angle from 109.5° to 104.5°</p>
+                    </div>
+                    
+                    <h3>2.4 Hybridization</h3>
+                    <p>Mixing of atomic orbitals to form hybrid orbitals for bonding.</p>
+                    
+                    <ul>
+                        <li><strong>sp³:</strong> Tetrahedral geometry (CH₄)</li>
+                        <li><strong>sp²:</strong> Trigonal planar geometry (C₂H₄)</li>
+                        <li><strong>sp:</strong> Linear geometry (C₂H₂)</li>
+                    </ul>
+                </div>
+
+                <!-- Chapter 3: Stoichiometry -->
+                <div class="content-section">
+                    <h2>Chapter 3: Stoichiometry and Chemical Equations</h2>
+                    
+                    <h3>3.1 Balancing Chemical Equations</h3>
+                    <p>Conservation of mass requires equal numbers of each type of atom on both sides.</p>
+                    
+                    <div class="example-section">
+                        <h4>Example: Combustion of Propane</h4>
+                        <p>Unbalanced: C₃H₈ + O₂ → CO₂ + H₂O</p>
+                        <p>Balanced: C₃H₈ + 5O₂ → 3CO₂ + 4H₂O</p>
+                        <p>Check: C: 3=3 ✓, H: 8=8 ✓, O: 10=10 ✓</p>
+                    </div>
+                    
+                    <h3>3.2 Mole Concept</h3>
+                    <p>The mole is the fundamental unit for counting particles in chemistry.</p>
+                    <div class="math-example">
+                        $$1 \text{ mol} = 6.022 \times 10^{23} \text{ particles (Avogadro's number)}$$
+                        $$\text{Moles} = \frac{\text{Mass (g)}}{\text{Molar mass (g/mol)}}$$
+                    </div>
+                    
+                    <div class="example-section">
+                        <h4>Example: Mole Calculations</h4>
+                        <p>How many molecules are in 18.0 g of water (H₂O)?</p>
+                        <p>Molar mass of H₂O = 2(1.008) + 16.00 = 18.016 g/mol</p>
+                        <div class="math-example">
+                            $$\text{Moles} = \frac{18.0 \text{ g}}{18.016 \text{ g/mol}} = 0.999 \text{ mol}$$
+                        </div>
+                        <div class="math-example">
+                            $$\text{Molecules} = 0.999 \text{ mol} \times 6.022 \times 10^{23} = 6.01 \times 10^{23}$$
+                        </div>
+                    </div>
+                    
+                    <h3>3.3 Limiting Reagent</h3>
+                    <p>The reactant that is completely consumed first, limiting the amount of product formed.</p>
+                    
+                    <div class="example-section">
+                        <h4>Example: Limiting Reagent Problem</h4>
+                        <p>2Al + 3Cl₂ → 2AlCl₃</p>
+                        <p>Given: 5.4 g Al and 10.6 g Cl₂</p>
+                        
+                        <p>Moles of Al = 5.4 g ÷ 26.98 g/mol = 0.20 mol</p>
+                        <p>Moles of Cl₂ = 10.6 g ÷ 70.90 g/mol = 0.15 mol</p>
+                        
+                        <p>From stoichiometry: 0.20 mol Al needs 0.30 mol Cl₂</p>
+                        <p>We only have 0.15 mol Cl₂, so Cl₂ is the limiting reagent</p>
+                        
+                        <p>Theoretical yield of AlCl₃: 0.15 mol Cl₂ × (2 mol AlCl₃/3 mol Cl₂) = 0.10 mol AlCl₃</p>
+                        <p>Mass of AlCl₃ = 0.10 mol × 133.34 g/mol = 13.3 g</p>
+                    </div>
+                    
+                    <h3>3.4 Percent Yield</h3>
+                    <div class="math-example">
+                        $$\text{Percent Yield} = \frac{\text{Actual Yield}}{\text{Theoretical Yield}} \times 100\%$$
+                    </div>
+                </div>
+
+                <!-- Chapter 4: Solutions -->
+                <div class="content-section">
+                    <h2>Chapter 4: Solutions and Concentration</h2>
+                    
+                    <h3>4.1 Types of Solutions</h3>
+                    <ul>
+                        <li><strong>Solvent:</strong> The dissolving medium (usually present in larger amount)</li>
+                        <li><strong>Solute:</strong> The dissolved substance</li>
+                        <li><strong>Aqueous solution:</strong> Water is the solvent</li>
+                    </ul>
+                    
+                    <h3>4.2 Concentration Units</h3>
+                    
+                    <h4>Molarity (M)</h4>
+                    <div class="math-example">
+                        $$\text{Molarity} = \frac{\text{moles of solute}}{\text{liters of solution}}$$
+                    </div>
+                    
+                    <h4>Molality (m)</h4>
+                    <div class="math-example">
+                        $$\text{Molality} = \frac{\text{moles of solute}}{\text{kg of solvent}}$$
+                    </div>
+                    
+                    <h4>Mass Percent</h4>
+                    <div class="math-example">
+                        $$\text{Mass \%} = \frac{\text{mass of solute}}{\text{mass of solution}} \times 100\%$$
+                    </div>
+                    
+                    <div class="example-section">
+                        <h4>Example: Molarity Calculation</h4>
+                        <p>What is the molarity of a solution made by dissolving 58.5 g NaCl in enough water to make 500.0 mL of solution?</p>
+                        
+                        <p>Molar mass of NaCl = 22.99 + 35.45 = 58.44 g/mol</p>
+                        <p>Moles of NaCl = 58.5 g ÷ 58.44 g/mol = 1.00 mol</p>
+                        <p>Volume = 500.0 mL = 0.5000 L</p>
+                        
+                        <div class="math-example">
+                            $$\text{Molarity} = \frac{1.00 \text{ mol}}{0.5000 \text{ L}} = 2.00 \text{ M}$$
+                        </div>
+                    </div>
+                    
+                    <h3>4.3 Dilutions</h3>
+                    <p>When diluting solutions, moles of solute remain constant:</p>
+                    <div class="math-example">
+                        $$M_1V_1 = M_2V_2$$
+                    </div>
+                    
+                    <div class="example-section">
+                        <h4>Example: Dilution Problem</h4>
+                        <p>How much water must be added to 100.0 mL of 6.0 M HCl to make 2.0 M HCl?</p>
+                        
+                        <div class="math-example">
+                            $$M_1V_1 = M_2V_2$$
+                            $$(6.0 \text{ M})(100.0 \text{ mL}) = (2.0 \text{ M})V_2$$
+                            $$V_2 = 300.0 \text{ mL}$$
+                        </div>
+                        
+                        <p>Water to add = 300.0 mL - 100.0 mL = 200.0 mL</p>
+                    </div>
+                </div>
+
+                <!-- Chapter 5: Acids and Bases -->
+                <div class="content-section">
+                    <h2>Chapter 5: Acids and Bases</h2>
+                    
+                    <h3>5.1 Definitions</h3>
+                    
+                    <h4>Arrhenius Definition</h4>
+                    <ul>
+                        <li><strong>Acid:</strong> Produces H⁺ ions in water</li>
+                        <li><strong>Base:</strong> Produces OH⁻ ions in water</li>
+                    </ul>
+                    
+                    <h4>Brønsted-Lowry Definition</h4>
+                    <ul>
+                        <li><strong>Acid:</strong> Proton (H⁺) donor</li>
+                        <li><strong>Base:</strong> Proton (H⁺) acceptor</li>
+                    </ul>
+                    
+                    <div class="example-section">
+                        <h4>Example: Brønsted-Lowry Acid-Base Reaction</h4>
+                        <p>HCl + NH₃ → NH₄⁺ + Cl⁻</p>
+                        <ul>
+                            <li>HCl is the acid (donates H⁺)</li>
+                            <li>NH₃ is the base (accepts H⁺)</li>
+                            <li>NH₄⁺ is the conjugate acid of NH₃</li>
+                            <li>Cl⁻ is the conjugate base of HCl</li>
+                        </ul>
+                    </div>
+                    
+                    <h3>5.2 pH and pOH</h3>
+                    <p>For aqueous solutions at 25°C:</p>
+                    <div class="math-example">
+                        $$K_w = [H^+][OH^-] = 1.0 \times 10^{-14}$$
+                        $$pH = -\log[H^+]$$
+                        $$pOH = -\log[OH^-]$$
+                        $$pH + pOH = 14.00$$
+                    </div>
+                    
+                    <div class="example-section">
+                        <h4>Example: pH Calculation</h4>
+                        <p>Calculate the pH of 0.025 M HCl</p>
+                        <p>HCl is a strong acid, so [H⁺] = 0.025 M</p>
+                        <div class="math-example">
+                            $$pH = -\log(0.025) = -\log(2.5 \times 10^{-2}) = 1.60$$
+                        </div>
+                    </div>
+                    
+                    <h3>5.3 Strong vs. Weak Acids and Bases</h3>
+                    
+                    <h4>Strong Acids (complete ionization)</h4>
+                    <p>HCl, HBr, HI, HNO₃, H₂SO₄, HClO₄, HClO₃</p>
+                    
+                    <h4>Strong Bases (complete ionization)</h4>
+                    <p>Group 1 hydroxides (NaOH, KOH), some Group 2 hydroxides (Ba(OH)₂, Ca(OH)₂)</p>
+                    
+                    <h4>Weak Acids (partial ionization)</h4>
+                    <p>For weak acid HA: $HA \rightleftharpoons H^+ + A^-$</p>
+                    <div class="math-example">
+                        $$K_a = \frac{[H^+][A^-]}{[HA]}$$
+                    </div>
+                    
+                    <div class="example-section">
+                        <h4>Example: Weak Acid pH</h4>
+                        <p>Calculate the pH of 0.10 M acetic acid (CH₃COOH, Ka = 1.8 × 10⁻⁵)</p>
+                        
+                        <p>CH₃COOH ⇌ H⁺ + CH₃COO⁻</p>
+                        <p>Let x = [H⁺] at equilibrium</p>
+                        
+                        <div class="math-example">
+                            $$K_a = \frac{x^2}{0.10 - x} = 1.8 \times 10^{-5}$$
+                        </div>
+                        
+                        <p>Assuming x << 0.10:</p>
+                        <div class="math-example">
+                            $$x^2 = (1.8 \times 10^{-5})(0.10) = 1.8 \times 10^{-6}$$
+                            $$x = 1.3 \times 10^{-3} \text{ M}$$
+                            $$pH = -\log(1.3 \times 10^{-3}) = 2.89$$
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Chapter 6: Thermodynamics -->
+                <div class="content-section">
+                    <h2>Chapter 6: Thermodynamics</h2>
+                    
+                    <h3>6.1 First Law of Thermodynamics</h3>
+                    <p>Energy cannot be created or destroyed, only transferred or converted.</p>
+                    <div class="math-example">
+                        $$\Delta U = q + w$$
+                    </div>
+                    <p>where ΔU = change in internal energy, q = heat, w = work</p>
+                    
+                    <h3>6.2 Enthalpy (H)</h3>
+                    <p>Enthalpy is the heat content of a system at constant pressure.</p>
+                    <div class="math-example">
+                        $$\Delta H = \Delta U + \Delta(PV) = q_p \text{ (at constant pressure)}$$
+                    </div>
+                    
+                    <h4>Standard Enthalpy of Formation (ΔH°f)</h4>
+                    <p>The enthalpy change when 1 mole of compound is formed from its elements in standard states.</p>
+                    <p>By definition: ΔH°f = 0 for elements in their standard states</p>
+                    
+                    <div class="example-section">
+                        <h4>Example: Calculating ΔH°rxn</h4>
+                        <p>Calculate ΔH° for: CH₄(g) + 2O₂(g) → CO₂(g) + 2H₂O(l)</p>
+                        
+                        <p>Given ΔH°f values (kJ/mol):</p>
+                        <ul>
+                            <li>CH₄(g): -74.8</li>
+                            <li>CO₂(g): -393.5</li>
+                            <li>H₂O(l): -285.8</li>
+                            <li>O₂(g): 0</li>
+                        </ul>
+                        
+                        <div class="math-example">
+                            $$\Delta H°_{rxn} = \sum \Delta H°_{f,products} - \sum \Delta H°_{f,reactants}$$
+                        </div>
+                        <div class="math-example">
+                            $$= [(-393.5) + 2(-285.8)] - [(-74.8) + 2(0)]$$
+                            $$= -965.1 - (-74.8) = -890.3 \text{ kJ/mol}$$
+                        </div>
+                    </div>
+                    
+                    <h3>6.3 Entropy (S)</h3>
+                    <p>Entropy is a measure of the randomness or disorder of a system.</p>
+                    <ul>
+                        <li>ΔS > 0: Increase in disorder (favored)</li>
+                        <li>ΔS < 0: Decrease in disorder (unfavored)</li>
+                    </ul>
+                    
+                    <h3>6.4 Gibbs Free Energy (G)</h3>
+                    <p>Gibbs free energy determines spontaneity of reactions.</p>
+                    <div class="math-example">
+                        $$\Delta G = \Delta H - T\Delta S$$
+                    </div>
+                    
+                    <ul>
+                        <li>ΔG < 0: Spontaneous reaction</li>
+                        <li>ΔG > 0: Non-spontaneous reaction</li>
+                        <li>ΔG = 0: Equilibrium</li>
+                    </ul>
+                    
+                    <div class="example-section">
+                        <h4>Example: Spontaneity Prediction</h4>
+                        <p>For a reaction at 298 K: ΔH = -125 kJ/mol, ΔS = -85 J/mol·K</p>
+                        
+                        <div class="math-example">
+                            $$\Delta G = \Delta H - T\Delta S$$
+                            $$= -125,000 \text{ J/mol} - (298 \text{ K})(-85 \text{ J/mol·K})$$
+                            $$= -125,000 + 25,330 = -99,670 \text{ J/mol} = -99.7 \text{ kJ/mol}$$
+                        </div>
+                        
+                        <p>Since ΔG < 0, the reaction is spontaneous at 298 K.</p>
+                    </div>
+                </div>
+
+                <!-- Chapter 7: Chemical Kinetics -->
+                <div class="content-section">
+                    <h2>Chapter 7: Chemical Kinetics</h2>
+                    
+                    <h3>7.1 Reaction Rates</h3>
+                    <p>The rate of reaction is the change in concentration over time.</p>
+                    <div class="math-example">
+                        $$\text{Rate} = -\frac{1}{a}\frac{d[A]}{dt} = -\frac{1}{b}\frac{d[B]}{dt} = \frac{1}{c}\frac{d[C]}{dt} = \frac{1}{d}\frac{d[D]}{dt}$$
+                    </div>
+                    <p>for the reaction: aA + bB → cC + dD</p>
+                    
+                    <h3>7.2 Rate Laws</h3>
+                    <p>The rate law expresses the relationship between rate and concentration:</p>
+                    <div class="math-example">
+                        $$\text{Rate} = k[A]^m[B]^n$$
+                    </div>
+                    <p>where k = rate constant, m and n = reaction orders</p>
+                    
+                    <div class="example-section">
+                        <h4>Example: Determining Rate Law</h4>
+                        <p>For the reaction A + B → C, given experimental data:</p>
+                        <table style="border-collapse: collapse; margin: 20px 0;">
+                            <tr style="background: #f0f0f0;">
+                                <th style="border: 1px solid #ddd; padding: 8px;">Trial</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">[A] (M)</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">[B] (M)</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">Rate (M/s)</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">1</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.10</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.10</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">2.0 × 10⁻³</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">2</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.20</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.10</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">8.0 × 10⁻³</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">3</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.10</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.30</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">2.0 × 10⁻³</td>
+                            </tr>
+                        </table>
+                        
+                        <p>Comparing trials 1 and 2: [A] doubles, rate increases 4×, so order in A = 2</p>
+                        <p>Comparing trials 1 and 3: [B] triples, rate unchanged, so order in B = 0</p>
+                        <p>Rate law: Rate = k[A]²</p>
+                        <p>k = (2.0 × 10⁻³)/((0.10)²) = 0.20 M⁻¹s⁻¹</p>
+                    </div>
+                    
+                    <h3>7.3 Integrated Rate Laws</h3>
+                    
+                    <h4>Zero Order: Rate = k</h4>
+                    <div class="math-example">
+                        $$[A]_t = [A]_0 - kt$$
+                        $$t_{1/2} = \frac{[A]_0}{2k}$$
+                    </div>
+                    
+                    <h4>First Order: Rate = k[A]</h4>
+                    <div class="math-example">
+                        $$\ln[A]_t = \ln[A]_0 - kt$$
+                        $$t_{1/2} = \frac{0.693}{k}$$
+                    </div>
+                    
+                    <h4>Second Order: Rate = k[A]²</h4>
+                    <div class="math-example">
+                        $$\frac{1}{[A]_t} = \frac{1}{[A]_0} + kt$$
+                        $$t_{1/2} = \frac{1}{k[A]_0}$$
+                    </div>
+                    
+                    <h3>7.4 Activation Energy and Temperature</h3>
+                    <p>The Arrhenius equation relates rate constant to temperature:</p>
+                    <div class="math-example">
+                        $$k = Ae^{-E_a/RT}$$
+                        $$\ln k = \ln A - \frac{E_a}{RT}$$
+                    </div>
+                    <p>where Ea = activation energy, A = pre-exponential factor, R = gas constant</p>
+                </div>
+
+                <!-- Chapter 8: Chemical Equilibrium -->
+                <div class="content-section">
+                    <h2>Chapter 8: Chemical Equilibrium</h2>
+                    
+                    <h3>8.1 Equilibrium Constant</h3>
+                    <p>For the reaction: aA + bB ⇌ cC + dD</p>
+                    <div class="math-example">
+                        $$K_c = \frac{[C]^c[D]^d}{[A]^a[B]^b}$$
+                    </div>
+                    
+                    <ul>
+                        <li>K >> 1: Products favored</li>
+                        <li>K << 1: Reactants favored</li>
+                        <li>K ≈ 1: Neither side strongly favored</li>
+                    </ul>
+                    
+                    <div class="example-section">
+                        <h4>Example: Equilibrium Expression</h4>
+                        <p>For: N₂(g) + 3H₂(g) ⇌ 2NH₃(g)</p>
+                        <div class="math-example">
+                            $$K_c = \frac{[NH_3]^2}{[N_2][H_2]^3}$$
+                        </div>
+                    </div>
+                    
+                    <h3>8.2 ICE Tables</h3>
+                    <p>Initial, Change, Equilibrium tables help solve equilibrium problems.</p>
+                    
+                    <div class="example-section">
+                        <h4>Example: ICE Table Problem</h4>
+                        <p>For H₂(g) + I₂(g) ⇌ 2HI(g), Kc = 54.3 at 700K</p>
+                        <p>Initial concentrations: [H₂] = 0.10 M, [I₂] = 0.20 M, [HI] = 0 M</p>
+                        
+                        <table style="border-collapse: collapse; margin: 20px 0;">
+                            <tr style="background: #f0f0f0;">
+                                <th style="border: 1px solid #ddd; padding: 8px;"></th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">H₂</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">I₂</th>
+                                <th style="border: 1px solid #ddd; padding: 8px;">HI</th>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">I</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.10</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.20</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">C</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">-x</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">-x</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">+2x</td>
+                            </tr>
+                            <tr>
+                                <td style="border: 1px solid #ddd; padding: 8px;">E</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.10-x</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">0.20-x</td>
+                                <td style="border: 1px solid #ddd; padding: 8px;">2x</td>
+                            </tr>
+                        </table>
+                        
+                        <div class="math-example">
+                            $$K_c = \frac{[HI]^2}{[H_2][I_2]} = \frac{(2x)^2}{(0.10-x)(0.20-x)} = 54.3$$
+                        </div>
+                        
+                        <p>Solving this quadratic equation gives x = 0.078 M</p>
+                        <p>Equilibrium concentrations: [H₂] = 0.022 M, [I₂] = 0.122 M, [HI] = 0.156 M</p>
+                    </div>
+                    
+                    <h3>8.3 Le Châtelier's Principle</h3>
+                    <p>When a system at equilibrium is disturbed, it shifts to counteract the disturbance.</p>
+                    
+                    <ul>
+                        <li><strong>Concentration changes:</strong> Adding reactant shifts right, adding product shifts left</li>
+                        <li><strong>Temperature changes:</strong> Increasing T favors endothermic direction</li>
+                        <li><strong>Pressure changes:</strong> Increasing P favors side with fewer gas molecules</li>
+                        <li><strong>Catalysts:</strong> Increase rate but don't affect equilibrium position</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 Scholarphile. All rights reserved.</p>
+        </div>
+    </footer>
+</body>
+</html>
