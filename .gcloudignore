@@ -1,0 +1,39 @@
+# Python
+backend/venv/
+backend/__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# Environment
+.env
+.env.*
+*.local
+
+# Frontend
+frontend/
+frontend/**
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Documentation
+*.md
+docs/
+
+# Docker
+docker-compose.yml
+
+# Tests
+tests/
+backend/tests/
+
