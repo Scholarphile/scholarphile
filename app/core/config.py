@@ -25,7 +25,7 @@ class Settings(BaseSettings):
     port: int = 8000
     
     # Database
-    database_url: str = Field(..., description="PostgreSQL connection string")
+    database_url: str = Field(default="sqlite:///./scholarphile.db", description="Database connection string")
     
     # Redis
     redis_url: str = "redis://localhost:6379/0"
@@ -36,7 +36,7 @@ class Settings(BaseSettings):
     youtube_quota_limit: int = 10000
     
     # Security
-    secret_key: str = Field(..., description="Secret key for JWT encoding")
+    secret_key: str = Field(default="dev-secret-change-in-production", description="Secret key for JWT encoding")
     allowed_origins: List[AnyHttpUrl] = [
         "http://localhost:3000",
         "http://localhost:8000"
