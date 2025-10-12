@@ -56,3 +56,4 @@ frontend/.env.development.local
 .mypy_cache/
 .hypothesis/
 
+
