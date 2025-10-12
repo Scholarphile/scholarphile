@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useState, Suspense } from "react"
 import { useSearchParams, useRouter } from "next/navigation"
 import { useQuery } from "@tanstack/react-query"
 import { SearchBar } from "@/components/search-bar"
@@ -8,7 +8,9 @@ import { VideoGrid } from "@/components/video-grid"
 import { searchVideos } from "@/lib/api"
 import { Filter, SlidersHorizontal } from "lucide-react"
 
-export default function SearchPage() {
+export const dynamic = 'force-dynamic'
+
+function SearchContent() {
   const searchParams = useSearchParams()
   const router = useRouter()
   const query = searchParams.get("q") || ""
@@ -134,6 +136,14 @@ export default function SearchPage() {
         </p>
       )}
     </div>
+  )
+}
+
+export default function SearchPage() {
+  return (
+    <Suspense fallback={<div className="max-w-7xl mx-auto px-4 py-8">Loading...</div>}>
+      <SearchContent />
+    </Suspense>
   )
 }
 
