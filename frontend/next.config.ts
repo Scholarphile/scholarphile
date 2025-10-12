@@ -1,9 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'export',  // Static export for Cloudflare Pages
+  // Use standalone output for Cloudflare Pages
+  output: 'standalone',
+  
   images: {
-    unoptimized: true,  // Required for static export
     remotePatterns: [
       {
         protocol: "https",
@@ -17,7 +18,6 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  trailingSlash: true,  // Better for static hosting
 };
 
 export default nextConfig;
