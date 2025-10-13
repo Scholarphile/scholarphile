@@ -1,8 +1,9 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  output: 'standalone', // For Docker deployment
+  output: 'export',  // Enable static exports for Cloudflare Pages
   images: {
+    unoptimized: true,  // Required for static export
     remotePatterns: [
       {
         protocol: "https",
