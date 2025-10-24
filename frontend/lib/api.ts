@@ -42,6 +42,8 @@ export interface VideoSearchRequest {
   order?: "relevance" | "date" | "rating" | "viewCount"
   require_captions?: boolean
   min_quality_score?: number
+  duration?: "any" | "short" | "medium" | "long"
+  page_token?: string
 }
 
 export interface VideoSearchResponse {
@@ -49,6 +51,7 @@ export interface VideoSearchResponse {
   total_results: number
   videos: VideoDetail[]
   quota_used: number
+  next_page_token?: string
 }
 
 export interface VideoCurationRequest {

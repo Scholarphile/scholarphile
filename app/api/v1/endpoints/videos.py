@@ -1,6 +1,8 @@
 """Video search and curation endpoints"""
 
-from fastapi import APIRouter, HTTPException, Query
+from fastapi import APIRouter, HTTPException
+import json
+import hashlib
 from typing import List
 
 from app.core.logging import get_logger
@@ -12,6 +14,7 @@ from app.schemas.video import (
     VideoDetail
 )
 from app.services import YouTubeService
+from app.core.cache import cache
 
 logger = get_logger(__name__)
 router = APIRouter()
@@ -29,25 +32,40 @@ async def search_videos(request: VideoSearchRequest):
     - **min_quality_score**: Minimum quality score filter
     """
     try:
+        # Cache key includes all request parameters
+        cache_key = "videos:search:" + hashlib.sha256(
+            json.dumps(request.model_dump(), sort_keys=True).encode("utf-8")
+        ).hexdigest()
+
+        cached = await cache.get(cache_key)
+        if cached:
+            payload = json.loads(cached)
+            return VideoSearchResponse(**payload)
+
         service = YouTubeService()
-        
-        videos, quota_used = service.search_videos(
+        videos, quota_used, next_page_token = service.search_videos(
             query=request.query,
             max_results=request.max_results,
             order=request.order,
-            require_captions=request.require_captions
+            require_captions=request.require_captions,
+            duration=request.duration,
+            page_token=request.page_token,
         )
         
         # Apply quality score filter if specified
         if request.min_quality_score is not None:
             videos = [v for v in videos if v.quality.quality_score >= request.min_quality_score]
         
-        return VideoSearchResponse(
+        response = VideoSearchResponse(
             query=request.query,
             total_results=len(videos),
             videos=videos,
-            quota_used=quota_used
+            quota_used=quota_used,
+            next_page_token=next_page_token,
         )
+        # Cache response (pydantic model -> dict -> json-friendly types)
+        await cache.set(cache_key, json.dumps(response.model_dump(mode="json")))
+        return response
         
     except Exception as e:
         logger.error("search_failed", error=str(e))

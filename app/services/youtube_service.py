@@ -2,7 +2,7 @@
 
 import re
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Tuple
 from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 
@@ -30,8 +30,10 @@ class YouTubeService:
         query: str,
         max_results: int = 10,
         order: str = 'relevance',
-        require_captions: bool = False
-    ) -> tuple[List[VideoDetail], int]:
+        require_captions: bool = False,
+        duration: str = 'any',
+        page_token: Optional[str] = None,
+    ) -> Tuple[List[VideoDetail], int, Optional[str]]:
         """
         Search for educational videos
         
@@ -39,7 +41,14 @@ class YouTubeService:
             Tuple of (videos, quota_used)
         """
         try:
-            logger.info("searching_videos", query=query, max_results=max_results, order=order)
+            logger.info(
+                "searching_videos",
+                query=query,
+                max_results=max_results,
+                order=order,
+                duration=duration,
+                page_token=page_token,
+            )
             
             # Search for videos (100 quota units)
             request = self.youtube.search().list(
@@ -49,25 +58,30 @@ class YouTubeService:
                 maxResults=max_results,
                 order=order,
                 videoCategoryId='27',  # Education category
-                videoCaption='closedCaption' if require_captions else 'any'
+                videoCaption='closedCaption' if require_captions else 'any',
+                videoDuration=duration,
+                pageToken=page_token,
             )
             
             response = request.execute()
             quota_used = 100
+            next_page_token = response.get('nextPageToken')
             
             # Extract video IDs
             video_ids = [item['id']['videoId'] for item in response['items']]
             
             if not video_ids:
-                return [], quota_used
+                return [], quota_used, next_page_token
             
             # Get detailed video information (1 quota unit per call)
             videos = self._get_video_details(video_ids)
             quota_used += 1
             
-            logger.info("search_complete", found=len(videos), quota=quota_used)
+            logger.info(
+                "search_complete", found=len(videos), quota=quota_used, has_next=bool(next_page_token)
+            )
             
-            return videos, quota_used
+            return videos, quota_used, next_page_token
             
         except HttpError as e:
             logger.error("youtube_api_error", error=str(e), status=e.status_code)
@@ -220,11 +234,13 @@ class YouTubeService:
         query = f"{topic} {level_keywords.get(level, 'tutorial')}"
         
         # Search for more videos than needed to allow filtering
-        videos, quota_used = self.search_videos(
+        videos, quota_used, _ = self.search_videos(
             query=query,
             max_results=max_videos * 3,
             order='rating',
-            require_captions=True
+            require_captions=True,
+            duration='any',
+            page_token=None,
         )
         
         # Sort by quality score

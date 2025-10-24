@@ -1,7 +1,7 @@
 """Video-related schemas"""
 
 from datetime import datetime
-from typing import List, Optional
+from typing import List, Optional, Literal
 from pydantic import BaseModel, Field, HttpUrl
 
 
@@ -49,6 +49,11 @@ class VideoSearchRequest(BaseModel):
     order: str = Field(default="relevance", description="Sort order: relevance, date, rating, viewCount")
     require_captions: bool = Field(default=False, description="Filter for videos with captions")
     min_quality_score: Optional[float] = Field(default=None, ge=0, le=100, description="Minimum quality score")
+    duration: Literal["any", "short", "medium", "long"] = Field(
+        default="any",
+        description="Filter by duration category: short(<4m), medium(4-20m), long(>20m)",
+    )
+    page_token: Optional[str] = Field(default=None, description="YouTube API page token for pagination")
 
 
 class VideoSearchResponse(BaseModel):
@@ -57,6 +62,7 @@ class VideoSearchResponse(BaseModel):
     total_results: int
     videos: List[VideoDetail]
     quota_used: int = Field(..., description="YouTube API quota units used")
+    next_page_token: Optional[str] = Field(default=None, description="Token to fetch the next page of results")
 
 
 class VideoCurationRequest(BaseModel):
